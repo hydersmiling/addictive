@@ -12,22 +12,21 @@ Run tests: <command, e.g. `python -m unittest` or `npm test`>
 
 ## Who does what
 - Main session: understand the request, plan, decide, check the final result.
-- `caveman-explore` / `cavecrew-investigator` (Haiku): find where code lives.
-- `cavecrew-builder` (Sonnet): small edits of 1-2 files, renames.
+- `explorer` / `scout` (Haiku): find where code lives.
+- `builder` (Sonnet): small edits of 1-2 files, renames.
 - `debugger` (Sonnet): root cause of bugs and failing tests, before any fix.
 - `researcher` (Sonnet): web and docs lookups.
-- `cavecrew-reviewer` (Haiku): check a diff before calling work done.
+- `reviewer` (Haiku): check a diff before calling work done.
 - `big-decision` (Fable, rare): only for choices that are expensive to undo, or after two failed attempts.
 - Do simple, known things directly. A subagent call that saves nothing is waste.
 
-## Before creating anything
-1. Search the map for the name and close synonyms.
-2. Not sure? Ask `caveman-explore`: "Is there already code that does X?"
-3. If you get "No match", do one direct search yourself to confirm.
-4. Reuse or extend what exists. Create new code only when nothing fits; then refresh the map.
-
-## Working style
-- Plan briefly, change little, test, then move on.
-- Bugs: find the cause first (`debugger` or the `investigate-first` skill), then fix.
-- Done means tests pass and the reviewer found nothing serious.
+## Every change
+- Do only what was asked. Smallest correct change (`lean-code` skill).
+- Before creating any file, function or dependency: `reuse-first` skill.
+- After every change: `self-check` skill. Two failed fixes → `debugger`, don't keep guessing.
+- Done means a check passed and `reviewer` found nothing serious.
+- Same correction twice, or "always/never": record it with `learn-corrections`.
 - Never read or print secrets. Never commit `.env`, keys or tokens.
+
+## Learned rules (from your past corrections)
+@.claude/LEARNED.md

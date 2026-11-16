@@ -25,6 +25,14 @@ class InstallTests(unittest.TestCase):
             again, _ = install.install(target)
             self.assertEqual(again, [])  # second run copies nothing
 
+    def test_optional_code_graph(self):
+        with tempfile.TemporaryDirectory() as target:
+            plain, _ = install.install(target, dry_run=True)
+            self.assertFalse(any("code-graph" in c for c in plain))
+            extra, _ = install.install(target, dry_run=True, extras=["code-graph"])
+            self.assertTrue(any(c.replace(os.sep, "/").endswith(".claude/skills/code-graph/SKILL.md") for c in extra))
+            self.assertTrue(any(c.replace(os.sep, "/").endswith(".claude/LEARNED.md") for c in plain))
+
     def test_dry_run_changes_nothing(self):
         with tempfile.TemporaryDirectory() as target:
             copied, _ = install.install(target, dry_run=True)

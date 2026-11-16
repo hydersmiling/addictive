@@ -71,6 +71,7 @@ def main():
     problems = []
     agents = sorted(glob.glob(os.path.join(ROOT, ".claude", "agents", "*.md")))
     skills = sorted(glob.glob(os.path.join(ROOT, ".claude", "skills", "*", "SKILL.md")))
+    skills += sorted(glob.glob(os.path.join(ROOT, "optional", "*", "SKILL.md")))
     for path in agents:
         problems += check(path, AGENT_FIELDS, need_model=True)
     for path in skills:

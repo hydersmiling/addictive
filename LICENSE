@@ -20,7 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Files under .claude/skills/ (except .claude/skills/map/) and the agents
-cavecrew-builder, cavecrew-investigator, cavecrew-reviewer and caveman-explore
-come from the caveman project and are licensed under the Apache License 2.0.
-See third_party/caveman/.
+Some files are third-party and licensed under the Apache License 2.0: the
+skills terse, terse-ultra, terse-classical, delegate, investigate-first,
+lean-build, surgical-patch, safe-refactor and verify-and-stop; the agents scout,
+builder, reviewer and explorer; and everything under optional/code-graph/.
+See third_party/skills/ for the licence, notices and the list of changes.

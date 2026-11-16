@@ -1,0 +1,27 @@
+Third-party notices for files in this repository
+================================================
+
+Some skills and agents in this repository are copied, renamed and lightly
+edited from two open-source projects, both under the Apache License 2.0
+(full text in LICENSE in this folder). Notices from those projects that apply
+to the copied files are reproduced below. The rest of their NOTICE files cover
+code we did not copy.
+
+Pack A (terse-output skills, working-style skills, scout/builder/reviewer/explorer agents)
+-------------------------------------------------------------------------------
+Caveman
+Copyright 2026 Julius Brussee
+Source: https://github.com/JuliusBrussee/caveman
+Before Caveman 3.0.0, parts of that repository were licensed under the MIT
+License; those contributions remain available under it.
+"Caveman" and its logo are trademarks of Julius Brussee. This repository does
+not use the name as a product name and is not affiliated with or endorsed by it.
+
+Pack B (optional/code-graph skill)
+---------------------------------
+Graphify
+Copyright 2026 Safi Shamsi and the Graphify contributors.
+Source: https://github.com/Graphify-Labs/graphify
+Portions were contributed under the MIT License prior to relicensing and
+remain available under those terms.
+This repository is not affiliated with or endorsed by Graphify Labs.

@@ -2,10 +2,10 @@
 
 One entry per surprise: what happened, root cause, fix, rule.
 
-## 2026-11-17: caveman agent inherited Opus
-- What: upstream `cavecrew-builder` has no `model:` line, so it would run on the parent model (Opus).
+## 2026-11-17: third-party builder agent inherited Opus
+- What: upstream `builder` has no `model:` line, so it would run on the parent model (Opus).
 - Cause: Claude Code uses the parent model when an agent file sets no model.
-- Fix: added `model: sonnet`; recorded in `third_party/caveman/SOURCE.md`.
+- Fix: added `model: sonnet`; recorded in `third_party/skills/SOURCE.md`.
 - Rule: every agent file in this repo sets `model:` explicitly.
 
 ## 2026-11-17: CODEMAP.md listed itself
@@ -32,3 +32,9 @@ One entry per surprise: what happened, root cause, fix, rule.
 - Cause: the temp folder was on C: and the repo on D:; Windows has no relative path between drives.
 - Fix: catch `ValueError` and fall back to the full path.
 - Rule: wrap `relpath` when the two paths can come from different places; CI on Windows catches this.
+
+## 2026-11-17: Bulk rename produced broken words
+- What: renaming third-party names with sed turned "caveman-compressed" into "compress-notesed".
+- Cause: a short pattern (`caveman-compress`) matched inside a longer word.
+- Fix: corrected by hand; grep for every new name after a bulk replace.
+- Rule: after any bulk replace, grep the results and read the changed lines before committing.

@@ -10,9 +10,9 @@ things without opening files, so we spend as few tokens as possible.
 | Role | Model | Jobs | Returns |
 |---|---|---|---|
 | **Brain** (main session) | Opus | Understand the request, plan, choose files, judge hard trade-offs, final check | Decisions and plans |
-| **Scout** (`caveman-explore`, `cavecrew-investigator`) | Haiku | Find where things live, answer "do we already have X?" | `path:line` list only |
-| **Builder** (`cavecrew-builder`) | Sonnet | Edits of 1-2 files, renames, mechanical changes | Short diff receipt |
-| **Reviewer** (`cavecrew-reviewer`) | Haiku, upgrade to Sonnet for risky code | Check a diff | One line per issue |
+| **Scout** (`explorer`, `scout`) | Haiku | Find where things live, answer "do we already have X?" | `path:line` list only |
+| **Builder** (`builder`) | Sonnet | Edits of 1-2 files, renames, mechanical changes | Short diff receipt |
+| **Reviewer** (`reviewer`) | Haiku, upgrade to Sonnet for risky code | Check a diff | One line per issue |
 | **Debugger** (`debugger`) | Sonnet | Root cause of bugs, before any fix | cause, proof, smallest fix |
 | **Researcher** (`researcher`) | Sonnet | Web and docs lookups | short answer + sources |
 | **Big decision** (`big-decision`) | Fable (optional) | Only choices that are expensive to undo, or after two failed attempts | decision, why, risks |
@@ -32,7 +32,7 @@ Before making a new file, function or module:
 1. Search the map for the name and close synonyms (exact whole-word match, then fuzzy).
 2. If unsure, ask the scout: "Is there already code that does X?" It returns `path:line` or `No match.`
 3. Found → extend or reuse it. Not found → create, then refresh the map.
-4. Never trust a `No match.` blindly: do one targeted search yourself first (caveman's own rule).
+4. Never trust a `No match.` blindly: do one targeted search yourself first.
 
 This is the cheapest place to save tokens *and* avoid duplicate code.
 
@@ -54,12 +54,12 @@ Cheaper models only help if the final result is the same. So the agents must als
    changed). A token saving that lowers the pass rate is a loss, not a win.
 7. **Count subagent tokens too.** Subagents have their own context; their logs live in
    `<session>/subagents/*.jsonl`. Leaving them out would fake the savings.
-8. **Plain English when it matters.** Caveman voice drops to normal sentences for security
+8. **Plain English when it matters.** Terse voice drops to normal sentences for security
    warnings, irreversible actions and questions to the user.
 
 ## v1 scope (from the brief, adjusted by research)
 1. `scripts/make_codemap.py`: tree + summaries + commit hash + `--check`, secret-safe.
-2. Agents: the four caveman agents above, plus an `Explore` override on Haiku.
+2. Agents: the scout, explorer, builder and reviewer agents above, plus an `Explore` override on Haiku.
 3. `CLAUDE.md.template` under ~80 lines with the reuse-gate rule and map pointer.
 4. `.claude/settings.json` deny rules (secrets, node_modules, build output), documented
    as a helper only: deny rules may not apply inside subagents.
@@ -67,3 +67,23 @@ Cheaper models only help if the final result is the same. So the agents must als
 6. README with measured results only.
 
 Later: symbol-aware map (tree-sitter), doctor script, `/map` command, hooks, plugin packaging.
+
+## How the agents "talk" to each other
+Subagents in Claude Code can't message each other directly; each reports back to the
+main session. So the shared ground is files, not chat:
+- `CODEMAP.md` (and optionally the code graph): one view of the code everyone reads.
+- `.claude/LEARNED.md`: the user's standing rules, imported into every session.
+- Fixed reply formats (`path:line`, `cause/proof/fix`, `decision/why/risks`), so the main
+  session can pass one agent's answer straight to the next without rewording it.
+
+## Adapting to the user
+When the user corrects the same thing twice, or says "always" or "never", the
+`learn-corrections` skill writes a one-line rule to `.claude/LEARNED.md`. CLAUDE.md
+imports that file, so the next session starts already knowing it. Capped at 40 rules,
+conflicting rules are replaced, and personal details are never stored.
+
+## Smaller code, same result
+`lean-code` asks for the smallest correct change and a self-review of the diff before
+finishing; `reuse-first` stops duplicate code before it is written; `self-check` proves
+the change works. None of this can *guarantee* fewer lines. The benchmark will measure
+lines changed and pass/fail together, so "shorter" never quietly means "worse".

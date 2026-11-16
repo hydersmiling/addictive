@@ -9,8 +9,10 @@ after it is tested.
 - Token counter that reads Claude Code's own logs, including subagents.
 - Agents: scout (Haiku), builder (Sonnet), reviewer (Haiku), debugger (Sonnet),
   researcher (Sonnet), big-decision (Fable, rare).
-- caveman skills for short replies and working styles; `/map` skill.
+- Third-party terse skills for short replies and working styles; `/map` skill.
 - CLAUDE.md template, deny rules, installer that never overwrites, header checker, CI.
+- Skills: `lean-code`, `reuse-first`, `self-check` (with escalation after two failed fixes),
+  `learn-corrections` + `.claude/LEARNED.md`; optional `code-graph`; MCP guide.
 
 ## Next, in priority order
 1. **Benchmark.** 3-5 fixed tasks on 2-3 small sample repos, run with and without the
@@ -28,12 +30,12 @@ after it is tested.
    - `commit`: small, well-described commits, no secrets.
    - `security-check`: quick scan for secrets and risky patterns before pushing.
    - `onboard`: first-run tour that builds the map and fills in CLAUDE.md.
-6. **Escalation ladder.** Haiku -> Sonnet -> Opus -> Fable when a task fails twice,
-   written into the agent descriptions and measured in the benchmark.
+6. **Measure the learning loop.** Count how often the same correction comes back after it
+   was recorded in `.claude/LEARNED.md`.
 7. **Plugin packaging.** One-command install through a Claude Code plugin marketplace.
 8. **Prompt cookbook.** Vague vs. specific prompts with measured token counts.
 9. **Before/after examples** in the README from the benchmark.
 
 ## Not planned
-- A proxy or engine that rewrites API traffic (caveman has one; too big and risky here).
+- A proxy or engine that rewrites API traffic (one of our sources has one; too big and risky here).
 - Anything that sends project code to a third-party service.

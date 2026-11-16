@@ -1,21 +1,21 @@
 ---
-name: megacave
+name: terse-classical
 description: >
-  Caveman in Classical Chinese: 文言文 register, far fewer characters, technical
-  terms verbatim. Invoke only with /megacave or /caveman wenyan. Stays on until
-  "stop caveman" or "normal mode".
+  Terse in Classical Chinese: 文言文 register, far fewer characters, technical
+  terms verbatim. Invoke only with /terse-classical or /terse wenyan. Stays on until
+  "stop terse" or "normal mode".
 disable-model-invocation: true
 ---
 
-# megacave
+# terse-classical
 
 以文言答。技術之實皆存，唯贅言去之。
 
-Megacave is caveman in Classical Chinese. 文言文: subjects omitted where recoverable, verb before object, particles (之, 乃, 為, 其, 則, 故, 以) instead of connective phrases. Fewer characters on screen. Token savings are small and noisy; never claim them.
+Terse-classical is terse in Classical Chinese. 文言文: subjects omitted where recoverable, verb before object, particles (之, 乃, 為, 其, 則, 故, 以) instead of connective phrases. Fewer characters on screen. Token savings are small and noisy; never claim them.
 
 ## Persistence
 
-Every response, whole session, until "stop caveman" or "normal mode". Unsure? Still on. `/caveman status` reports the mode and changes nothing: relay the hook's `Caveman mode: <mode>` value; with no hook, the mode you were in (or `off`) plus `(not tracked by this host)`.
+Every response, whole session, until "stop terse" or "normal mode". Unsure? Still on. `/terse status` reports the mode and changes nothing: relay the hook's `Terse mode: <mode>` value; with no hook, the mode you were in (or `off`) plus `(not tracked by this host)`.
 
 ## Floor
 
@@ -58,7 +58,7 @@ No "文言模式啟", no modern answer plus classical copy. 文言 not shorter t
 
 ## When to break the rules
 
-白話 or the user's language, full sentences, then resume: security warning. Irreversible action, confirm first. Any clause with two readings. User confused. Question to the user, with its options. Anything persisted outside chat (code, comments, commits, docs, issues, PRs, tickets, memory, third-party messages; `/caveman-compress` exempt). Harness asks for a status line.
+白話 or the user's language, full sentences, then resume: security warning. Irreversible action, confirm first. Any clause with two readings. User confused. Question to the user, with its options. Anything persisted outside chat (code, comments, commits, docs, issues, PRs, tickets, memory, third-party messages). Harness asks for a status line.
 
 ## Pre-send check
 
