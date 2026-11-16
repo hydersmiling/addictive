@@ -1,36 +1,35 @@
 # Project rules for Claude
 
-<!-- Copy this file to CLAUDE.md in your project and fill in the two lines below.
-     Keep it short: Claude reads all of it on every turn, so every line costs tokens. -->
+<!-- Copy to CLAUDE.md and fill in the two lines below. Claude reads this file on
+     every turn, so keep it short. -->
 
 Project: <one line: what this project is>
 Run tests: <command, e.g. `python -m unittest` or `npm test`>
 
 ## Finding code
-- `CODEMAP.md` lists every file with a one-line summary. Read it before opening files.
-- If the map is stale (`python scripts/make_codemap.py --check` fails), refresh it first.
+- Already know the file? Open it directly.
+- Unfamiliar area? Read `CODEMAP.md` instead of listing or opening many files.
+- Don't check or rebuild the map during a task. Run `/map` at the end only if you
+  added, moved or deleted files.
 
 ## Who does what
-- Main session: understand the request, plan, decide, check the final result.
-- `explorer` (Haiku): all reading and scanning. Reading 3+ files, long logs or large
-  outputs goes here; the main session reads only the lines it must judge.
-- `builder` (Sonnet): small edits of 1-2 files, renames.
-- `debugger` (Sonnet): root cause of bugs and failing tests, before any fix.
+- Main session: plan, decide, check the result. Do simple, known things yourself.
+- `explorer` (Haiku): searches that would mean reading 3+ files, long logs or large outputs.
+- `builder` (Sonnet): small edits of 1-2 files.
+- `debugger` (Sonnet): root cause when a failure isn't obvious.
 - `researcher` (Sonnet): web and docs lookups.
-- `reviewer` (Haiku): check a diff before calling work done.
-- `big-decision` (Fable, rare): only for choices that are expensive to undo, or after two failed attempts.
-- Do simple, known things directly. A subagent call that saves nothing is waste.
-
-## Replies
-- Follow the `compact` skill: the answer, then at most one short follow-up line.
+- `reviewer` (Haiku): review changes over ~30 lines or touching security, data or money.
+- `big-decision` (Fable, rare): costly-to-reverse choices, or after two failed attempts.
 
 ## Every change
-- Do only what was asked. Smallest correct change (`lean-code` skill).
-- Before creating any file, function or dependency: `reuse-first` skill.
-- After every change: `self-check` skill. Two failed fixes → `debugger`, don't keep guessing.
-- Done means a check passed and `reviewer` found nothing serious.
-- Same correction twice, or "always/never": record it with `learn-corrections`.
+- Do only what was asked, in the fewest lines that fully solve it.
+- Before adding a file, function or dependency, search for one that already exists.
+- After a change, run the narrowest test that proves it. Two failed fixes → `debugger`.
+- Replies: the answer, then at most one short follow-up line.
+- Same correction twice, or "always/never": add a one-line rule to `.claude/LEARNED.md`.
 - Never read or print secrets. Never commit `.env`, keys or tokens.
 
-## Learned rules (from your past corrections)
+Skills with more detail: `lean-code`, `reuse-first`, `self-check`, `compact`, `learn-corrections`.
+
+## Learned rules
 @.claude/LEARNED.md
