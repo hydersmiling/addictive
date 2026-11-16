@@ -38,3 +38,9 @@ One entry per surprise: what happened, root cause, fix, rule.
 - Cause: a short pattern (`caveman-compress`) matched inside a longer word.
 - Fix: corrected by hand; grep for every new name after a bulk replace.
 - Rule: after any bulk replace, grep the results and read the changed lines before committing.
+
+## 2026-11-17: Agent said "no shell" but had every tool
+- What: the third-party builder agent's text said "No Bash available", but its header had no `tools:` line.
+- Cause: with no `tools:` line, an agent gets every tool, whatever its instructions say.
+- Fix: `tools: Read, Edit, Write, Grep, Glob` on builder; reviewer restricted too.
+- Rule: every agent states `tools:` explicitly. Instructions are not permissions.

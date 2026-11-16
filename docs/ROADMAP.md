@@ -7,17 +7,19 @@ after it is tested.
 ## Done (v1)
 - Code map script with secret filtering, `.gitignore` support and a stale check.
 - Token counter that reads Claude Code's own logs, including subagents.
-- Agents: scout (Haiku), builder (Sonnet), reviewer (Haiku), debugger (Sonnet),
+- Agents: explorer (Haiku), builder (Sonnet), reviewer (Haiku), debugger (Sonnet),
   researcher (Sonnet), big-decision (Fable, rare).
 - Third-party terse skills for short replies and working styles; `/map` skill.
 - CLAUDE.md template, deny rules, installer that never overwrites, header checker, CI.
 - Skills: `lean-code`, `reuse-first`, `self-check` (with escalation after two failed fixes),
   `learn-corrections` + `.claude/LEARNED.md`; optional `code-graph`; MCP guide.
+- `compact` default reply style; benchmark harness with sample repo and hidden checks;
+  privacy guard tests; professional review (8 skills, 6 agents, least-privilege tools).
 
 ## Next, in priority order
-1. **Benchmark.** 3-5 fixed tasks on 2-3 small sample repos, run with and without the
-   kit using `claude -p`. Record tokens *and* pass/fail. Publish the method and raw
-   numbers, as ranges. No savings claim before this exists.
+1. **Run the benchmark** (`benchmarks/run_benchmark.py --run --repeat 3`) and publish the
+   numbers with the method, as ranges. Add a second, larger sample repo. No savings claim
+   before this exists.
 2. **Doctor script.** One command that checks CLAUDE.md length, map freshness, deny
    rules, agent headers and Fable access, and prints plain-English fixes.
 3. **Symbol map for more languages.** Function and class names for JS/TS, Go, Java

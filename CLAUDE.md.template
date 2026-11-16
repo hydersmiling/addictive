@@ -12,13 +12,16 @@ Run tests: <command, e.g. `python -m unittest` or `npm test`>
 
 ## Who does what
 - Main session: understand the request, plan, decide, check the final result.
-- `explorer` / `scout` (Haiku): find where code lives.
+- `explorer` (Haiku): find where code lives.
 - `builder` (Sonnet): small edits of 1-2 files, renames.
 - `debugger` (Sonnet): root cause of bugs and failing tests, before any fix.
 - `researcher` (Sonnet): web and docs lookups.
 - `reviewer` (Haiku): check a diff before calling work done.
 - `big-decision` (Fable, rare): only for choices that are expensive to undo, or after two failed attempts.
 - Do simple, known things directly. A subagent call that saves nothing is waste.
+
+## Replies
+- Follow the `compact` skill: the answer, then at most one short follow-up line.
 
 ## Every change
 - Do only what was asked. Smallest correct change (`lean-code` skill).

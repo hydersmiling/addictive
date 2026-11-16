@@ -1,0 +1,30 @@
+{
+  "_about": "Fixed tasks for the benchmark. Each runs on a fresh copy of sample_repo. A task passes when every check command exits 0. hidden_files are copied in only after Claude finishes, so Claude never sees the grader.",
+  "tasks": [
+    {
+      "id": "fix-bug",
+      "prompt": "The tests fail. Run `python -m unittest discover tests`, find the cause and fix it.",
+      "hidden_files": [],
+      "checks": ["python -m unittest discover tests"]
+    },
+    {
+      "id": "add-feature",
+      "prompt": "Add a function receipt_line(name, cents) to shop/cart.py that returns text like 'Apple: $1.50'.",
+      "hidden_files": ["test_receipt.py"],
+      "checks": ["python -m unittest test_receipt"]
+    },
+    {
+      "id": "locate",
+      "prompt": "Which file and which function compute the cart's total price? Reply with only the path and the function name.",
+      "hidden_files": [],
+      "checks": [],
+      "answer_must_contain": ["cart.py", "calc_total"]
+    },
+    {
+      "id": "rename",
+      "prompt": "Rename the function calc_total to cart_total everywhere in the project, including the tests.",
+      "hidden_files": ["check_rename.py"],
+      "checks": ["python check_rename.py"]
+    }
+  ]
+}

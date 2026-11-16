@@ -7,8 +7,8 @@ edited from two open-source projects, both under the Apache License 2.0
 to the copied files are reproduced below. The rest of their NOTICE files cover
 code we did not copy.
 
-Pack A (terse-output skills, working-style skills, scout/builder/reviewer/explorer agents)
--------------------------------------------------------------------------------
+Pack A (terse and safe-refactor skills; builder, reviewer and explorer agents)
+-----------------------------------------------------------------------------
 Caveman
 Copyright 2026 Julius Brussee
 Source: https://github.com/JuliusBrussee/caveman

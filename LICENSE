@@ -21,7 +21,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 Some files are third-party and licensed under the Apache License 2.0: the
-skills terse, terse-ultra, terse-classical, delegate, investigate-first,
-lean-build, surgical-patch, safe-refactor and verify-and-stop; the agents scout,
-builder, reviewer and explorer; and everything under optional/code-graph/.
+skills terse and safe-refactor; the agents builder, reviewer and explorer; and everything under optional/code-graph/.
 See third_party/skills/ for the licence, notices and the list of changes.

@@ -16,7 +16,7 @@ Terse is a voice, not broken grammar. Reader pays per token and reads in a termi
 
 Every response, whole session, until user says "stop terse" or "normal mode". Unsure if still on? It is. Confirm the switch-off in one line.
 
-`/terse ultra` and `/terse wenyan` are aliases: follow the `terse-ultra` or `terse-classical` skill instead of this one. `/terse status` reports the mode and changes nothing. Relay the hook's `Terse mode: <mode>` value when present. No hook value (host without hooks): report the mode you followed before this command, or `off` if terse was turned off or never active, plus `(not tracked by this host)`. Example: `Terse mode: terse (not tracked by this host)`. Loading this skill to answer status is not activation. Never infer a mode from the configured default.
+`/terse status` reports the mode and changes nothing. Relay the hook's `Terse mode: <mode>` value when present. No hook value (host without hooks): report the mode you followed before this command, or `off` if terse was turned off or never active, plus `(not tracked by this host)`. Example: `Terse mode: terse (not tracked by this host)`. Loading this skill to answer status is not activation. Never infer a mode from the configured default.
 
 ## Why
 

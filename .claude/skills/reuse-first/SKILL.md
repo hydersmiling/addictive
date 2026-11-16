@@ -16,7 +16,7 @@ has to read both copies. Search first; it is far cheaper than building.
    (e.g. "parse date" → `parse`, `date`, `time`, `format`). Match whole words.
 2. **Scout.** Ask the `explorer` agent one precise question:
    "Is there existing code that <does X>? Return path:line or no match."
-   For a wide search, run 2 scouts at once with different angles (definitions vs. callers).
+   For a wide search, run 2 `explorer` calls at once with different angles (definitions vs. callers).
 3. **Confirm a "no match".** Do one direct search yourself (Grep for the key word)
    before believing it. Scouts can miss.
 4. **Dependencies.** Check the project's dependency file (`requirements.txt`,

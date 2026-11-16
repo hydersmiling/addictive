@@ -6,7 +6,7 @@ Usage:
     python scripts/install.py C:\\path\\to\\your-project --with-code-graph   # plus the optional graph skill
 
 What it copies:
-  .claude/agents/*        subagents (scout, builder, reviewer, debugger, researcher, big-decision)
+  .claude/agents/*        subagents (explorer, builder, reviewer, debugger, researcher, big-decision)
   .claude/skills/*        skills (terse, map, lean-code, reuse-first, self-check, ...)
   .claude/LEARNED.md      empty list of rules Claude learns from your corrections
   scripts/make_codemap.py and scripts/measure_tokens.py

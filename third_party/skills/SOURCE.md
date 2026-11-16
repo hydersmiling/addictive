@@ -9,19 +9,15 @@ Upstream commit `9b243662ff98d392bc0a95b865a554583d71be75` (2026-11-16), version
 
 | Our path | Upstream path | Changes |
 |---|---|---|
-| `.claude/skills/terse/SKILL.md` | `skills/caveman/SKILL.md` | Renamed; product name replaced with "terse"; removed mention of a skill we don't ship |
-| `.claude/skills/terse-ultra/SKILL.md` | `skills/ultracave/SKILL.md` | Renamed; names replaced; same removal |
-| `.claude/skills/terse-classical/SKILL.md` | `skills/megacave/SKILL.md` | Renamed; names replaced; same removal |
-| `.claude/skills/delegate/SKILL.md` | `skills/cavecrew/SKILL.md` | Renamed; agent names replaced |
-| `.claude/skills/investigate-first/SKILL.md` | same | None |
-| `.claude/skills/lean-build/SKILL.md` | same | None |
-| `.claude/skills/surgical-patch/SKILL.md` | same | None |
-| `.claude/skills/verify-and-stop/SKILL.md` | same | None |
+| `.claude/skills/terse/SKILL.md` | `skills/caveman/SKILL.md` | Renamed; product name replaced with "terse"; removed mentions of skills we don't ship |
 | `.claude/skills/safe-refactor/SKILL.md` | same | None |
-| `.claude/agents/scout.md` | `agents/cavecrew-investigator.md` | Renamed; names replaced |
-| `.claude/agents/builder.md` | `agents/cavecrew-builder.md` | Renamed; names replaced; added `model: sonnet` |
-| `.claude/agents/reviewer.md` | `agents/cavecrew-reviewer.md` | Renamed; names replaced |
+| `.claude/agents/builder.md` | `agents/cavecrew-builder.md` | Renamed; names replaced; added `model: sonnet`; added `tools: Read, Edit, Write, Grep, Glob` (the original said it had no shell but granted every tool) |
+| `.claude/agents/reviewer.md` | `agents/cavecrew-reviewer.md` | Renamed; names replaced; added `tools: Read, Grep, Glob, Bash` |
 | `.claude/agents/explorer.md` | `skills/caveman-explore/SKILL.md` | Renamed; moved to agents (it is written as an agent) |
+
+Removed after review (overlap with our own skills or not useful for beginners):
+ultracave, megacave, cavecrew, investigate-first, lean-build, surgical-patch,
+verify-and-stop, cavecrew-investigator. See `docs/REVIEW.md`.
 
 Name mapping used: caveman → terse, ultracave → terse-ultra, megacave → terse-classical,
 cavecrew → delegate, cavecrew-investigator → scout, cavecrew-builder → builder,

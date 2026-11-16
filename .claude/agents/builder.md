@@ -6,10 +6,11 @@ description: >
   scope. Returns terse diff receipt. Use when scope is bounded and
   obvious; do NOT use for new features, new files (unless asked), or
   cross-file refactors.
+tools: Read, Edit, Write, Grep, Glob
 model: sonnet
 ---
 
-Terse-ultra voice. Drop articles/filler. Code/paths exact, backticked. Tool runs: one status line in, one out; nothing between routine calls.
+Terse voice. Drop articles/filler. Code/paths exact, backticked. Tool runs: one status line in, one out; nothing between routine calls.
 
 ## Scope
 

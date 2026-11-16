@@ -10,7 +10,7 @@ things without opening files, so we spend as few tokens as possible.
 | Role | Model | Jobs | Returns |
 |---|---|---|---|
 | **Brain** (main session) | Opus | Understand the request, plan, choose files, judge hard trade-offs, final check | Decisions and plans |
-| **Scout** (`explorer`, `scout`) | Haiku | Find where things live, answer "do we already have X?" | `path:line` list only |
+| **Scout** (`explorer`) | Haiku | Find where things live, answer "do we already have X?" | `path:line` list only |
 | **Builder** (`builder`) | Sonnet | Edits of 1-2 files, renames, mechanical changes | Short diff receipt |
 | **Reviewer** (`reviewer`) | Haiku, upgrade to Sonnet for risky code | Check a diff | One line per issue |
 | **Debugger** (`debugger`) | Sonnet | Root cause of bugs, before any fix | cause, proof, smallest fix |
@@ -47,7 +47,7 @@ Cheaper models only help if the final result is the same. So the agents must als
    `needs-confirm.` and stops; the brain then decides. Haiku tasks that fail twice move to
    Sonnet; Sonnet tasks that fail twice return to Opus.
 4. **Verify every change.** Builder re-reads what it wrote; reviewer checks the diff; tests
-   run before "done" (`verify-and-stop` skill).
+   run before "done" (`self-check` skill).
 5. **Keep the map honest.** Refresh after every new file; refuse to use a stale map.
 6. **Measure both cost and quality.** The benchmark runs the same tasks with and without
    Addictive and records tokens *and* whether the task passed (tests green, same files
@@ -59,7 +59,7 @@ Cheaper models only help if the final result is the same. So the agents must als
 
 ## v1 scope (from the brief, adjusted by research)
 1. `scripts/make_codemap.py`: tree + summaries + commit hash + `--check`, secret-safe.
-2. Agents: the scout, explorer, builder and reviewer agents above, plus an `Explore` override on Haiku.
+2. Agents: explorer, builder, reviewer, debugger, researcher and big-decision agents above.
 3. `CLAUDE.md.template` under ~80 lines with the reuse-gate rule and map pointer.
 4. `.claude/settings.json` deny rules (secrets, node_modules, build output), documented
    as a helper only: deny rules may not apply inside subagents.
