@@ -45,7 +45,10 @@ def read_header(path):
 def check(path, allowed, need_model):
     problems = []
     header = read_header(path)
-    rel = os.path.relpath(path, ROOT)
+    try:
+        rel = os.path.relpath(path, ROOT)
+    except ValueError:
+        rel = path  # on Windows, a file on another drive (D: vs C:) has no relative path
     if header is None:
         return [f"{rel}: missing or unclosed --- header"]
     for key in ("name", "description"):

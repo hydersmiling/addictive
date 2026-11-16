@@ -26,3 +26,9 @@ One entry per surprise: what happened, root cause, fix, rule.
   fail or find nothing silently. (2) One reply is written on several lines, each repeating its usage.
 - Fix: `\?\` long-path prefix with `os.listdir`; count each (message id, request id) once.
 - Rule: test file tools on real Windows paths, and dedupe log records by id before summing.
+
+## 2026-11-17: os.path.relpath crashed across Windows drives
+- What: CI on Windows failed: `ValueError: path is on mount 'C:', start on mount 'D:'`.
+- Cause: the temp folder was on C: and the repo on D:; Windows has no relative path between drives.
+- Fix: catch `ValueError` and fall back to the full path.
+- Rule: wrap `relpath` when the two paths can come from different places; CI on Windows catches this.
