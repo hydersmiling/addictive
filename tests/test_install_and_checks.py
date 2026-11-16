@@ -25,13 +25,18 @@ class InstallTests(unittest.TestCase):
             again, _ = install.install(target)
             self.assertEqual(again, [])  # second run copies nothing
 
-    def test_optional_code_graph(self):
+    def test_optional_packs(self):
         with tempfile.TemporaryDirectory() as target:
-            plain, _ = install.install(target, dry_run=True)
-            self.assertFalse(any("code-graph" in c for c in plain))
-            extra, _ = install.install(target, dry_run=True, extras=["code-graph"])
-            self.assertTrue(any(c.replace(os.sep, "/").endswith(".claude/skills/code-graph/SKILL.md") for c in extra))
-            self.assertTrue(any(c.replace(os.sep, "/").endswith(".claude/LEARNED.md") for c in plain))
+            norm = lambda paths: [p.replace(os.sep, "/") for p in paths]
+            plain = norm(install.install(target, dry_run=True)[0])
+            self.assertIn(".claude/LEARNED.md", plain)
+            self.assertFalse(any("code-graph" in p or "debugging-strategies" in p for p in plain))
+            extra = norm(install.install(target, dry_run=True,
+                                         extras=["code-graph", "dev-essentials", "llm-compress"])[0])
+            for want in (".claude/skills/code-graph/SKILL.md",
+                         ".claude/skills/debugging-strategies/SKILL.md",
+                         ".claude/skills/llm-compress/SKILL.md"):
+                self.assertIn(want, extra)
 
     def test_dry_run_changes_nothing(self):
         with tempfile.TemporaryDirectory() as target:

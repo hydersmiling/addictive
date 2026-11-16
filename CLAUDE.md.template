@@ -12,7 +12,8 @@ Run tests: <command, e.g. `python -m unittest` or `npm test`>
 
 ## Who does what
 - Main session: understand the request, plan, decide, check the final result.
-- `explorer` (Haiku): find where code lives.
+- `explorer` (Haiku): all reading and scanning. Reading 3+ files, long logs or large
+  outputs goes here; the main session reads only the lines it must judge.
 - `builder` (Sonnet): small edits of 1-2 files, renames.
 - `debugger` (Sonnet): root cause of bugs and failing tests, before any fix.
 - `researcher` (Sonnet): web and docs lookups.

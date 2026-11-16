@@ -1,15 +1,11 @@
-# Addictive: project rules
+# Tokenwise: project rules
 
-Goal: a token-saving "brain" kit for Claude Code. Design: `docs/DESIGN.md`. Research: `docs/RESEARCH.md`.
-Read `docs/LESSONS.md` before starting work.
+Token-efficient orchestration kit for Claude Code. Design: `docs/DESIGN.md`. Read `docs/LESSONS.md` first.
 
-- Opus plans and judges. Delegate finding code to `explorer` (Haiku),
-  small edits to `builder` (Sonnet), diff checks to `reviewer`.
-- Before creating any file or function, check whether it already exists (map, then `explorer`, then one
-  direct search). Reuse before you create.
-- Code: plain, well-commented Python, standard library only for v1. The author is a beginner:
-  explain each step simply.
-- Never claim token savings without a measured run. Record method and raw numbers.
-- Some skills and agents are third-party (Apache-2.0). Log any change to them in
-  `third_party/skills/SOURCE.md`.
-- Never commit secrets or session logs.
+- Opus plans and judges. Reading and scanning go to `explorer` (Haiku); small edits to `builder`
+  (Sonnet); diff checks to `reviewer` (Haiku).
+- Reuse before creating: map, then `explorer`, then one direct search.
+- Code: plain, commented Python, standard library only. Explain steps simply; the author is learning.
+- No savings claims without a measured benchmark run.
+- Third-party files: log every change in `third_party/skills/SOURCE.md`.
+- Never commit secrets, session logs or personal details (`tests/test_privacy_guard.py` enforces this).

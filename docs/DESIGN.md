@@ -1,89 +1,42 @@
-# Addictive: design
+# Design
 
-## The idea in one line
-A "brain" for Claude Code: Opus thinks and decides, Sonnet and Haiku do the
-reading, renaming and routine edits, and a **code tree** (map) lets everyone find
-things without opening files, so we spend as few tokens as possible.
+## Principle
+Spend expensive reasoning only where judgement is needed. Opus plans and decides;
+cheaper models read, search and make routine edits; a generated map replaces
+exploratory file reads. Every saving must hold output quality constant.
 
-## Who does what
-
-| Role | Model | Jobs | Returns |
+## Roles
+| Role | Model | Responsibility | Returns |
 |---|---|---|---|
-| **Brain** (main session) | Opus | Understand the request, plan, choose files, judge hard trade-offs, final check | Decisions and plans |
-| **Scout** (`explorer`) | Haiku | Find where things live, answer "do we already have X?" | `path:line` list only |
-| **Builder** (`builder`) | Sonnet | Edits of 1-2 files, renames, mechanical changes | Short diff receipt |
-| **Reviewer** (`reviewer`) | Haiku, upgrade to Sonnet for risky code | Check a diff | One line per issue |
-| **Debugger** (`debugger`) | Sonnet | Root cause of bugs, before any fix | cause, proof, smallest fix |
-| **Researcher** (`researcher`) | Sonnet | Web and docs lookups | short answer + sources |
-| **Big decision** (`big-decision`) | Fable (optional) | Only choices that are expensive to undo, or after two failed attempts | decision, why, risks |
-| **Mapper** (`scripts/make_codemap.py`, plain Python, no model) | none | Build and refresh the tree | `CODEMAP.md` |
+| Main session | Opus | Plan, decide, final check | Decisions |
+| `explorer` | Haiku | All reading and scanning: locate code, answer "does this exist?" | `path:line` list |
+| `reviewer` | Haiku | Review a diff | One line per finding |
+| `builder` | Sonnet | Edits of 1-2 files | Diff receipt |
+| `debugger` | Sonnet | Root cause before any fix | cause / proof / fix |
+| `researcher` | Sonnet | Web and docs lookups | Answer + sources |
+| `big-decision` | Fable | Costly-to-reverse choices; two failed attempts | decision / why / risks |
+| `make_codemap.py` | none | Build `CODEMAP.md` | File map |
 
-Rule: the brain never reads a whole file to *find* something; it asks the scout or
-the map. The brain reads code only when it must *judge* it.
+The main session reads code only to judge it, never to find it.
 
-## The tree (CODEMAP.md)
-- Folder tree + one line per file + function/class names (v2).
-- Header holds the git commit hash; `--check` warns when the map is stale.
-- Skips `.gitignore`d files and anything that looks like a secret.
-- CLAUDE.md has only a one-line pointer to it, so it costs tokens only when read.
+## Mechanisms
+- **Code map.** One line per file plus Python symbols; secret files and gitignored paths
+  excluded; `--check` detects staleness. Read on demand, never inlined into `CLAUDE.md`.
+- **Reuse before create.** Map, then `explorer`, then one direct search, then installed
+  dependencies, then `researcher`. A "no match" is always confirmed once.
+- **Smallest correct change.** `lean-code` scopes the work to the request and trims the diff.
+- **Self-verification.** `self-check` runs the narrowest proof, reads the first error, and
+  escalates to `debugger` after two failed fixes.
+- **Adaptive rules.** Repeated corrections become one-line rules in `.claude/LEARNED.md`,
+  imported by `CLAUDE.md` (40-rule cap, conflicts replaced, no personal data).
+- **Shared state through files.** Subagents cannot message each other; they share the map,
+  the learned rules and fixed reply formats, so one agent's output feeds the next unchanged.
 
-## "Check before you create" (reuse gate)
-Before making a new file, function or module:
-1. Search the map for the name and close synonyms (exact whole-word match, then fuzzy).
-2. If unsure, ask the scout: "Is there already code that does X?" It returns `path:line` or `No match.`
-3. Found → extend or reuse it. Not found → create, then refresh the map.
-4. Never trust a `No match.` blindly: do one targeted search yourself first.
-
-This is the cheapest place to save tokens *and* avoid duplicate code.
-
-## Keeping the result as good as "Opus does everything"
-Cheaper models only help if the final result is the same. So the agents must also:
-
-1. **Fixed output contracts.** Every subagent answers in a fixed shape (`path:line — note`,
-   diff receipt, `No match.`). The brain can check the shape and spot a bad answer at once.
-2. **Evidence, not opinions.** Scouts cite line ranges they actually read. Line numbers
-   past the end of a file are rejected.
-3. **Escalate instead of guessing.** Builder replies `too-big.`, `ambiguous.` or
-   `needs-confirm.` and stops; the brain then decides. Haiku tasks that fail twice move to
-   Sonnet; Sonnet tasks that fail twice return to Opus.
-4. **Verify every change.** Builder re-reads what it wrote; reviewer checks the diff; tests
-   run before "done" (`self-check` skill).
-5. **Keep the map honest.** Refresh after every new file; refuse to use a stale map.
-6. **Measure both cost and quality.** The benchmark runs the same tasks with and without
-   Addictive and records tokens *and* whether the task passed (tests green, same files
-   changed). A token saving that lowers the pass rate is a loss, not a win.
-7. **Count subagent tokens too.** Subagents have their own context; their logs live in
-   `<session>/subagents/*.jsonl`. Leaving them out would fake the savings.
-8. **Plain English when it matters.** Terse voice drops to normal sentences for security
-   warnings, irreversible actions and questions to the user.
-
-## v1 scope (from the brief, adjusted by research)
-1. `scripts/make_codemap.py`: tree + summaries + commit hash + `--check`, secret-safe.
-2. Agents: explorer, builder, reviewer, debugger, researcher and big-decision agents above.
-3. `CLAUDE.md.template` under ~80 lines with the reuse-gate rule and map pointer.
-4. `.claude/settings.json` deny rules (secrets, node_modules, build output), documented
-   as a helper only: deny rules may not apply inside subagents.
-5. `scripts/measure_tokens.py`: reads session JSONL including subagents.
-6. README with measured results only.
-
-Later: symbol-aware map (tree-sitter), doctor script, `/map` command, hooks, plugin packaging.
-
-## How the agents "talk" to each other
-Subagents in Claude Code can't message each other directly; each reports back to the
-main session. So the shared ground is files, not chat:
-- `CODEMAP.md` (and optionally the code graph): one view of the code everyone reads.
-- `.claude/LEARNED.md`: the user's standing rules, imported into every session.
-- Fixed reply formats (`path:line`, `cause/proof/fix`, `decision/why/risks`), so the main
-  session can pass one agent's answer straight to the next without rewording it.
-
-## Adapting to the user
-When the user corrects the same thing twice, or says "always" or "never", the
-`learn-corrections` skill writes a one-line rule to `.claude/LEARNED.md`. CLAUDE.md
-imports that file, so the next session starts already knowing it. Capped at 40 rules,
-conflicting rules are replaced, and personal details are never stored.
-
-## Smaller code, same result
-`lean-code` asks for the smallest correct change and a self-review of the diff before
-finishing; `reuse-first` stops duplicate code before it is written; `self-check` proves
-the change works. None of this can *guarantee* fewer lines. The benchmark will measure
-lines changed and pass/fail together, so "shorter" never quietly means "worse".
+## Decisions
+- **Few skills.** Each skill's description is loaded in every session; overlapping skills
+  cost tokens and blur routing. Core kit: 8 skills, 6 agents. Specialised packs are optional.
+- **Least privilege.** Every agent declares `tools:` and `model:` explicitly. Instructions
+  are not permissions.
+- **Nothing implicit.** No hooks, no network access in scripts, no overwriting user files.
+- **Measured claims only.** The benchmark records tokens (subagents included), cost,
+  pass/fail from hidden checks, and lines changed. A saving that lowers the pass rate is a loss.
