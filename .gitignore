@@ -1,0 +1,20 @@
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+credentials*
+secrets*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Claude Code local files and session logs
+.claude/settings.local.json
+*.jsonl
+
+# OS
+.DS_Store
+Thumbs.db
