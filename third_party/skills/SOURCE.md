@@ -1,6 +1,6 @@
 # Third-party skills: what was copied and changed
 
-Licences: packs A, B and D are Apache-2.0, pack C is MIT (see `NOTICE` for authors, links
+Licences: packs A, B and D are Apache-2.0, packs C and E are MIT (see `NOTICE` for authors, links
 and which licence file applies). Both licences let us copy, rename and edit the files as
 long as we keep the licence and notices; Apache-2.0 also asks us to list our changes.
 
@@ -46,6 +46,16 @@ Upstream commit `9c61ab2` (2026-11-08).
 | `optional/dev-essentials/python-testing-patterns/` | `plugins/python-development/skills/python-testing-patterns/` | None |
 | `optional/dev-essentials/javascript-testing-patterns/` | `plugins/javascript-typescript/skills/javascript-testing-patterns/` | None |
 
+### Agent catalog (`optional/agents-catalog/`, 136 of its 198 agents)
+Copied from `plugins/*/agents/*.md`. Changes:
+- Deduplicated by name (first plugin alphabetically wins); 66 duplicates dropped, including
+  five named `debugger` that would clash with our core agent.
+- Models capped for cost: `inherit` → `sonnet` (36), `opus` → `sonnet` (34),
+  `fable` → `sonnet` (1). Haiku and Sonnet agents unchanged. Costly decisions belong to
+  our `big-decision` agent.
+- Otherwise unchanged. Most catalog agents do not declare `tools:`, so they get all tools;
+  install only the ones you need and review them first.
+
 ## Pack D (optional, not installed by default)
 Upstream commit `66e0086` (2026-11-17).
 
@@ -56,6 +66,17 @@ Upstream commit `66e0086` (2026-11-17).
 The skill tells Claude to add the `headroom-ai` Python/npm package to *your app*. It does
 not touch Claude Code. Its separate proxy for coding agents was not included: it routes
 your AI traffic through a local server, which is too intrusive for this kit.
+
+## Pack E (optional, 62 agents in `optional/agents-catalog/`)
+Upstream commit `d4b97e6` (2026-11-16), from `agents/*.md`.
+- Added only agents whose names were not already in the catalog (skipped: `architect`,
+  `code-reviewer`).
+- Left out 7 agents that only work with that project's own scripts, skills or MCP
+  servers: agent-evaluator, conversation-analyzer, docs-lookup, gan-evaluator,
+  gan-generator, gan-planner, harness-optimizer.
+- `opus` → `sonnet` in 3 agents; the upstream project name removed from 2 agent texts.
+- Left out `chief-of-staff` too: it sends emails and chat messages and relies on a hook.
+- No hooks, commands, skills or install scripts were copied.
 
 ## Updating
 Re-clone upstream, compare with the tables above, copy again, re-apply the changes,

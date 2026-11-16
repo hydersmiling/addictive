@@ -2,9 +2,9 @@ Third-party notices for files in this repository
 ================================================
 
 Some skills and agents in this repository are copied, renamed and lightly
-edited from four open-source projects. Packs A and B: Apache License 2.0
+edited from five open-source projects. Packs A and B: Apache License 2.0
 (LICENSE). Pack C: MIT (LICENSE-pack-c). Pack D: Apache License 2.0
-(LICENSE-pack-d). Notices from those projects that apply
+(LICENSE-pack-d). Pack E: MIT (LICENSE-pack-e). Notices from those projects that apply
 to the copied files are reproduced below. The rest of their NOTICE files cover
 code we did not copy.
 
@@ -27,8 +27,8 @@ Portions were contributed under the MIT License prior to relicensing and
 remain available under those terms.
 This repository is not affiliated with or endorsed by Graphify Labs.
 
-Pack C (optional/dev-essentials skills), MIT License, see LICENSE-pack-c
--------------------------------------------------------------------------
+Pack C (optional/dev-essentials skills, optional/agents-catalog), MIT License, see LICENSE-pack-c
+------------------------------------------------------------------------------------------------
 Copyright (c) 2024 Seth Hobson
 Source: https://github.com/wshobson/agents
 
@@ -38,3 +38,9 @@ Headroom
 Copyright 2025 Headroom Contributors
 Source: https://github.com/headroomlabs-ai/headroom
 This repository is not affiliated with or endorsed by the Headroom project.
+
+Pack E (62 agents in optional/agents-catalog), MIT License, see LICENSE-pack-e
+------------------------------------------------------------------------------
+Copyright (c) 2026 Affaan Mustafa
+Source: https://github.com/affaan-m/ECC
+This repository is not affiliated with or endorsed by that project.

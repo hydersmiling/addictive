@@ -44,3 +44,14 @@ One entry per surprise: what happened, root cause, fix, rule.
 - Cause: with no `tools:` line, an agent gets every tool, whatever its instructions say.
 - Fix: `tools: Read, Edit, Write, Grep, Glob` on builder; reviewer restricted too.
 - Rule: every agent states `tools:` explicitly. Instructions are not permissions.
+
+## 2026-11-17: Benchmark grader failed itself
+- What: the rename task failed in both setups on the first real run.
+- Cause: `check_rename.py` searched every .py file for `calc_total`, including itself.
+- Fix: the check skips its own file; a test now proves it accepts a correct rename.
+- Rule: run every grader against a known-good answer before trusting a failure.
+
+## 2026-11-17: The kit cost more on a tiny project
+- What: first benchmark: same pass rate, 17-34% more tokens with the kit.
+- Cause: fixed context (CLAUDE.md, rules, skill descriptions) plus extra turns; nothing to save on 5 files.
+- Rule: report what the data shows; test savings at realistic project size before claiming any.

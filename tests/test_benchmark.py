@@ -40,6 +40,23 @@ class BenchmarkTests(unittest.TestCase):
         self.assertTrue(row["passed"])
         self.assertEqual(row["lines_added"] + row["lines_removed"], 0)  # kit files are not counted
 
+    def test_rename_grader_accepts_a_correct_rename(self):
+        import shutil
+        import subprocess
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = os.path.join(tmp, "repo")
+            shutil.copytree(run_benchmark.SAMPLE, repo)
+            for rel in ("shop/cart.py", "tests/test_cart.py"):
+                path = os.path.join(repo, rel)
+                with open(path, encoding="utf-8") as fh:
+                    text = fh.read().replace("calc_total", "cart_total")
+                with open(path, "w", encoding="utf-8") as fh:
+                    fh.write(text)
+            shutil.copy2(os.path.join(run_benchmark.HIDDEN, "check_rename.py"), repo)
+            result = subprocess.run([sys.executable, "check_rename.py"], cwd=repo, capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_dry_run_runs_nothing(self):
         self.assertEqual(run_benchmark.main(["--claude-cmd", "does-not-exist"]), 0)
 

@@ -70,6 +70,7 @@ def main():
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     problems = []
     agents = sorted(glob.glob(os.path.join(ROOT, ".claude", "agents", "*.md")))
+    agents += sorted(glob.glob(os.path.join(ROOT, "optional", "agents-catalog", "*.md")))
     skills = sorted(glob.glob(os.path.join(ROOT, ".claude", "skills", "*", "SKILL.md")))
     skills += sorted(glob.glob(os.path.join(ROOT, "optional", "**", "SKILL.md"), recursive=True))
     for path in agents:

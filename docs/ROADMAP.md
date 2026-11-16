@@ -1,8 +1,8 @@
 # Roadmap
 
 ## Next
-1. **Publish benchmark results.** `run_benchmark.py --run --repeat 3`; report ranges and method.
-   Add a second, larger sample repository.
+1. **Benchmark at realistic size.** Run 1 (5-file sample) showed +17-34% tokens with equal pass rate;
+   add a 50+ file sample, run Opus with `--repeat 3`, and trim fixed context until the kit pays off.
 2. **Doctor command.** Check `CLAUDE.md` length, map freshness, deny rules, agent headers and
    Fable access; print fixes.
 3. **Symbols for more languages.** JS/TS, Go, Java in the code map.

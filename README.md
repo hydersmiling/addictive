@@ -1,12 +1,21 @@
 # Tokenwise
 
-Token-efficient orchestration for Claude Code. Tokenwise routes work by cognitive
-demand: Opus reasons and decides, Sonnet executes, Haiku reads and retrieves. A
-secret-aware codebase map replaces exploratory file reads, a reuse-before-create
-discipline prevents duplicate code, and every change is self-verified before it is
-reported. Rules learned from your corrections persist across sessions.
+A verified collection of 200+ specialized Claude Code subagents and 16 skills for
+token-efficient development: 6 core agents installed by default and a catalog of 198
+specialists you add by name.
 
-> **Status:** v1. Savings are not yet benchmarked, so none are claimed.
+Tokenwise routes work by cognitive demand: Opus reasons and decides, Sonnet executes,
+Haiku reads and retrieves, and Fable is reserved for rare, costly-to-reverse decisions.
+A secret-aware codebase map replaces exploratory file reads. A reuse-before-create
+discipline searches the map, scout agents and installed dependencies before any new
+code is written. Every change is scoped to the request, verified by the narrowest
+passing check, and escalated to a debugger after two failed fixes instead of looping.
+Corrections you repeat become persistent project rules, so you teach each preference
+once. Replies are compact: the answer, then at most one short follow-up.
+
+**Verified:** every agent and skill header is validated in CI, and 30 tests run on
+Linux, Windows and macOS. Privacy guards fail the build on network access in scripts,
+hooks, permission bypasses, committed emails, personal paths or keys.
 
 ## Install
 Requires Python 3.9+ and git.
@@ -19,6 +28,7 @@ Then fill in the two lines at the top of `CLAUDE.md` and run `python scripts/mak
 The installer never overwrites existing files.
 
 Optional packs: `--with code-graph dev-essentials llm-compress`.
+Catalog agents: `--list-agents`, then `--agents security-auditor backend-architect ...`.
 
 ## Agents
 | Agent | Model | Role |
@@ -31,6 +41,11 @@ Optional packs: `--with code-graph dev-essentials llm-compress`.
 | `big-decision` | Fable | Rare: architecture, data model, security design, or after two failed attempts |
 
 No Fable access: set `model: opus` in `.claude/agents/big-decision.md`.
+
+**Agent catalog (optional, 198 agents).** Specialists for languages, frameworks,
+infrastructure, security, data, testing, documentation and more, capped at Sonnet or
+Haiku for cost. Install only the ones you need: each installed agent's description is
+read in every session.
 
 ## Skills
 | Skill | Purpose |
@@ -62,13 +77,17 @@ copies of a sample project, with and without the kit, using the same model and p
 It records tokens, cost, lines changed, and pass/fail from hidden checks. A saving
 counts only if the pass rate holds. A real run (`--run`) uses your Claude plan or API credit.
 
+**First result** (Haiku, 5-file sample, 1 repeat, about $0.06): every task passed in both
+setups, and the kit used 17-34% *more* tokens. On a tiny project its fixed context
+outweighs any saving. Larger samples are next. Full table: [docs/BENCHMARK.md](docs/BENCHMARK.md).
+
 ## Privacy
 Scripts make no network calls. No hooks, no permission bypass, least-privilege agents.
 Secret files are excluded from the map and denied to Claude. CI fails on committed
 emails, personal paths or keys. See [docs/PRIVACY.md](docs/PRIVACY.md).
 
 ## Documentation
-[Design](docs/DESIGN.md) · [Token tips](docs/token-tips.md) · [MCP servers](docs/MCP.md) ·
+[Design](docs/DESIGN.md) · [Benchmark](docs/BENCHMARK.md) · [Token tips](docs/token-tips.md) · [MCP servers](docs/MCP.md) ·
 [Privacy](docs/PRIVACY.md) · [Roadmap](docs/ROADMAP.md) · [Lessons](docs/LESSONS.md)
 
 ## License

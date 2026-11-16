@@ -4,6 +4,8 @@ Usage:
     python scripts/install.py PATH --dry-run                  # show what would happen
     python scripts/install.py PATH                            # install the core kit
     python scripts/install.py PATH --with dev-essentials      # plus optional skill packs
+    python scripts/install.py --list-agents                   # show the 198 catalog agents
+    python scripts/install.py PATH --agents security-auditor  # add catalog agents by name
 
 Core kit: agents, skills, CLAUDE.md (from the template), .claude/settings.json,
 .claude/LEARNED.md, and the map and token scripts.
@@ -12,6 +14,9 @@ Optional packs (installed only when named with --with):
     code-graph      knowledge graph for large codebases (needs: uv tool install graphifyy)
     dev-essentials  debugging, code review, git, error handling, Python and JS testing
     llm-compress    for apps you build that call an LLM API (adds the headroom-ai package)
+
+Agent catalog: 198 specialised subagents (optional/agents-catalog). Install only the
+ones you need: every installed agent's description is loaded in every session.
 
 It NEVER overwrites a file you already have. Existing files are skipped and listed.
 """
@@ -37,6 +42,12 @@ OPTIONAL = {
     "dev-essentials": [("optional/dev-essentials", ".claude/skills")],
     "llm-compress": [("optional/llm-compress", ".claude/skills/llm-compress")],
 }
+CATALOG = os.path.join(KIT, "optional", "agents-catalog")
+
+
+def catalog_agents():
+    """Names of the agents in the optional catalog."""
+    return sorted(f[:-3] for f in os.listdir(CATALOG) if f.endswith(".md"))
 
 
 def walk_pairs(src_folder, dst_folder):
@@ -49,19 +60,22 @@ def walk_pairs(src_folder, dst_folder):
     return pairs
 
 
-def plan(target, extras=()):
+def plan(target, extras=(), agents=()):
     """Return the sorted list of (source, destination) file pairs to copy."""
     pairs = [(os.path.join(KIT, s), os.path.join(target, d)) for s, d in SINGLE_FILES]
+    for name in agents:
+        pairs.append((os.path.join(CATALOG, name + ".md"),
+                      os.path.join(target, ".claude", "agents", name + ".md")))
     folders = CORE_FOLDERS + [f for name in extras for f in OPTIONAL[name]]
     for src, dst in folders:
         pairs += walk_pairs(os.path.join(KIT, src), os.path.join(target, dst))
     return sorted(pairs)
 
 
-def install(target, dry_run=False, extras=()):
+def install(target, dry_run=False, extras=(), agents=()):
     """Copy kit files into target. Return (copied, skipped) lists of relative paths."""
     copied, skipped = [], []
-    for src, dst in plan(target, extras):
+    for src, dst in plan(target, extras, agents):
         rel = os.path.relpath(dst, target)
         if os.path.exists(dst):
             skipped.append(rel)
@@ -77,11 +91,27 @@ def main(argv=None):
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(description="Copy the Tokenwise kit into a project.")
-    parser.add_argument("target", help="your project folder")
+    parser.add_argument("target", nargs="?", help="your project folder")
     parser.add_argument("--dry-run", action="store_true", help="show what would be copied; change nothing")
     parser.add_argument("--with", dest="extras", nargs="+", default=[], choices=sorted(OPTIONAL),
                         help="optional packs to add")
+    parser.add_argument("--agents", nargs="+", default=[], metavar="NAME",
+                        help="catalog agents to add (see --list-agents)")
+    parser.add_argument("--list-agents", action="store_true", help="list catalog agents and exit")
     args = parser.parse_args(argv)
+
+    if args.list_agents:
+        names = catalog_agents()
+        print(f"{len(names)} catalog agents:")
+        for name in names:
+            print("  " + name)
+        return 0
+    if not args.target:
+        parser.error("give your project folder")
+    unknown = sorted(set(args.agents) - set(catalog_agents()))
+    if unknown:
+        print(f"Unknown catalog agents: {', '.join(unknown)}. See --list-agents.")
+        return 1
 
     target = os.path.abspath(args.target)
     if not os.path.isdir(target):
@@ -91,7 +121,7 @@ def main(argv=None):
         print("That is the kit itself. Pick your own project folder.")
         return 1
 
-    copied, skipped = install(target, args.dry_run, args.extras)
+    copied, skipped = install(target, args.dry_run, args.extras, args.agents)
     print(f"{'Would copy' if args.dry_run else 'Copied'} {len(copied)} files into {target}")
     for rel in copied:
         print(f"  + {rel}")

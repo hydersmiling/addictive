@@ -38,6 +38,21 @@ class InstallTests(unittest.TestCase):
                          ".claude/skills/llm-compress/SKILL.md"):
                 self.assertIn(want, extra)
 
+    def test_catalog_agents_by_name(self):
+        names = install.catalog_agents()
+        self.assertGreaterEqual(len(names), 100)
+        with tempfile.TemporaryDirectory() as target:
+            copied, _ = install.install(target, dry_run=True, agents=[names[0]])
+            self.assertIn(f".claude/agents/{names[0]}.md", [c.replace(os.sep, "/") for c in copied])
+            plain, _ = install.install(target, dry_run=True)
+            self.assertFalse(any(names[0] in c for c in plain))
+
+    def test_catalog_never_inherits_or_uses_top_models(self):
+        for name in install.catalog_agents():
+            with open(os.path.join(install.CATALOG, name + ".md"), encoding="utf-8") as fh:
+                header = fh.read().split(chr(10) + "---", 1)[0]
+            self.assertRegex(header, r"(?m)^model: (haiku|sonnet)$", name)
+
     def test_dry_run_changes_nothing(self):
         with tempfile.TemporaryDirectory() as target:
             copied, _ = install.install(target, dry_run=True)
