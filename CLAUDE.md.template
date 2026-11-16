@@ -1,0 +1,33 @@
+# Project rules for Claude
+
+<!-- Copy this file to CLAUDE.md in your project and fill in the two lines below.
+     Keep it short: Claude reads all of it on every turn, so every line costs tokens. -->
+
+Project: <one line: what this project is>
+Run tests: <command, e.g. `python -m unittest` or `npm test`>
+
+## Finding code
+- `CODEMAP.md` lists every file with a one-line summary. Read it before opening files.
+- If the map is stale (`python scripts/make_codemap.py --check` fails), refresh it first.
+
+## Who does what
+- Main session: understand the request, plan, decide, check the final result.
+- `caveman-explore` / `cavecrew-investigator` (Haiku): find where code lives.
+- `cavecrew-builder` (Sonnet): small edits of 1-2 files, renames.
+- `debugger` (Sonnet): root cause of bugs and failing tests, before any fix.
+- `researcher` (Sonnet): web and docs lookups.
+- `cavecrew-reviewer` (Haiku): check a diff before calling work done.
+- `big-decision` (Fable, rare): only for choices that are expensive to undo, or after two failed attempts.
+- Do simple, known things directly. A subagent call that saves nothing is waste.
+
+## Before creating anything
+1. Search the map for the name and close synonyms.
+2. Not sure? Ask `caveman-explore`: "Is there already code that does X?"
+3. If you get "No match", do one direct search yourself to confirm.
+4. Reuse or extend what exists. Create new code only when nothing fits; then refresh the map.
+
+## Working style
+- Plan briefly, change little, test, then move on.
+- Bugs: find the cause first (`debugger` or the `investigate-first` skill), then fix.
+- Done means tests pass and the reviewer found nothing serious.
+- Never read or print secrets. Never commit `.env`, keys or tokens.

@@ -7,3 +7,22 @@ One entry per surprise: what happened, root cause, fix, rule.
 - Cause: Claude Code uses the parent model when an agent file sets no model.
 - Fix: added `model: sonnet`; recorded in `third_party/caveman/SOURCE.md`.
 - Rule: every agent file in this repo sets `model:` explicitly.
+
+## 2026-11-17: CODEMAP.md listed itself
+- What: `--check` always said STALE right after writing the map.
+- Cause: the map included its own file, so each write changed the content it compared.
+- Fix: the output file is excluded from the list; `--check` also ignores the header's commit hash.
+- Rule: a generated file must never describe itself, and freshness checks compare content, not stamps.
+
+## 2026-11-17: "*token*" pattern hid real code
+- What: the secret filter would have hidden `measure_tokens.py`.
+- Cause: substring patterns match harmless names.
+- Fix: whole-name patterns only (`token.json`, `secrets.*`, `credentials*`).
+- Rule: match file names exactly or by clear suffix, never by a loose substring.
+
+## 2026-11-17: Windows long paths and duplicate log lines
+- What: the token counter found no subagent logs and would have double-counted replies.
+- Cause: (1) Claude Code log paths exceed Windows' 260-character limit; `open` and `glob`
+  fail or find nothing silently. (2) One reply is written on several lines, each repeating its usage.
+- Fix: `\?\` long-path prefix with `os.listdir`; count each (message id, request id) once.
+- Rule: test file tools on real Windows paths, and dedupe log records by id before summing.

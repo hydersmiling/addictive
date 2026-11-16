@@ -1,4 +1,4 @@
-# Addictive: design (draft, nothing built yet)
+# Addictive: design
 
 ## The idea in one line
 A "brain" for Claude Code: Opus thinks and decides, Sonnet and Haiku do the
@@ -13,6 +13,9 @@ things without opening files, so we spend as few tokens as possible.
 | **Scout** (`caveman-explore`, `cavecrew-investigator`) | Haiku | Find where things live, answer "do we already have X?" | `path:line` list only |
 | **Builder** (`cavecrew-builder`) | Sonnet | Edits of 1-2 files, renames, mechanical changes | Short diff receipt |
 | **Reviewer** (`cavecrew-reviewer`) | Haiku, upgrade to Sonnet for risky code | Check a diff | One line per issue |
+| **Debugger** (`debugger`) | Sonnet | Root cause of bugs, before any fix | cause, proof, smallest fix |
+| **Researcher** (`researcher`) | Sonnet | Web and docs lookups | short answer + sources |
+| **Big decision** (`big-decision`) | Fable (optional) | Only choices that are expensive to undo, or after two failed attempts | decision, why, risks |
 | **Mapper** (`scripts/make_codemap.py`, plain Python, no model) | none | Build and refresh the tree | `CODEMAP.md` |
 
 Rule: the brain never reads a whole file to *find* something; it asks the scout or
