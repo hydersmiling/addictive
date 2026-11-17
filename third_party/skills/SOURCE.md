@@ -11,9 +11,9 @@ Upstream commit `9b243662ff98d392bc0a95b865a554583d71be75` (2026-11-16), version
 |---|---|---|
 | `.claude/skills/terse/SKILL.md` | `skills/caveman/SKILL.md` | Renamed; product name replaced with "terse"; removed mentions of skills we don't ship |
 | `.claude/skills/safe-refactor/SKILL.md` | same | None |
-| `.claude/agents/builder.md` | `agents/cavecrew-builder.md` | Renamed; names replaced; added `model: sonnet`; added `tools: Read, Edit, Write, Grep, Glob` (the original said it had no shell but granted every tool) |
+| `.claude/agents/builder.md` | `agents/cavecrew-builder.md` | Renamed; names replaced; added `model: sonnet`; added `tools: Read, Edit, Write, Grep, Glob` (the original said it had no shell but granted every tool); description rewritten: it makes every edit, the main session splits larger work |
 | `.claude/agents/reviewer.md` | `agents/cavecrew-reviewer.md` | Renamed; names replaced; added `tools: Read, Grep, Glob, Bash` |
-| `.claude/agents/explorer.md` | `skills/caveman-explore/SKILL.md` | Renamed; moved to agents (it is written as an agent) |
+| `.claude/agents/explorer.md` | `skills/caveman-explore/SKILL.md` | Renamed; moved to agents (it is written as an agent); description says it does all reading for the main session; may add a 5-line answer after its citations |
 
 Removed after review (overlap with our own skills or not useful for beginners):
 ultracave, megacave, cavecrew, investigate-first, lean-build, surgical-patch,

@@ -1,11 +1,9 @@
 ---
 name: builder
 description: >
-  Surgical 1-2 file edit. Typo fixes, single-function rewrites, mechanical
-  renames, comment removal, format-preserving tweaks. Hard refuses 3+ file
-  scope. Returns terse diff receipt. Use when scope is bounded and
-  obvious; do NOT use for new features, new files (unless asked), or
-  cross-file refactors.
+  Makes every file edit for the main session: fixes, renames, features and new
+  files, 1-2 files per call (the main session splits larger work into several
+  calls). Refuses 3+ files in one call. Returns a terse diff receipt.
 tools: Read, Edit, Write, Grep, Glob
 model: sonnet
 ---
