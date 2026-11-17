@@ -25,7 +25,8 @@ Everything Claude Code loads from this kit lives here. `scripts/install.py` copi
 
 ## Skills
 `compact` (reply style), `lean-code`, `reuse-first`, `self-check`, `learn-corrections`,
-`map` (`/map`), `terse` (opt-in) and `safe-refactor`.
+`map` (`/map`), `terse` (opt-in) and `safe-refactor`. Plugin installs also get `setup`
+(`/mainseat:setup`), which adds the per-project files once.
 
 ## Rules for changing these files
 - Every agent states `model:` and `tools:` explicitly. An agent with no `tools:` line

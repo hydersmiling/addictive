@@ -10,6 +10,9 @@ Usage:
 Core kit: agents, skills, CLAUDE.md (from the template), .claude/settings.json,
 .claude/LEARNED.md, and the map and token scripts.
 
+Plugin users: the plugin provides agents and skills; /mainseat:setup runs this script with
+--rules-only to add only the per-project files.
+
 Optional packs (installed only when named with --with):
     code-graph      knowledge graph for large codebases (needs: uv tool install graphifyy)
     dev-essentials  debugging, code review, git, error handling, Python and JS testing
@@ -60,22 +63,23 @@ def walk_pairs(src_folder, dst_folder):
     return pairs
 
 
-def plan(target, extras=(), agents=()):
+def plan(target, extras=(), agents=(), rules_only=False):
     """Return the sorted list of (source, destination) file pairs to copy."""
     pairs = [(os.path.join(KIT, s), os.path.join(target, d)) for s, d in SINGLE_FILES]
     for name in agents:
         pairs.append((os.path.join(CATALOG, name + ".md"),
                       os.path.join(target, ".claude", "agents", name + ".md")))
-    folders = CORE_FOLDERS + [f for name in extras for f in OPTIONAL[name]]
+    # rules_only: the plugin already provides agents and skills, so copy only project files.
+    folders = ([] if rules_only else CORE_FOLDERS) + [f for name in extras for f in OPTIONAL[name]]
     for src, dst in folders:
         pairs += walk_pairs(os.path.join(KIT, src), os.path.join(target, dst))
     return sorted(pairs)
 
 
-def install(target, dry_run=False, extras=(), agents=()):
+def install(target, dry_run=False, extras=(), agents=(), rules_only=False):
     """Copy kit files into target. Return (copied, skipped) lists of relative paths."""
     copied, skipped = [], []
-    for src, dst in plan(target, extras, agents):
+    for src, dst in plan(target, extras, agents, rules_only):
         rel = os.path.relpath(dst, target)
         if os.path.lexists(dst):  # lexists: also skip broken symlinks, never write through them
             skipped.append(rel)
@@ -98,6 +102,8 @@ def main(argv=None):
     parser.add_argument("--agents", nargs="+", default=[], metavar="NAME",
                         help="catalog agents to add (see --list-agents)")
     parser.add_argument("--list-agents", action="store_true", help="list catalog agents and exit")
+    parser.add_argument("--rules-only", action="store_true",
+                        help="only CLAUDE.md, settings, LEARNED.md and scripts (for plugin installs)")
     args = parser.parse_args(argv)
 
     if args.list_agents:
@@ -121,7 +127,7 @@ def main(argv=None):
         print("That is the kit itself. Pick your own project folder.")
         return 1
 
-    copied, skipped = install(target, args.dry_run, args.extras, args.agents)
+    copied, skipped = install(target, args.dry_run, args.extras, args.agents, args.rules_only)
     print(f"{'Would copy' if args.dry_run else 'Copied'} {len(copied)} files into {target}")
     for rel in copied:
         print(f"  + {rel}")

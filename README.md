@@ -26,13 +26,27 @@ half the cost, delivered in smaller, cleaner changes.
 101 graded benchmark runs so far; one failed, exposing a defect that is now fixed. Method and raw numbers: [docs/BENCHMARK.md](docs/BENCHMARK.md).
 
 ## Start in one minute
+**As a Claude Code plugin (recommended).** Inside Claude Code:
+```
+/plugin install mainseat --marketplace hydersmiling/mainseat
+```
+or from a terminal:
+```bash
+claude plugin marketplace add hydersmiling/mainseat
+claude plugin install mainseat@mainseat
+```
+Then open your project, start Claude Code on Sonnet (`claude --model sonnet`) and type
+`/mainseat:setup` once. It adds the project rules, settings and helper scripts, asks for a
+one-line description of your project and its test command, and builds the code map.
+
+**Or with the installer script.** If you prefer plain files in your repository:
 ```bash
 git clone https://github.com/hydersmiling/mainseat
 python mainseat/scripts/install.py path/to/project
 claude --model sonnet
 ```
 Fill in the two lines at the top of the new `CLAUDE.md`, then run `python scripts/make_codemap.py`.
-The installer never overwrites your files.
+Either way, nothing you already have is overwritten.
 
 ## More than a cost cutter
 Lower cost is the headline, but the everyday difference is a Claude that behaves like a
