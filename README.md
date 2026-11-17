@@ -1,112 +1,69 @@
 # Tokenwise
 
-A verified collection of 200+ specialized Claude Code subagents and 16 skills for
-token-efficient development: 8 core agents installed by default and a catalog of 198
-specialists you add by name.
+**Opus-quality results at Sonnet prices.** Tokenwise sets up Claude Code so a mid-price
+model runs your session, cheap helpers do the reading, and Opus steps in only to plan.
+Same passing result, about half the cost, smaller diffs.
 
-Tokenwise routes work by cognitive demand: Opus only plans, delegates and judges; every
-hands-on step, however small, goes to Sonnet (edits, debugging, research) or Haiku
-(reading, searching, running tests). Fable is reserved for rare, costly-to-reverse decisions.
-A secret-aware codebase map replaces exploratory file reads. A reuse-before-create
-discipline searches the map, scout agents and installed dependencies before any new
-code is written. Every change is scoped to the request, verified by the narrowest
-passing check, and escalated to a debugger after two failed fixes instead of looping.
-Corrections you repeat become persistent project rules, so you teach each preference
-once. Replies are compact: the answer, then at most one short follow-up.
+| Measured on the same tasks | Plain Opus | Sonnet + Tokenwise |
+|---|---|---|
+| Tasks passed (hidden graders) | 10/10 | **10/10** |
+| Cost, 6 real-size tasks | $1.12 | **$0.49 (-56%)** |
+| Cost, 4 small tasks | $0.59 | **$0.33 (-44%)** |
+| Lines changed, feature task | 22 | **6** |
 
-**Verified:** every agent and skill header is validated in CI, and 30 tests run on
-Linux, Windows and macOS. Privacy guards fail the build on network access in scripts,
-hooks, permission bypasses, committed emails, personal paths or keys.
+86 graded benchmark runs so far, every one passed. Method and raw numbers: [docs/BENCHMARK.md](docs/BENCHMARK.md).
 
-## Recommended: run the main session on Sonnet
-```bash
-claude --model sonnet        # or type /model sonnet inside Claude Code
-```
-Every reply of the main session re-reads its whole context at the main model's price,
-so the main model is the biggest cost lever. Sonnet runs the session, Haiku helpers read
-and run tests, and Opus is called only through the `planner` agent for real design work.
-Measured on 6 tasks: **Sonnet + kit cost 56% less than plain Opus, and every task passed
-in both** (6/6). The kit also produced the smallest change on the feature task (6 lines,
-vs 22 for plain Opus). Plain Sonnet was cheaper still (-64%); the kit's rules add about
-22% on short tasks. Details: [docs/BENCHMARK.md](docs/BENCHMARK.md).
-
-## Install
-Requires Python 3.9+ and git.
+## Start in one minute
 ```bash
 git clone https://github.com/hydersmiling/tokenwise
-python tokenwise/scripts/install.py path/to/project --dry-run
 python tokenwise/scripts/install.py path/to/project
+claude --model sonnet          # run your session on Sonnet
 ```
-Then fill in the two lines at the top of `CLAUDE.md` and run `python scripts/make_codemap.py`.
-The installer never overwrites existing files.
+Fill in the two lines at the top of the new `CLAUDE.md`, then run `python scripts/make_codemap.py`.
+The installer never overwrites your files.
 
-Optional packs: `--with code-graph dev-essentials llm-compress`.
-Catalog agents: `--list-agents`, then `--agents security-auditor backend-architect ...`.
-
-## Agents
-| Agent | Model | Role |
+## Who does what
+| Role | Model | Why |
 |---|---|---|
-| `explorer` | Haiku | All reading and searching; returns `path:line` and a short answer |
-| `runner` | Haiku | Runs tests and commands; reports pass/fail and key lines |
-| `reviewer` | Haiku | Diff review, one line per finding; cannot edit |
-| `builder` | Sonnet | Every edit, 1-2 files per call; no shell |
-| `debugger` | Sonnet | Reproduces failures and isolates the root cause |
-| `researcher` | Sonnet | Documentation and web lookups with sources |
-| `planner` | Opus | Plans multi-file work, design and unclear fixes; called by a cheaper main session |
-| `big-decision` | Fable | Rare: architecture, data model, security design, or after two failed attempts |
+| Main session: understands, decides, edits known files | **Sonnet** | Every reply re-reads the whole context, so this seat sets the price |
+| `planner`: designs multi-file work | Opus | Strongest reasoning, used only when a plan is needed |
+| `explorer`, `runner`, `reviewer`: read, search, run tests, review | Haiku | 40x cheaper than Opus for mechanical work |
+| `builder`, `debugger`, `researcher`: edits, root causes, docs lookups | Sonnet | Capable and half Opus's price |
+| `big-decision`: costly-to-reverse choices | Fable | Rare; falls back to Opus if unavailable |
 
-No Fable access: set `model: opus` in `.claude/agents/big-decision.md`.
+Why Opus doesn't build: building is many turns of reading and editing, and every turn is
+paid at the session model's price. Opus earns its cost on the plan, not the keystrokes.
 
-**Agent catalog (optional, 198 agents).** Specialists for languages, frameworks,
-infrastructure, security, data, testing, documentation and more, capped at Sonnet or
-Haiku for cost. Install only the ones you need: each installed agent's description is
-read in every session.
-
-## Skills
-| Skill | Purpose |
+## What to use
+| You want | Use |
 |---|---|
-| `compact` | Default reply style: the answer, then at most one short follow-up |
-| `lean-code` | Smallest correct change, scoped to the request |
-| `reuse-first` | Search map, agents and dependencies before creating anything |
-| `self-check` | Verify every change; escalate to `debugger` after two failed fixes |
-| `learn-corrections` | Turn repeated corrections into persistent rules (`/learn`) |
-| `map` | Refresh `CODEMAP.md` (`/map`) |
-| `terse` | Opt-in: maximally short replies |
-| `safe-refactor` | Restructure without changing behaviour |
+| Opus-level results for less | `claude --model sonnet` + Tokenwise |
+| The lowest possible cost on simple work | `claude --model haiku` + Tokenwise (passed every small task, $0.02 for four) |
+| A hard design or architecture call | Let the session call `planner` or `big-decision` |
+| A large codebase | `--with code-graph` |
 
-Optional: `code-graph` (knowledge graph for large repositories), `dev-essentials`
-(debugging, code review, git, error handling, Python and JS testing), `llm-compress`
-(context compression for applications that call an LLM API).
+## What you get
+- **Code map:** one-line summary of every file; secrets and ignored files left out.
+- **Reuse before create:** searches the map and existing helpers before writing new code.
+- **Smallest correct change:** only what you asked for, verified by the narrowest test.
+- **Self-debugging:** two failed fixes hand over to a debugger instead of looping.
+- **Learns your corrections:** say it twice and it becomes a rule in `.claude/LEARNED.md`.
+- **Compact replies:** the answer, then at most one short follow-up.
+- **200+ agents:** 8 core plus 198 optional specialists (`--list-agents`, `--agents NAME`).
+- **Real numbers:** `scripts/measure_tokens.py` shows any session's tokens, subagents included.
 
-## Tools
-| Script | Purpose |
-|---|---|
-| `scripts/make_codemap.py` | Generate `CODEMAP.md`; `--check` reports staleness |
-| `scripts/measure_tokens.py` | Token use per model from local session logs, subagents included |
-| `scripts/check_agents.py` | Validate agent and skill headers |
-| `benchmarks/run_benchmark.py` | Compare runs with and without the kit (dry run by default) |
+## Honest limits
+- Quality is graded by hidden tests and checks: correctness and reuse. Code style is not scored.
+- Most savings come from Sonnet as the main model. Plain Sonnet was cheaper still (-64%);
+  the kit's rules cost about 20-30% on short tasks and buy smaller, reused, checked changes.
+- One or two runs per setup so far. Long multi-task sessions are not yet measured.
 
-## Benchmark
-Four fixed tasks (fix a bug, add a feature, locate code, rename a symbol) run on two
-copies of a sample project, with and without the kit, using the same model and prompt.
-It records tokens, cost, lines changed, and pass/fail from hidden checks. A saving
-counts only if the pass rate holds. A real run (`--run`) uses your Claude plan or API credit.
+## Safe by design
+No hooks, no network calls in scripts, no permission bypass, least-privilege agents.
+CI on Linux, Windows and macOS fails on leaked emails, personal paths or keys.
+`main` is protected: every change goes through a pull request with passing checks.
 
-**Results so far** ([details](docs/BENCHMARK.md)): quality held in every valid run (44/44 graded passes
-across four runs). With strict delegation on Opus, helpers did all hands-on work and Opus
-took 65% fewer turns, but total cost rose 25% on short single tasks, because each Opus
-session has a fixed token floor and helper tokens add to it. It cost less only on the
-largest task (-14%). Long multi-task sessions, where savings should appear, are not yet measured.
+[Design](docs/DESIGN.md) · [Benchmark](docs/BENCHMARK.md) · [Token tips](docs/token-tips.md) ·
+[MCP](docs/MCP.md) · [Privacy](docs/PRIVACY.md) · [Roadmap](docs/ROADMAP.md) · [Changelog](CHANGELOG.md)
 
-## Privacy
-Scripts make no network calls. No hooks, no permission bypass, least-privilege agents.
-Secret files are excluded from the map and denied to Claude. CI fails on committed
-emails, personal paths or keys. See [docs/PRIVACY.md](docs/PRIVACY.md).
-
-## Documentation
-[Design](docs/DESIGN.md) · [Benchmark](docs/BENCHMARK.md) · [Token tips](docs/token-tips.md) · [MCP servers](docs/MCP.md) ·
-[Privacy](docs/PRIVACY.md) · [Roadmap](docs/ROADMAP.md) · [Lessons](docs/LESSONS.md)
-
-## License
-MIT. Third-party skills keep their licences (Apache-2.0 or MIT); see
-[third_party/skills](third_party/skills/).
+MIT licence. Third-party skills keep their licences; see [third_party/skills](third_party/skills/).
