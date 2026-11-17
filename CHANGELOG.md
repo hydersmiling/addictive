@@ -1,6 +1,9 @@
 # Changelog
 
-## Unreleased
+## 1.1.0 (2026-11-17)
+- **Blind quality review:** `benchmarks/judge.py` scores baseline vs kit outputs A/B without
+  revealing which is which; benchmark runs now record their diff and answer.
+- README rewritten around measured results; `.claude/README.md` documents every agent and skill.
 - **Recommended setup: Sonnet main session** with Opus only via the new `planner` agent
   (measured -56% cost vs plain Opus, 6/6 passes).
 - `measure_tokens.py` shows a token profile: fixed floor, peak context, floor share.

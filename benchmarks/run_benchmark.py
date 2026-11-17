@@ -132,6 +132,12 @@ def lines_changed(workdir):
     return added, removed
 
 
+def code_diff(workdir, limit=20000):
+    """The code Claude changed, as a unified diff (kept for the blind quality review)."""
+    _code, out = sh(["git", "diff", "--cached", "--", ".", ":!CODEMAP.md"], workdir)
+    return out[:limit]
+
+
 def tokens_from_logs(workdir, session_id):
     """Token totals from Claude Code's logs for this run, subagents included."""
     folder = os.path.join(measure_tokens.projects_dir(), measure_tokens.project_folder_name(workdir))
@@ -183,6 +189,7 @@ def run_one(task, mode, model, claude_cmd, keep=False, sample="small", effort=No
         for name in copied:
             os.remove(os.path.join(workdir, name))
         added, removed = lines_changed(workdir)
+        diff = code_diff(workdir)
 
         return {
             "task": task["id"], "mode": mode, "model": model, "sample": sample, "time": time.strftime("%Y-%m-%d %H:%M"),
@@ -190,6 +197,7 @@ def run_one(task, mode, model, claude_cmd, keep=False, sample="small", effort=No
             "cost_usd": reply.get("total_cost_usd"), "turns": reply.get("num_turns"),
             "seconds": seconds, "lines_added": added, "lines_removed": removed,
             "tokens": tokens_from_logs(workdir, reply.get("session_id")),
+            "diff": diff, "answer": answer[:4000],
         }
     finally:
         if not keep:
