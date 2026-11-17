@@ -25,8 +25,16 @@ risks: <0-2 lines, or "none">
 ```
 At most 8 steps. Prefer reusing existing code: name the helper and its path.
 
-For a new app, page or UI, add a `design:` block before the steps: the audience and the
-page's one job, a palette (4-6 hex colours), typefaces, the layout section by section,
-the headline and key copy, and what stands in for images (no blank placeholder blocks).
-The builder follows it exactly, so be specific.
+For a new app, page or UI, add a `design:` block before the steps:
+- the audience and the page's one job;
+- a palette (4-6 hex colours) and typefaces;
+- the layout, section by section, with what each section contains;
+- the headline and key copy;
+- what stands in for images (never blank placeholder blocks).
+
+Then a `signature:` block naming the 2-3 pieces the `designer` (Opus) will build, each with
+its level of detail. For example: "hero: detailed side-view SVG of the chair with mesh
+texture, shading and three floating feature labels"; "showpiece: dark 'anatomy' section,
+chair drawing with five numbered hotspots explained beside it". Everything not listed
+there is built by the main session, so be specific.
 If the goal is ambiguous, reply only `ask: <one question>`.

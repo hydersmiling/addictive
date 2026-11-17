@@ -14,6 +14,8 @@ should be a mid-price model that delegates reading and saves Opus for planning.
 | Job | Who | Model |
 |---|---|---|
 | Plan a new app, page or UI (design and copy), multi-file work, unclear fixes | `planner` | Opus |
+| Build the signature pieces of a page: hero visual, showpiece section, headline | `designer` | Opus |
+| Review a screenshot of a finished page | `art-director` | Opus |
 | Find code, read 3+ files, audits | `explorer` | Haiku |
 | Run tests and commands | `runner` | Haiku |
 | Small edits in files you already know | main session | (Sonnet) |
@@ -25,8 +27,12 @@ should be a mid-price model that delegates reading and saves Opus for planning.
 If the main session is running on Opus, it does no hands-on work at all: every read,
 edit and command goes to a helper (`builder` for edits).
 
-Building something new that people will see (an app, page, UI or marketing copy)? Ask
-`planner` for the design first, then build exactly to it.
+Building something new that people will see (an app, page, UI or marketing copy):
+1. `planner` writes the design brief, including the signature pieces.
+2. `designer` builds the signature pieces.
+3. You build everything else exactly to the brief.
+4. `python scripts/screenshot.py <page>`, then `art-director` reviews the screenshot.
+5. Apply its fixes once, then stop.
 
 Give helpers precise tasks with paths. Independent helper calls go in one message.
 If a helper is refused permission (for example, `runner` can't run a command), do that
