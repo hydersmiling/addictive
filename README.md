@@ -28,6 +28,52 @@ claude --model sonnet
 Fill in the two lines at the top of the new `CLAUDE.md`, then run `python scripts/make_codemap.py`.
 The installer never overwrites your files.
 
+## New to Claude Code? Start here
+If you have just installed Claude Code, Tokenwise gives you a sound configuration on day
+one, so you never have to learn the expensive habits first. Five steps:
+
+1. **Install the kit into your project.** Run the installer shown above. It adds a short
+   `CLAUDE.md`, the agents and skills, and two helper scripts. Nothing you already have is
+   replaced.
+2. **Describe your project in two lines.** Open `CLAUDE.md` and fill in what the project is
+   and the command that runs its tests. Claude reads this on every turn, so two precise
+   lines are worth more than a page of background.
+3. **Build the code map.** `python scripts/make_codemap.py` writes `CODEMAP.md`, a one-line
+   summary of every file. Claude consults it instead of opening files at random.
+4. **Start on Sonnet.** `claude --model sonnet`. This single choice delivers most of the
+   saving. You do not need to call Opus yourself; the kit's `planner` does that when a task
+   genuinely needs a plan.
+5. **Work normally.** Ask for what you want in plain language. Tokenwise decides who reads,
+   who builds and who checks, and replies with the answer and at most one short follow-up.
+
+After your first few sessions, run `python scripts/measure_tokens.py` to see what they
+actually cost. Most new users are surprised by how much of a session is the fixed floor,
+and by how much shorter sessions on a mid-price model reduce it.
+
+### Choosing a model: a field guide
+Start every session on **Sonnet**. It handles everyday building, debugging and refactoring
+with the same graded pass rate as Opus in our benchmarks, at roughly half the price per
+token. Move to **Haiku** (`/model haiku`) for routine, well-specified work: renames, small
+fixes, documentation edits, test runs. It passed every small benchmark task for a few cents.
+Reach for **Opus** directly only when a whole session is design work, such as an
+architecture review or a difficult migration; for a single hard decision inside an ordinary
+session, let the `planner` or `big-decision` agent handle it. Switching costs nothing, so
+the right habit is to match the model to the next stretch of work, not to the most
+difficult moment you can imagine.
+
+### Writing requests that cost less
+The cheapest token is the one never needed. A few habits make every model more efficient:
+
+- **Name what you know.** "Fix the rounding in `apply_discount` in `orders/pricing.py`"
+  lets Claude open one file; "something is wrong with prices" makes it search.
+- **Paste the decisive line, not the log.** One error line and its file reference say more
+  than two hundred lines of output.
+- **State the finish line.** "Done when the pricing tests pass" stops work at the right
+  moment instead of inviting polish.
+- **One topic per session.** Start fresh with `/clear` when you change subject; a long
+  session re-reads its entire history on every reply.
+- **Ask for a plan on large changes.** Correcting a plan is cheaper than correcting code.
+
 ## The thesis
 Most advice on saving tokens targets the wrong variable. Every reply in a Claude Code
 session re-reads a fixed floor of context (system prompt, tool definitions, project
@@ -285,6 +331,101 @@ commit, with every local change listed beside it.
 - **Code map:** `CODEMAP.md`, a one-line summary of every file in the project.
 - **Hidden check:** a test copied in only after Claude finishes, so it cannot be gamed.
 - **Decoy:** a correct file planted beside a flawed one, to catch over-reporting.
+
+## Working in a team
+Tokenwise is plain files in your repository, so it travels with the code. Commit
+`CLAUDE.md`, `.claude/agents`, `.claude/skills` and `.claude/settings.json`, and every
+teammate's Claude Code session follows the same routing, the same reply style and the same
+safety rules. `.claude/LEARNED.md` can be shared as well: a correction one person teaches
+becomes a rule for everyone, which is often the fastest way to encode a team's conventions.
+Review changes to these files the way you review code, because they shape how every
+session behaves. Keep personal preferences in your own user-level settings instead, so the
+shared configuration stays focused on the project.
+
+## Upgrading and removing
+To upgrade, pull the latest Tokenwise and run the installer again. It adds new files and
+skips existing ones, so local edits are never overwritten; compare any skipped file with
+the new version and merge what you want. To remove Tokenwise, delete the files it added:
+the agents and skills in `.claude/`, `.claude/LEARNED.md`, `CODEMAP.md`, and the two
+scripts in `scripts/`. Remove or edit `CLAUDE.md` and `.claude/settings.json` if you have
+not customised them. Nothing else on your system is touched, because nothing else was ever
+installed.
+
+## Known trade-offs
+Every design choice here buys something and costs something, and it is better to know both.
+The kit's instructions are read on every turn, which adds a small fixed cost that only pays
+for itself once tasks involve real reading, reuse or verification. Delegating to helpers
+keeps the main context lean, but a helper repeats some orientation work, so delegating a
+search that one pattern could answer costs more than doing it directly. Strict scoping
+produces smaller changes, which occasionally means Claude asks before extending a task you
+half-expected it to extend. The benchmark tasks are deliberately controlled; your own
+codebase is the final arbiter, and `measure_tokens.py` exists so that you can check.
+
+### When Tokenwise is not the right tool
+If you use Claude Code only occasionally, for a quick question or a single small edit,
+the kit's instructions will cost more than they save, and a plain Sonnet session is the
+better choice. The same is true for one-off scripts in a throwaway folder. Tokenwise earns
+its keep in projects you return to: codebases with history, conventions and tests, where
+reuse, verification and remembered corrections compound from one session to the next. If
+your work is mostly long design conversations rather than code changes, running Opus
+directly for those sessions remains perfectly reasonable; the kit simply makes sure you
+are not paying Opus rates for the routine turns around them.
+
+## A tour of the repository
+| Path | Purpose |
+|---|---|
+| `CLAUDE.md.template` | The short project rules the installer copies into your project |
+| `.claude/agents/` | The eight core agents, each with an explicit model and tool list |
+| `.claude/skills/` | The eight core skills, loaded only when relevant |
+| `optional/` | The agent catalog and optional skill packs, installed only on request |
+| `scripts/` | Installer, code map, token counter and header checker, all standard-library Python |
+| `benchmarks/` | Sample projects, task definitions, hidden graders, the runner and the blind judge |
+| `tests/` | Unit tests, including privacy guards that run on every push |
+| `docs/` | Design notes, benchmark results, token tips, privacy and lessons learned |
+| `third_party/` | Licences, notices and the change log for every borrowed file |
+
+## Judging the savings yourself
+Benchmarks describe controlled tasks; your work is not controlled. The most reliable test
+is a simple before-and-after on your own project. Pick a task you do often, such as
+fixing a failing test or adding a small endpoint. Do it once in a plain session on your
+usual model and once on Sonnet with Tokenwise installed, with the same request. After each,
+run `python scripts/measure_tokens.py` and note the tokens per model and the floor share.
+Then compare the two results the way a reviewer would: does each change work, is it the
+right size, does it reuse what already exists? If the cheaper setup produced equally good
+work, the saving is real for you. If it did not, the numbers will tell you where it went,
+and the [design notes](docs/DESIGN.md) explain which part of the kit to adjust.
+
+## More questions
+**Is Tokenwise a plugin?** Not yet. It is a set of plain files you install with one
+command, which keeps everything visible and editable. Plugin packaging is on the roadmap.
+
+**Does it work with any programming language?** The agents, skills and routing are
+language-neutral. The code map summarises every file and lists function and class names
+for Python today; other languages get one-line summaries without symbols.
+
+**What happens on a subscription plan?** You are not billed per token, but usage limits
+are measured in the same tokens. Lower usage means more work before a limit is reached.
+
+**Why are the replies so short?** The `compact` style answers first and stops. Ask "why"
+or "explain" and it expands; security warnings and irreversible actions are always
+explained in full.
+
+**Can I turn individual features off?** Yes. Delete an agent or skill file, or remove a
+rule from `CLAUDE.md`. Nothing depends on anything hidden.
+
+## What comes next
+The next milestones are a benchmark of long, multi-task sessions, where the savings from
+a lean main context should compound; a blind quality review of recorded outputs, so style
+is measured as carefully as correctness; symbol extraction for more languages in the code
+map; a one-command health check for an installed project; and packaging as a Claude Code
+plugin. Each will ship the way everything here has: with its method and its numbers.
+
+## Credits
+Tokenwise builds on the work of several open-source projects, whose skills and agents are
+included under their original licences and credited in
+[third_party/skills](third_party/skills/), together with a list of every local change. It
+also owes its method to a simple discipline: measure before claiming, and publish the
+numbers, including the unflattering ones.
 
 ## Contributing
 Every change reaches `main` through a pull request, and CI must pass on Linux, Windows and
