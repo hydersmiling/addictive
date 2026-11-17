@@ -1,5 +1,21 @@
 # Benchmark results
 
+## Run 6: 2026-11-17, Haiku vs Sonnet vs Opus main, small sample (1 repeat)
+The 4 small-sample tasks, each main model with and without the kit. 24 runs, about $2.
+
+| Main model | Passed (plain / kit) | Cost for 4 tasks (plain / kit) | Change | Lines changed (plain / kit) |
+|---|---|---|---|---|
+| Haiku | 4/4 / 4/4 | $0.024 / $0.024 | 0% | 31 / 26 |
+| Sonnet | 4/4 / 4/4 | $0.263 / $0.331 | +26% | 32 / 19 |
+| Opus | 4/4 / 4/4 | $0.593 / $0.794 | +34% | 39 / 27 |
+
+### What it shows
+- **Every model passed every task**, with and without the kit.
+- **Model choice dwarfs everything else:** Sonnet costs ~45% of Opus, Haiku ~4%.
+- **On a tiny project the kit costs more on Sonnet and Opus** (its rules are re-read every
+  turn) but **always produced smaller changes** (19 vs 32 lines on Sonnet).
+
+
 ## Run 5: 2026-11-17, which main model? (1 repeat, large + audit samples)
 Same 6 tasks, three setups: plain Opus, plain Sonnet, and Sonnet with the kit (Opus
 available through the `planner` agent). Total cost about $2.
