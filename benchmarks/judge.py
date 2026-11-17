@@ -25,6 +25,19 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "results", "judgements.jsonl")
 CRITERIA = ["correctness", "readability", "minimal_scope", "fits_codebase"]
+# Task names repeat across samples (e.g. "fix-bug"), so prompts are looked up per sample.
+TASK_FILES = {"small": "tasks.json", "large": "tasks_large.json", "audit": "tasks_audit.json",
+              "session": "tasks_session.json"}
+
+
+def load_prompts():
+    """{(sample, task id): prompt} for every sample's task file."""
+    prompts = {}
+    for sample, name in TASK_FILES.items():
+        with open(os.path.join(HERE, name), encoding="utf-8") as fh:
+            for t in json.load(fh)["tasks"]:
+                prompts[(sample, t["id"])] = t["prompt"]
+    return prompts
 
 PROMPT = """You are reviewing two solutions to the same coding task. You do not know who wrote them.
 Task: {task}
@@ -124,16 +137,13 @@ def main(argv=None):
         print("\nDry run only. Add --run to call the reviewer.")
         return 0
 
-    prompts = {}
-    for name in ("tasks.json", "tasks_large.json", "tasks_audit.json"):
-        with open(os.path.join(HERE, name), encoding="utf-8") as fh:
-            for t in json.load(fh)["tasks"]:
-                prompts.setdefault(t["id"], t["prompt"])
+    prompts = load_prompts()
     rng = random.Random(args.seed)
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     judgements = []
     for base, kit in pairs:
-        j = judge_pair(base, kit, prompts.get(base["task"], base["task"]), [args.claude_cmd], args.model, rng)
+        prompt = prompts.get((base.get("sample", "small"), base["task"]), base["task"])
+        j = judge_pair(base, kit, prompt, [args.claude_cmd], args.model, rng)
         judgements.append(j)
         with open(args.out, "a", encoding="utf-8") as fh:
             fh.write(json.dumps(j) + "\n")

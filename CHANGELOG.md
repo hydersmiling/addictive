@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.2.0 (2026-11-17)
+- **Long-session benchmark:** `--sample session` runs six tasks in one resumed session.
+  Result: Sonnet + Tokenwise 6/6 at $0.23 vs plain Opus 6/6 at $0.53 (-57%).
+- **Blind quality review run:** Opus reviewer rated plain Opus and Sonnet + Tokenwise as tied
+  overall (1 win each, 4 ties); Tokenwise scored higher on keeping to the task.
+- **Fix:** if a helper is refused permission, the main session now does the step itself
+  instead of stopping (found by the benchmark).
+- **Fix:** the judge looks up task text per sample; session costs use the running total.
+- Installer ends by recommending a Sonnet main session; README expanded to a full guide
+  with a start-here section for new users.
+
 ## 1.1.0 (2026-11-17)
 - **Blind quality review:** `benchmarks/judge.py` scores baseline vs kit outputs A/B without
   revealing which is which; benchmark runs now record their diff and answer.

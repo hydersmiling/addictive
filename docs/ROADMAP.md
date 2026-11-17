@@ -1,9 +1,8 @@
 # Roadmap
 
 ## Next
-1. **Measure long sessions.** Strict delegation cut Opus turns 65% but cost +25% on short
-   single tasks. Benchmark a multi-task session where Opus context grows; trim helper prompts
-   and prefer Haiku over Sonnet where quality allows.
+1. **Trim per-turn cost.** Long sessions confirmed Sonnet + Tokenwise at -57% vs plain Opus, but
+   +48% vs plain Sonnet. Shorten the template and agent descriptions; rerun with `--repeat 3`.
 2. **Doctor command.** Check `CLAUDE.md` length, map freshness, deny rules, agent headers and
    Fable access; print fixes.
 3. **Symbols for more languages.** JS/TS, Go, Java in the code map.

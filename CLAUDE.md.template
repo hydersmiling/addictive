@@ -26,6 +26,8 @@ If the main session is running on Opus, it does no hands-on work at all: every r
 edit and command goes to a helper (`builder` for edits).
 
 Give helpers precise tasks with paths. Independent helper calls go in one message.
+If a helper is refused permission (for example, `runner` can't run a command), do that
+step yourself instead of stopping; never end a task just because a helper was blocked.
 
 ## Every change
 - Do only what was asked, in the fewest lines that fully solve it.

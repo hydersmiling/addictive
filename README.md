@@ -16,8 +16,10 @@ half the cost, delivered in smaller, cleaner changes.
 | Cost, 6 real-size tasks | $1.12 | **$0.49 (-56%)** |
 | Cost, 4 small tasks | $0.59 | **$0.33 (-44%)** |
 | Lines changed, feature task | 22 | **6** |
+| Long session, 6 tasks in one conversation | $0.53 | **$0.23 (-57%)** |
+| Blind code review (6 pairs, Opus as reviewer) | 1 win | **1 win, 4 ties** |
 
-86 graded benchmark runs so far, every one passed. Method and raw numbers: [docs/BENCHMARK.md](docs/BENCHMARK.md).
+101 graded benchmark runs so far; one failed, exposing a defect that is now fixed. Method and raw numbers: [docs/BENCHMARK.md](docs/BENCHMARK.md).
 
 ## Start in one minute
 ```bash
@@ -258,7 +260,7 @@ from Claude Code's local logs; nothing leaves your machine.
   to catch typos, which Claude Code would otherwise ignore silently.
 
 ## Benchmark history
-Six runs so far, each published with its method and caveats in
+Eight runs so far, each published with its method and caveats in
 [docs/BENCHMARK.md](docs/BENCHMARK.md). Early runs on a five-file project showed the kit's
 overhead outweighing any saving, which led to a leaner template. A 64-file project
 confirmed equal quality with much smaller diffs. Search-heavy audits on a 214-file
@@ -266,11 +268,13 @@ project showed that delegating a search one pattern can answer costs more, which
 the delegation rules. Strict delegation from an Opus main session cut Opus turns by 65%
 but raised cost, which pointed to the main seat as the real lever. Comparing main models
 directly then showed Sonnet with Tokenwise passing everything plain Opus passed for
-44-56% less.
+44-56% less. A long six-task session confirmed it (-57%), and a blind review by Opus
+rated the two setups' code as tied overall.
 
 ## FAQ
-**Does Tokenwise make Claude worse?** In 86 graded runs, no setup failed a task that
-another passed. Hidden checks verify correctness and reuse; the blind review scores style.
+**Does Tokenwise make Claude worse?** In 101 graded runs, every setup passed the same tasks
+apart from one run that exposed a since-fixed defect. A blind code review scored the two
+setups as tied overall: 1 win each, 4 ties.
 
 **Why not run everything on Haiku?** You can, for simple work, and it is remarkably cheap.
 For ambiguous requests and design decisions, Sonnet's and Opus's judgement is worth the price.
@@ -414,10 +418,9 @@ explained in full.
 rule from `CLAUDE.md`. Nothing depends on anything hidden.
 
 ## What comes next
-The next milestones are a benchmark of long, multi-task sessions, where the savings from
-a lean main context should compound; a blind quality review of recorded outputs, so style
-is measured as carefully as correctness; symbol extraction for more languages in the code
-map; a one-command health check for an installed project; and packaging as a Claude Code
+The next milestones are repeated runs to tighten the error bars, symbol extraction for more
+languages in the code map, a one-command health check for an installed project, trimming the
+kit's per-turn instructions so it costs less over plain Sonnet, and packaging as a Claude Code
 plugin. Each will ship the way everything here has: with its method and its numbers.
 
 ## Credits
@@ -437,8 +440,9 @@ with a benchmark run and record its method in `docs/BENCHMARK.md`.
 - Most of the saving comes from Sonnet in the main seat; plain Sonnet was cheaper still
   (-64%). Tokenwise's rules cost about 20-30% on short tasks and buy smaller, reused,
   verified changes.
-- One or two runs per setup so far; long multi-task sessions are not yet measured.
-- Code style is scored by the blind review, which has not yet been run on recorded outputs.
+- One or two runs per setup so far, so treat the percentages as indicative.
+- In the blind review the two setups tied overall; plain Opus was slightly stronger on
+  correctness details (8.8 vs 8.5), Tokenwise on keeping to the task (10 vs 8.7).
 
 ## Safe by design
 No hooks, no network calls in scripts, no permission bypass, least-privilege agents.

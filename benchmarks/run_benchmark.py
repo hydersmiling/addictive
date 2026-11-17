@@ -253,7 +253,8 @@ def run_session(tasks, mode, model, claude_cmd, keep=False, sample="session", ef
             sid = reply.get("session_id") or sid
             session_ids.append(reply.get("session_id"))
             answers[task["id"]] = str(reply.get("result", ""))
-            cost += reply.get("total_cost_usd") or 0
+            # A resumed session reports a running total, so keep the latest, never a sum.
+            cost = max(cost, reply.get("total_cost_usd") or 0)
             turns += reply.get("num_turns") or 0
         seconds = round(time.time() - started, 1)
 

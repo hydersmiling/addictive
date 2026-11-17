@@ -37,6 +37,12 @@ class JudgeTests(unittest.TestCase):
         self.assertEqual(as_a["kit"]["correctness"], 9)
         self.assertEqual(as_b["kit"]["correctness"], 7)
 
+    def test_prompts_are_per_sample(self):
+        prompts = judge.load_prompts()
+        self.assertIn("calc_line_total", prompts[("large", "rename")])
+        self.assertIn("calc_total", prompts[("small", "rename")])
+        self.assertNotEqual(prompts[("large", "rename")], prompts[("small", "rename")])
+
     def test_dry_run(self):
         import json
         import tempfile

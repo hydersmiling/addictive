@@ -74,3 +74,24 @@ One entry per surprise: what happened, root cause, fix, rule.
 - What: the one delegated audit run used 2.3x the tokens of a baseline that used grep.
 - Rule: delegate reading that needs judgement across many files; let simple pattern
   searches stay a single grep in the main session.
+
+## 2026-11-17: A blocked helper stopped the whole task
+- What: in a benchmark run, `runner` (Haiku) was denied permission to run the tests, and the
+  Sonnet main session gave up and asked the user instead of running them itself.
+- Cause: command permissions granted to the main session did not reach the subagent, and the
+  template had no fallback rule.
+- Fix: the template now tells the main session to do a refused helper step itself.
+- Rule: delegation must degrade gracefully; a blocked helper is never a reason to stop.
+
+## 2026-11-17: Resumed sessions report a running cost total
+- What: summing each resumed call's `total_cost_usd` gave session costs about 4x too high.
+- Cause: when a session is resumed, Claude Code reports the session's cumulative cost.
+- Fix: keep the latest figure, not the sum; costs cross-checked against raw tokens.
+- Rule: sanity-check any reported metric against an independent calculation before publishing.
+
+## 2026-11-17: The judge showed the reviewer the wrong task
+- What: the first blind review scored correctness 1/10 on tasks both setups had passed.
+- Cause: task ids repeat across samples; prompts were looked up by id alone, so large-sample
+  pairs got the small sample's task description.
+- Fix: prompts keyed by (sample, task id); test added.
+- Rule: when a grader's verdict contradicts the hidden tests, suspect the grader first.
