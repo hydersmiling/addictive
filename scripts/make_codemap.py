@@ -59,6 +59,9 @@ SECRET_TEXT = re.compile(
     r"|AKIA[0-9A-Z]{16}"                 # AWS access key IDs
     r"|xox[abpr]-[A-Za-z0-9-]{10,}"      # Slack tokens
     r"|-----BEGIN [A-Z ]*PRIVATE KEY"    # private key blocks
+    r"|sk_(live|test)_[A-Za-z0-9]{10,}"  # Stripe keys
+    r"|AIza[0-9A-Za-z_-]{35}"            # Google API keys
+    r"|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}"  # JSON web tokens
     r"|(password|passwd|secret|api_?key|token)\s*[:=]\s*\S+)",
     re.IGNORECASE,
 )
@@ -122,6 +125,8 @@ def list_files(root, exclude=("CODEMAP.md",)):
             continue
         if is_secret(p):
             continue
+        if os.path.islink(os.path.join(root, p)):
+            continue  # a link could point outside the project (e.g. to ~/.ssh)
         if p in exclude:
             continue  # never list the map inside itself, or it changes every run
         keep.append(p)

@@ -77,7 +77,7 @@ def install(target, dry_run=False, extras=(), agents=()):
     copied, skipped = [], []
     for src, dst in plan(target, extras, agents):
         rel = os.path.relpath(dst, target)
-        if os.path.exists(dst):
+        if os.path.lexists(dst):  # lexists: also skip broken symlinks, never write through them
             skipped.append(rel)
             continue
         copied.append(rel)

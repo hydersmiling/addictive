@@ -61,6 +61,14 @@ class CodemapTests(unittest.TestCase):
         # A file whose summary looks like a secret is listed, but with no summary.
         self.assertIn("- `leaky.py`\n", text)
 
+    def test_more_key_formats_are_dropped(self):
+        fake = ["sk_live_" + "a" * 20, "AIza" + "b" * 35, "eyJ" + "c" * 12 + "." + "d" * 12]
+        for i, key in enumerate(fake):
+            write(self.root, f"k{i}.py", f'"""uses {key}"""\n')
+        text = make_codemap.build_map(self.root)
+        for key in fake:
+            self.assertNotIn(key, text)
+
     def test_whole_name_matching_keeps_normal_files(self):
         text = make_codemap.build_map(self.root)
         self.assertIn("measure_tokens.py", text)
