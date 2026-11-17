@@ -34,6 +34,24 @@ claude --model sonnet
 Fill in the two lines at the top of the new `CLAUDE.md`, then run `python scripts/make_codemap.py`.
 The installer never overwrites your files.
 
+## More than a cost cutter
+Lower cost is the headline, but the everyday difference is a Claude that behaves like a
+disciplined senior engineer: it stays on task, builds on what already exists, proves its
+work, remembers how you like things done, and keeps out of what it should not touch.
+
+| Capability | What it means for you |
+|---|---|
+| **Precise, minimal changes** | Claude does exactly what was asked, in the fewest lines that fully solve it. In the benchmarks its changes were about a third the size of plain Opus's (22 lines against 60) for identical results, which makes every change faster to review and safer to ship. |
+| **Reuse before reinvention** | Before writing anything new, Tokenwise checks whether the project already has it, then reuses or extends that code. Duplicate helpers, the slow tax on every growing codebase, are stopped before they are written. |
+| **Self-verifying work** | Every change is proven by the narrowest test that demonstrates it. If a fix fails twice, the problem is handed to a dedicated debugger for a root-cause analysis instead of a third guess. |
+| **An assistant that learns** | Correct Claude twice on the same point, or say "always" or "never", and the preference becomes a one-line project rule. Every future session follows it without being told again. |
+| **Instant orientation** | The code map summarises every file in a single line, so Claude, and every new teammate, can see what lives where without opening the codebase file by file. |
+| **Security by construction** | Environment files, keys and credentials are kept out of Claude's reach and out of the map. Each helper agent receives only the tools its role requires, nothing runs in the background, and the installer never overwrites a file. |
+| **Expertise on demand** | A catalog of 198 specialist agents, covering security, databases, frontend, infrastructure and more, ready to add by name whenever a project calls for depth. |
+| **Replies that respect your time** | The answer comes first, followed by at most one short next step. No preamble, no recap, and full explanation whenever a risk or an irreversible action is involved. |
+| **Shared team standards** | Commit the configuration and every teammate's Claude follows the same routing, rules and safeguards. A correction one person teaches can become a convention for the whole team. |
+| **Evidence you can reproduce** | `measure_tokens.py` reveals what any session truly cost, and the benchmark with its blind reviewer lets you compare any two setups on your own tasks, so no claim has to be taken on trust. |
+
 ## New to Claude Code? Start here
 If you have just installed Claude Code, Tokenwise gives you a sound configuration on day
 one, so you never have to learn the expensive habits first. Five steps:
