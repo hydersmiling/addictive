@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.0 (2026-11-17)
+- **Installable as a Claude Code plugin:** `claude plugin marketplace add hydersmiling/mainseat`,
+  then `claude plugin install mainseat@mainseat`.
+- New `/mainseat:setup` skill adds the per-project files (CLAUDE.md, settings, scripts) once.
+- Installer `--rules-only` mode for plugin installs.
+
 ## 1.3.0 (2026-11-17)
 - **Renamed from Tokenwise to Mainseat.** The name says the core idea: the model in the main
   seat sets the price of every turn. The old GitHub address redirects automatically.
