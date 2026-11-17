@@ -425,7 +425,8 @@ Tokenwise builds on the work of several open-source projects, whose skills and a
 included under their original licences and credited in
 [third_party/skills](third_party/skills/), together with a list of every local change. It
 also owes its method to a simple discipline: measure before claiming, and publish the
-numbers, including the unflattering ones.
+numbers, including the unflattering ones. Suggestions, issues and benchmark results from
+your own projects are warmly welcomed.
 
 ## Contributing
 Every change reaches `main` through a pull request, and CI must pass on Linux, Windows and
