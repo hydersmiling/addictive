@@ -55,3 +55,11 @@ One entry per surprise: what happened, root cause, fix, rule.
 - What: first benchmark: same pass rate, 17-34% more tokens with the kit.
 - Cause: fixed context (CLAUDE.md, rules, skill descriptions) plus extra turns; nothing to save on 5 files.
 - Rule: report what the data shows; test savings at realistic project size before claiming any.
+
+## 2026-11-17: Review found a fail-open budget and nine smaller risks
+- What: the `reviewer` agent (Haiku) found that `--max-tokens` counted an unreadable token
+  log as 0, so the budget could never trip; plus JSON parsing of mixed output, symlinks
+  followed by the map and installer, BOM-sensitive header checks, and missing key formats.
+- Fix: stop when spend is unknown; parse stdout only; skip symlinks; `lexists`; `utf-8-sig`;
+  Stripe, Google and JWT patterns; checker refuses to pass when it finds no files.
+- Rule: any guard that limits spend or exposure fails closed when its input is missing.
