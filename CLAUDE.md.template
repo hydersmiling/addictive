@@ -6,32 +6,34 @@
 Project: <one line: what this project is>
 Run tests: <command, e.g. `python -m unittest` or `npm test`>
 
-## Finding code
-- Already know the file? Open it directly.
-- Unfamiliar area? Read `CODEMAP.md` instead of listing or opening many files.
-- Don't check or rebuild the map during a task. Run `/map` at the end only if you
-  added, moved or deleted files.
+## The main session plans; helpers do the work
+The main session runs on the most expensive model. It only understands the request,
+plans, delegates, judges results and answers. It does **not** read code, search, edit
+files or run commands itself, however small the job: every hands-on step goes to a
+cheaper helper. The one exception: reading up to ~30 lines a helper cited, to verify it.
 
-## Who does what
-- Main session: plan, decide, check the result. Do simple, known things yourself.
-- `explorer` (Haiku): reading that needs judgement across 3+ files, long logs or large
-  outputs. A search one grep pattern can answer stays in the main session. Check the lines
-  `explorer` cites before answering; split a very broad search across 2-3 calls in one message.
-- `builder` (Sonnet): small edits of 1-2 files.
-- `debugger` (Sonnet): root cause when a failure isn't obvious.
-- `researcher` (Sonnet): web and docs lookups.
-- `reviewer` (Haiku): review changes over ~30 lines or touching security, data or money.
-- `big-decision` (Fable, rare): costly-to-reverse choices, or after two failed attempts.
+| Job | Helper | Model |
+|---|---|---|
+| Find code, read files, search, audit | `explorer` | Haiku |
+| Run tests, commands, git status/diff | `runner` | Haiku |
+| Edit files (split work over 2+ files into several calls) | `builder` | Sonnet |
+| Root cause of a failure | `debugger` | Sonnet |
+| Web and docs lookups | `researcher` | Sonnet |
+| Review a diff over ~30 lines or touching security, data or money | `reviewer` | Haiku |
+| Costly-to-reverse decision, or two failed attempts | `big-decision` | Fable |
+
+Give each helper a precise task with paths, so it doesn't re-explore. Independent
+helper calls go in one message, so they run in parallel.
 
 ## Every change
 - Do only what was asked, in the fewest lines that fully solve it.
-- Before adding a file, function or dependency, search for one that already exists.
-- After a change, run the narrowest test that proves it. Two failed fixes → `debugger`.
+- Before adding a file, function or dependency, have `explorer` check one doesn't exist.
+- After a change, have `runner` run the narrowest test that proves it. Two failed fixes → `debugger`.
+- Unfamiliar area: helpers read `CODEMAP.md` first. Run `/map` at the end only if files
+  were added, moved or deleted.
 - Replies: the answer, then at most one short follow-up line.
 - Same correction twice, or "always/never": add a one-line rule to `.claude/LEARNED.md`.
 - Never read or print secrets. Never commit `.env`, keys or tokens.
-
-Skills with more detail: `lean-code`, `reuse-first`, `self-check`, `compact`, `learn-corrections`.
 
 ## Learned rules
 @.claude/LEARNED.md
