@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.0 (2026-11-17)
+- **Renamed from Tokenwise to Mainseat.** The name says the core idea: the model in the main
+  seat sets the price of every turn. The old GitHub address redirects automatically.
+  Earlier entries below keep the name the project had at the time.
+
 ## 1.2.1 (2026-11-17)
 - README: "More than a cost cutter" section describing everything Tokenwise does beyond
   saving tokens, and a one-page visual overview at the top of the page.

@@ -1,4 +1,4 @@
-# Tokenwise: project rules
+# Mainseat: project rules
 
 Token-efficient orchestration kit for Claude Code. Recommended main model: **Sonnet**.
 Design: `docs/DESIGN.md`. Agents and skills: `.claude/README.md`. Read `docs/LESSONS.md` first.

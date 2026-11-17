@@ -28,7 +28,7 @@ Upstream commit `480b61ed91cbc08177dc2c60caa9ffd6c9b95749` (2026-11-16).
 
 | Our path | Upstream path | Changes |
 |---|---|---|
-| `optional/code-graph/SKILL.md` | `graphify/skill.md` | Skill renamed to `code-graph`; slash command `/graphify` → `/code-graph`; description narrowed so it only triggers on request or when a graph already exists; extraction subagents told to run on Haiku |
+| `optional/code-graph/SKILL.md` | `graphify/skill.md` | Skill renamed to `code-graph`; slash command `/graphify` → `/code-graph`; description narrowed so it only triggers on request or when a graph already exists; extraction subagents told to run on Haiku (note labelled with this kit's name) |
 | `optional/code-graph/references/*.md` | `graphify/skills/claude/references/*.md` | Slash command renamed as above; heading prefix "graphify reference" → "code-graph reference" |
 
 The skill still calls its command-line tool by its real name, `graphify`, because

@@ -281,7 +281,7 @@ Call the Agent tool multiple times IN THE SAME RESPONSE - one call per chunk. Th
 
 **IMPORTANT - subagent type:** Always use `subagent_type="general-purpose"`. Do NOT use `Explore` - it is read-only and cannot write chunk files to disk, which silently drops extraction results. General-purpose has Write and Bash access which the subagent needs.
 
-**Model (Tokenwise):** pass `model: "haiku"` on every extraction subagent call. Extraction is reading and tagging, which Haiku does at a fraction of the cost. Use `sonnet` only with `--mode deep`.
+**Model (Mainseat):** pass `model: "haiku"` on every extraction subagent call. Extraction is reading and tagging, which Haiku does at a fraction of the cost. Use `sonnet` only with `--mode deep`.
 
 Concrete example for 3 chunks:
 ```

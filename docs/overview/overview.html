@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Tokenwise overview</title>
+<title>Mainseat overview</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -91,7 +91,7 @@
 
 <header>
   <div>
-    <div class="brand"><span class="spark">✻</span><h1>Tokenwise</h1></div>
+    <div class="brand"><span class="spark">✻</span><h1>Mainseat</h1></div>
     <p class="lede">Opus-level results at Sonnet prices.</p>
     <p class="sub">A routing kit for Claude Code: Sonnet builds, Haiku reads, Opus plans.</p>
   </div>
@@ -154,7 +154,7 @@
   <section>
     <h2>What it saves, measured</h2>
     <table>
-      <thead><tr><th>Same tasks, hidden graders</th><th>Plain Opus</th><th>Sonnet + Tokenwise</th></tr></thead>
+      <thead><tr><th>Same tasks, hidden graders</th><th>Plain Opus</th><th>Sonnet + Mainseat</th></tr></thead>
       <tbody>
         <tr><td>Long session, 6 tasks</td><td>6/6, $0.53</td><td class="us">6/6, $0.23 (−57%)</td></tr>
         <tr><td>Six separate tasks</td><td>6/6, $1.19</td><td class="us">6/6, $0.46 (−61%)</td></tr>
@@ -168,7 +168,7 @@
     <h2>Why it works</h2>
     <p>Every reply in a session re-reads the whole conversation, plus a fixed floor of
        12,000 to 14,000 tokens of instructions. All of it is paid at the main model's price.</p>
-    <p>So the main seat sets the bill. Tokenwise gives that seat to Sonnet, sends reading and
+    <p>So the main seat sets the bill. Mainseat gives that seat to Sonnet, sends reading and
        test runs to Haiku, and calls Opus only for the moments that need its judgement.</p>
   </section>
 </div>
@@ -189,8 +189,8 @@
     <div class="terminal">
       <div class="bar"><i></i><i></i><i></i></div>
       <div class="c"># inside your project folder</div>
-      <div><span class="p">$</span> git clone https://github.com/hydersmiling/tokenwise</div>
-      <div><span class="p">$</span> python tokenwise/scripts/install.py .</div>
+      <div><span class="p">$</span> git clone https://github.com/hydersmiling/mainseat</div>
+      <div><span class="p">$</span> python mainseat/scripts/install.py .</div>
       <div class="ok">  Copied the kit. Never overwrites your files.</div>
       <div><span class="p">$</span> python scripts/make_codemap.py</div>
       <div class="ok">  Wrote CODEMAP.md</div>
@@ -203,7 +203,7 @@
 <div class="row">
   <section>
     <h2>What's in the repository</h2>
-<pre class="tree">tokenwise/
+<pre class="tree">mainseat/
 ├── .claude/agents/      <em>8 core agents</em>
 ├── .claude/skills/      <em>8 core skills</em>
 ├── CLAUDE.md.template   <em>short project rules</em>
@@ -251,7 +251,7 @@
 </div>
 
 <footer>
-  <span><strong>github.com/hydersmiling/tokenwise</strong>, version 1.2.0, MIT licence</span>
+  <span><strong>github.com/hydersmiling/mainseat</strong>, version 1.3.0, MIT licence</span>
   <span>No hooks. No network calls in scripts. Least-privilege agents.</span>
 </footer>
 
