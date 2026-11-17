@@ -19,6 +19,10 @@ if "tests fail" in prompt:
         fh.write(text)
 elif "Which file" in prompt:
     answer = "shop/cart.py calc_total"
+elif "dollar amounts" in prompt:  # a correct audit answer
+    answer = " ".join(f"depot/legacy/mod_{n}.py" for n in ("017", "048", "093", "131"))
+elif "SQL statement" in prompt:  # an audit answer that wrongly includes a decoy
+    answer = " ".join(f"depot/legacy/mod_{n}.py" for n in ("029", "076", "118", "061"))
 
 print(json.dumps({"type": "result", "result": answer, "total_cost_usd": 0.0,
                   "num_turns": 1, "session_id": None, "is_error": False}))

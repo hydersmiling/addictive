@@ -38,6 +38,9 @@ sys.path.insert(0, os.path.join(KIT, "scripts"))
 import install  # noqa: E402
 import measure_tokens  # noqa: E402
 
+sys.path.insert(0, HERE)
+import build_audit_sample  # noqa: E402
+
 SAMPLE = os.path.join(HERE, "sample_repo")
 HIDDEN = os.path.join(HERE, "hidden_checks")
 # name -> (project folder, task file, folder of hidden checks)
@@ -45,6 +48,8 @@ SAMPLES = {
     "small": (SAMPLE, os.path.join(HERE, "tasks.json"), HIDDEN),
     "large": (os.path.join(HERE, "sample_large"), os.path.join(HERE, "tasks_large.json"),
               os.path.join(HERE, "hidden_checks_large")),
+    # Built on the fly (large sample + 150 legacy modules) instead of stored in git.
+    "audit": (build_audit_sample.build, os.path.join(HERE, "tasks_audit.json"), HIDDEN),
 }
 RESULTS = os.path.join(HERE, "results", "results.jsonl")
 
@@ -77,7 +82,11 @@ def load_tasks(sample):
 
 def prepare(mode, workdir, sample="small"):
     """Copy the sample into workdir and, for kit mode, install the kit."""
-    shutil.copytree(SAMPLES[sample][0], workdir)
+    source = SAMPLES[sample][0]
+    if callable(source):
+        source(workdir)  # a builder function creates the sample
+    else:
+        shutil.copytree(source, workdir)
     sh(["git", "init", "-q"], workdir)
     if mode == "kit":
         install.install(workdir)
@@ -165,6 +174,9 @@ def run_one(task, mode, model, claude_cmd, keep=False, sample="small"):
         for needle in task.get("answer_must_contain", []):
             if needle not in answer:
                 failures.append(f"answer is missing '{needle}'")
+        for needle in task.get("answer_must_not_contain", []):
+            if needle in answer:
+                failures.append(f"answer wrongly includes '{needle}'")
         for name in copied:
             os.remove(os.path.join(workdir, name))
         added, removed = lines_changed(workdir)
