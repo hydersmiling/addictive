@@ -70,7 +70,7 @@ def main():
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     problems = []
     root = glob.escape(ROOT)  # a folder name with [ ] * ? must not break the search
-    agents = sorted(glob.glob(os.path.join(root, ".claude", "agents", "*.md")))
+    agents = sorted(glob.glob(os.path.join(root, "agents", "*.md")))
     agents += sorted(glob.glob(os.path.join(root, "optional", "agents-catalog", "*.md")))
     skills = sorted(glob.glob(os.path.join(root, ".claude", "skills", "*", "SKILL.md")))
     skills += sorted(glob.glob(os.path.join(root, "optional", "**", "SKILL.md"), recursive=True))

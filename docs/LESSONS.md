@@ -95,3 +95,18 @@ One entry per surprise: what happened, root cause, fix, rule.
   pairs got the small sample's task description.
 - Fix: prompts keyed by (sample, task id); test added.
 - Rule: when a grader's verdict contradicts the hidden tests, suspect the grader first.
+
+## 2026-11-17: Plugin agents in a custom path did not load
+- What: v1.4.0 installed cleanly and `claude plugin validate` passed, but `claude plugin details`
+  showed Agents (0); the manifest listed the agents under `./.claude/agents/`.
+- Cause: in testing, Claude Code loaded plugin agents only from the default `agents/` folder.
+- Fix: core agents moved to the root `agents/` folder; the installer copies them into a
+  project's `.claude/agents/`; a test pins the location.
+- Rule: verify a release by installing it the way a user would, not only by validating it.
+
+## 2026-11-17: PowerShell 5.1 corrupted a UTF-8 file
+- What: editing overview.html with `Get-Content | Set-Content` turned ✻, box-drawing
+  characters and minus signs into gibberish in the rendered image.
+- Cause: Windows PowerShell 5.1 reads files as the ANSI code page unless told otherwise.
+- Fix: restored from git and edited with Python using encoding="utf-8".
+- Rule: edit text files with Python or the editor, never PowerShell 5.1 Get-Content/Set-Content.

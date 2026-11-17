@@ -39,7 +39,8 @@ SINGLE_FILES = [
     (".claude/settings.json", ".claude/settings.json"),
     (".claude/LEARNED.md", ".claude/LEARNED.md"),
 ]
-CORE_FOLDERS = [(".claude/agents", ".claude/agents"), (".claude/skills", ".claude/skills")]
+# Core agents live in agents/ (where Claude Code plugins load them) and install into .claude/agents.
+CORE_FOLDERS = [("agents", ".claude/agents"), (".claude/skills", ".claude/skills")]
 OPTIONAL = {
     "code-graph": [("optional/code-graph", ".claude/skills/code-graph")],
     "dev-essentials": [("optional/dev-essentials", ".claude/skills")],

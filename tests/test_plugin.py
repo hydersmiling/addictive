@@ -17,14 +17,15 @@ def load(name):
 
 
 class PluginTests(unittest.TestCase):
-    def test_manifest_lists_every_core_agent(self):
-        listed = sorted(os.path.basename(p) for p in load("plugin.json")["agents"])
-        on_disk = sorted(f for f in os.listdir(os.path.join(ROOT, ".claude", "agents")) if f.endswith(".md"))
-        self.assertEqual(listed, on_disk)
+    def test_core_agents_are_in_the_default_plugin_folder(self):
+        # Claude Code loads plugin agents from agents/; custom paths were not picked up in testing.
+        self.assertNotIn("agents", load("plugin.json"))
+        on_disk = [f for f in os.listdir(os.path.join(ROOT, "agents")) if f.endswith(".md")]
+        self.assertEqual(len(on_disk), 8)
 
     def test_manifest_paths_exist_and_stay_inside(self):
         data = load("plugin.json")
-        for path in data["agents"] + data["skills"]:
+        for path in data["skills"]:
             self.assertTrue(path.startswith("./") and ".." not in path, path)
             self.assertTrue(os.path.exists(os.path.join(ROOT, path)), path)
 

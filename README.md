@@ -290,7 +290,8 @@ from Claude Code's local logs; nothing leaves your machine.
 ## Customising Mainseat
 - **Project rules** live in `CLAUDE.md`. Keep it short: it is read on every turn.
 - **Learned rules** live in `.claude/LEARNED.md`. Edit or delete them freely.
-- **Models** are set per agent in the `model:` line of each file in `.claude/agents/`.
+- **Models** are set per agent in the `model:` line of each agent file (`.claude/agents/` in
+  your project after a script install; the plugin's `agents/` folder for plugin installs).
   Without Fable access, set `big-decision` to `opus`.
 - **New agents** must declare `model:` and `tools:`; run `python scripts/check_agents.py`
   to catch typos, which Claude Code would otherwise ignore silently.
@@ -415,7 +416,7 @@ are not paying Opus rates for the routine turns around them.
 | Path | Purpose |
 |---|---|
 | `CLAUDE.md.template` | The short project rules the installer copies into your project |
-| `.claude/agents/` | The eight core agents, each with an explicit model and tool list |
+| `agents/` | The eight core agents, each with an explicit model and tool list |
 | `.claude/skills/` | The eight core skills, loaded only when relevant |
 | `optional/` | The agent catalog and optional skill packs, installed only on request |
 | `scripts/` | Installer, code map, token counter and header checker, all standard-library Python |
