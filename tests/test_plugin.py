@@ -21,7 +21,7 @@ class PluginTests(unittest.TestCase):
         # Claude Code loads plugin agents from agents/; custom paths were not picked up in testing.
         self.assertNotIn("agents", load("plugin.json"))
         on_disk = [f for f in os.listdir(os.path.join(ROOT, "agents")) if f.endswith(".md")]
-        self.assertEqual(len(on_disk), 10)
+        self.assertEqual(len(on_disk), 9)
 
     def test_manifest_paths_exist_and_stay_inside(self):
         data = load("plugin.json")

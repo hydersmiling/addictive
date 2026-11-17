@@ -1,9 +1,6 @@
 ---
 name: reuse-first
-description: >
-  Check whether code, a helper, a file or a library already does the job before
-  creating anything new. Use before adding a file, function, class, component,
-  script or dependency.
+description: "Check for existing code or a library before creating anything new."
 ---
 
 # reuse-first

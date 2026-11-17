@@ -1,9 +1,6 @@
 ---
 name: runner
-description: >
-  Run tests, builds, linters or any read-only command and report the result in a
-  few lines. Use for every command the main session would otherwise run itself:
-  test runs, checking an error, listing files, git status or diff.
+description: "Haiku: runs long or noisy commands and reports only pass/fail and key lines."
 tools: Bash, Read
 model: haiku
 maxTurns: 8

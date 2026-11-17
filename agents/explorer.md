@@ -1,6 +1,6 @@
 ---
 name: explorer
-description: Read-only explorer that does all code reading and searching for the main session, including single files and named symbols. Returns path:line citations, plus a short answer when asked a question; its reads stay out of main context.
+description: "Haiku: reads and searches many files or long output; returns path:line citations."
 tools: Read, Glob, Grep
 model: haiku
 ---

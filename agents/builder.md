@@ -1,9 +1,6 @@
 ---
 name: builder
-description: >
-  Makes every file edit for the main session: fixes, renames, features and new
-  files, 1-2 files per call (the main session splits larger work into several
-  calls). Refuses 3+ files in one call. Returns a terse diff receipt.
+description: "Sonnet: edits 1-2 files per call for an Opus main session; returns a diff receipt."
 tools: Read, Edit, Write, Grep, Glob
 model: sonnet
 ---

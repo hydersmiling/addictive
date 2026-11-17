@@ -1,8 +1,6 @@
 ---
 name: map
-description: >
-  Refresh CODEMAP.md, the project's file map. Use when the user types /map,
-  after creating, moving or deleting files, or when the map check reports STALE.
+description: "Refresh CODEMAP.md (/map) after adding, moving or deleting files."
 ---
 
 # map

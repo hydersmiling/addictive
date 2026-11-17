@@ -1,9 +1,6 @@
 ---
 name: compact
-description: >
-  Default reply style: give only the actual answer in plain, complete sentences,
-  then at most one short follow-up line. Use for every reply unless the user asks
-  for more detail. Type /compact off for normal replies.
+description: "Reply style: the answer, then at most one short follow-up."
 ---
 
 # compact
