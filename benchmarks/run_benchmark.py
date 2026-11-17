@@ -40,16 +40,24 @@ import measure_tokens  # noqa: E402
 
 SAMPLE = os.path.join(HERE, "sample_repo")
 HIDDEN = os.path.join(HERE, "hidden_checks")
+# name -> (project folder, task file, folder of hidden checks)
+SAMPLES = {
+    "small": (SAMPLE, os.path.join(HERE, "tasks.json"), HIDDEN),
+    "large": (os.path.join(HERE, "sample_large"), os.path.join(HERE, "tasks_large.json"),
+              os.path.join(HERE, "hidden_checks_large")),
+}
 RESULTS = os.path.join(HERE, "results", "results.jsonl")
 
 
-def sh(cmd, cwd, timeout=120):
-    """Run a command; return (exit code, combined output). Never raises."""
+def sh(cmd, cwd, timeout=120, stdout_only=False):
+    """Run a command; return (exit code, output). Never raises.
+
+    Output is stdout+stderr, or stdout alone with stdout_only=True (for JSON replies)."""
     try:
         p = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True,
                            encoding="utf-8", errors="replace", timeout=timeout,
                            shell=isinstance(cmd, str))
-        return p.returncode, (p.stdout or "") + (p.stderr or "")
+        return p.returncode, (p.stdout or "") + ("" if stdout_only else (p.stderr or ""))
     except (OSError, subprocess.TimeoutExpired) as exc:
         return 1, str(exc)
 
@@ -60,16 +68,23 @@ def git_commit_all(cwd, message):
         "commit", "-q", "--no-verify", "-m", message], cwd)
 
 
-def prepare(mode, workdir):
+def load_tasks(sample):
+    """(project line, task list) for a sample."""
+    with open(SAMPLES[sample][1], encoding="utf-8") as fh:
+        data = json.load(fh)
+    return data.get("project_line", "A tiny shop library (benchmark sample)."), data["tasks"]
+
+
+def prepare(mode, workdir, sample="small"):
     """Copy the sample into workdir and, for kit mode, install the kit."""
-    shutil.copytree(SAMPLE, workdir)
+    shutil.copytree(SAMPLES[sample][0], workdir)
     sh(["git", "init", "-q"], workdir)
     if mode == "kit":
         install.install(workdir)
         claude_md = os.path.join(workdir, "CLAUDE.md")
         with open(claude_md, encoding="utf-8") as fh:
             text = fh.read()
-        text = text.replace("<one line: what this project is>", "A tiny shop library (benchmark sample).")
+        text = text.replace("<one line: what this project is>", load_tasks(sample)[0])
         text = text.replace("<command, e.g. `python -m unittest` or `npm test`>",
                             "`python -m unittest discover tests`")
         with open(claude_md, "w", encoding="utf-8") as fh:
@@ -117,24 +132,32 @@ def tokens_from_logs(workdir, session_id):
     return {"by_model": both, "total": measure_tokens.add_up(both)}
 
 
-def run_one(task, mode, model, claude_cmd, keep=False):
+def run_one(task, mode, model, claude_cmd, keep=False, sample="small"):
     """Run one task in one mode. Returns a result dict."""
     base = tempfile.mkdtemp(prefix=f"bench-{task['id']}-{mode}-")
     workdir = os.path.realpath(os.path.join(base, "repo"))
     try:
-        prepare(mode, workdir)
+        prepare(mode, workdir, sample)
         started = time.time()
-        code, out = sh(claude_command(claude_cmd, task["prompt"], model), workdir, timeout=900)
+        code, out = sh(claude_command(claude_cmd, task["prompt"], model), workdir, timeout=900, stdout_only=True)
         seconds = round(time.time() - started, 1)
         try:
-            reply = json.loads(out[out.index("{"):]) if "{" in out else {}
+            reply = json.JSONDecoder().raw_decode(out[out.index("{"):])[0] if "{" in out else {}
         except json.JSONDecodeError:
             reply = {}
+        if not reply:
+            print("    warning: could not read Claude's JSON reply; cost and tokens will be missing")
         answer = str(reply.get("result", ""))
 
-        for name in task.get("hidden_files", []):
-            shutil.copy2(os.path.join(HIDDEN, name), os.path.join(workdir, name))
         failures = []
+        copied = []
+        for name in task.get("hidden_files", []):
+            dst = os.path.join(workdir, name)
+            if os.path.lexists(dst):  # never overwrite a file Claude created or changed
+                failures.append(f"hidden file {name} clashes with a project file")
+                continue
+            shutil.copy2(os.path.join(SAMPLES[sample][2], name), dst)
+            copied.append(name)
         for check in task.get("checks", []):
             c_code, c_out = sh(check, workdir)
             if c_code != 0:
@@ -142,12 +165,12 @@ def run_one(task, mode, model, claude_cmd, keep=False):
         for needle in task.get("answer_must_contain", []):
             if needle not in answer:
                 failures.append(f"answer is missing '{needle}'")
-        for name in task.get("hidden_files", []):
+        for name in copied:
             os.remove(os.path.join(workdir, name))
         added, removed = lines_changed(workdir)
 
         return {
-            "task": task["id"], "mode": mode, "model": model, "time": time.strftime("%Y-%m-%d %H:%M"),
+            "task": task["id"], "mode": mode, "model": model, "sample": sample, "time": time.strftime("%Y-%m-%d %H:%M"),
             "claude_exit": code, "passed": code == 0 and not failures, "failures": failures,
             "cost_usd": reply.get("total_cost_usd"), "turns": reply.get("num_turns"),
             "seconds": seconds, "lines_added": added, "lines_removed": removed,
@@ -203,33 +226,46 @@ def main(argv=None):
     parser.add_argument("--model", default="opus", help="main model for both modes (default: opus)")
     parser.add_argument("--claude-cmd", default="claude", help="command that starts Claude Code")
     parser.add_argument("--keep", action="store_true", help="keep the temporary project copies")
+    parser.add_argument("--sample", default="small", choices=sorted(SAMPLES), help="which sample project")
+    parser.add_argument("--max-tokens", type=int, default=0,
+                        help="stop starting new runs once this many tokens* are used (0 = no limit)")
     parser.add_argument("--out", default=RESULTS, help="where to append results (JSON lines)")
     args = parser.parse_args(argv)
 
-    with open(os.path.join(HERE, "tasks.json"), encoding="utf-8") as fh:
-        tasks = json.load(fh)["tasks"]
+    tasks = load_tasks(args.sample)[1]
     if args.tasks:
         tasks = [t for t in tasks if t["id"] in args.tasks]
-    runs = [(t, m) for t in tasks for m in args.modes for _ in range(args.repeat)]
+    # Round by round (all tasks, both modes), so a budget stop keeps the comparison balanced.
+    runs = [(t, m) for _ in range(args.repeat) for t in tasks for m in args.modes]
 
-    print(f"{len(runs)} runs: {len(tasks)} tasks x {len(args.modes)} modes x {args.repeat} repeats, model {args.model}")
+    print(f"{len(runs)} runs on the {args.sample} sample: {len(tasks)} tasks x {len(args.modes)} modes "
+          f"x {args.repeat} repeats, model {args.model}")
     if not args.run:
         for t, m in runs:
             print(f"  would run  {t['id']:<12} {m}")
         print("\nDry run only. Add --run to really run Claude (this uses your plan or API credit).")
         return 0
 
-    os.makedirs(os.path.dirname(args.out), exist_ok=True)
+    os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     rows = []
-    claude_cmd = args.claude_cmd.split()
+    claude_cmd = [args.claude_cmd]  # one path; may contain spaces on Windows
+    used = 0
     for i, (task, mode) in enumerate(runs, 1):
+        if args.max_tokens and used >= args.max_tokens:
+            print(f"Token budget reached ({used:,} of {args.max_tokens:,}); skipping the remaining runs.")
+            break
         print(f"[{i}/{len(runs)}] {task['id']} {mode} ...", flush=True)
-        row = run_one(task, mode, args.model, claude_cmd, args.keep)
+        row = run_one(task, mode, args.model, claude_cmd, args.keep, args.sample)
         rows.append(row)
         with open(args.out, "a", encoding="utf-8") as fh:
             fh.write(json.dumps(row) + "\n")
+        tokens = total_tokens(row)
         status = "pass" if row["passed"] else "FAIL " + "; ".join(row["failures"])[:120]
-        print(f"    {status} | tokens {total_tokens(row)} | cost {row['cost_usd']} | lines +{row['lines_added']}/-{row['lines_removed']}")
+        print(f"    {status} | tokens {tokens} | cost {row['cost_usd']} | lines +{row['lines_added']}/-{row['lines_removed']}")
+        if args.max_tokens and tokens is None:
+            print("Token log unreadable for that run, so the budget can't be enforced; stopping.")
+            break  # fail closed: an unknown spend must not let the budget run open
+        used += tokens
     summarise(rows)
     return 0
 

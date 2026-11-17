@@ -77,9 +77,10 @@ copies of a sample project, with and without the kit, using the same model and p
 It records tokens, cost, lines changed, and pass/fail from hidden checks. A saving
 counts only if the pass rate holds. A real run (`--run`) uses your Claude plan or API credit.
 
-**First result** (Haiku, 5-file sample, 1 repeat, about $0.06): every task passed in both
-setups, and the kit used 17-34% *more* tokens. On a tiny project its fixed context
-outweighs any saving. Larger samples are next. Full table: [docs/BENCHMARK.md](docs/BENCHMARK.md).
+**Results so far** ([details](docs/BENCHMARK.md)): on a 64-file project with Opus, every task
+passed with and without the kit (16/16). The kit changed far fewer lines (7 vs 23.5 on the
+feature task), cost about the same (+5% overall), and did not yet reduce tokens. On a
+5-file project it cost 17-34% more. The template has since been trimmed.
 
 ## Privacy
 Scripts make no network calls. No hooks, no permission bypass, least-privilege agents.

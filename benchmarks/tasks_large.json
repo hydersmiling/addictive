@@ -1,0 +1,31 @@
+{
+  "_about": "Tasks for sample_large (a 60+ file warehouse app). Same rules as tasks.json: hidden files are copied in only after Claude finishes.",
+  "project_line": "Depot: warehouse, orders and reporting library (benchmark sample).",
+  "tasks": [
+    {
+      "id": "fix-bug",
+      "prompt": "The test suite fails (`python -m unittest discover tests`). Find the cause and fix it.",
+      "hidden_files": [],
+      "checks": ["python -m unittest discover tests"]
+    },
+    {
+      "id": "add-feature",
+      "prompt": "Add a function order_summary(order) to depot/reports/sales_report.py that returns text like 'Order ORD-0001: 3 items, total $32.40', where the total is after discounts and tax.",
+      "hidden_files": ["test_order_summary.py", "check_reuse.py"],
+      "checks": ["python -m unittest test_order_summary", "python check_reuse.py"]
+    },
+    {
+      "id": "locate",
+      "prompt": "Which function applies the loyalty-tier discount to an order, and in which file? Reply with only the path and the function name.",
+      "hidden_files": [],
+      "checks": [],
+      "answer_must_contain": ["discounts.py", "apply_loyalty_discount"]
+    },
+    {
+      "id": "rename",
+      "prompt": "Rename the function calc_line_total to line_total everywhere in the project.",
+      "hidden_files": ["check_rename_large.py"],
+      "checks": ["python check_rename_large.py"]
+    }
+  ]
+}

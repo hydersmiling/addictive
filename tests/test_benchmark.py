@@ -57,6 +57,51 @@ class BenchmarkTests(unittest.TestCase):
             result = subprocess.run([sys.executable, "check_rename.py"], cwd=repo, capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def _large_copy(self, tmp):
+        import shutil
+        repo = os.path.join(tmp, "repo")
+        shutil.copytree(run_benchmark.SAMPLES["large"][0], repo)
+        return repo
+
+    def _run_check(self, repo, *names, cmd):
+        import shutil
+        import subprocess
+        for name in names:
+            shutil.copy2(os.path.join(run_benchmark.SAMPLES["large"][2], name), repo)
+        return subprocess.run([sys.executable, *cmd], cwd=repo, capture_output=True, text=True)
+
+    def test_large_graders_accept_correct_answers(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self._large_copy(tmp)
+            report = os.path.join(repo, "depot", "reports", "sales_report.py")
+            with open(report, "a", encoding="utf-8") as fh:
+                fh.write("\n\nfrom depot.core.money import format_cents\n\n\n"
+                         "def order_summary(order):\n"
+                         "    return f\"Order {order.order_id}: {order.item_count()} items, total {format_cents(total(order))}\"\n")
+            r = self._run_check(repo, "test_order_summary.py", "check_reuse.py", cmd=["-m", "unittest", "test_order_summary"])
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertEqual(self._run_check(repo, cmd=["check_reuse.py"]).returncode, 0)
+            for folder, _dirs, files in os.walk(repo):
+                for name in files:
+                    if name.endswith(".py"):
+                        path = os.path.join(folder, name)
+                        with open(path, encoding="utf-8") as fh:
+                            text = fh.read()
+                        with open(path, "w", encoding="utf-8") as fh:
+                            fh.write(text.replace("calc_line_total", "line_total"))
+            r = self._run_check(repo, "check_rename_large.py", cmd=["check_rename_large.py"])
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+
+    def test_reuse_check_rejects_hand_rolled_formatting(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self._large_copy(tmp)
+            report = os.path.join(repo, "depot", "reports", "sales_report.py")
+            with open(report, "a", encoding="utf-8") as fh:
+                fh.write("\n\ndef order_summary(order):\n    return f\"${total(order) / 100:.2f}\"\n")
+            self.assertNotEqual(self._run_check(repo, "check_reuse.py", cmd=["check_reuse.py"]).returncode, 0)
+
     def test_dry_run_runs_nothing(self):
         self.assertEqual(run_benchmark.main(["--claude-cmd", "does-not-exist"]), 0)
 
