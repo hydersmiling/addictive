@@ -1,5 +1,42 @@
 # Benchmark results
 
+## Run 8: 2026-11-17, long sessions (6 tasks in one session)
+All six large and audit tasks run one after another in a single resumed session on the
+214-file audit sample, so context grows as in real work. One session per setup.
+Costs are computed from raw token counts at list prices (Claude Code reports a running total
+for resumed sessions, which an earlier version of the runner wrongly summed).
+
+| Setup | Tasks passed | Est. cost | vs plain Opus | Main-session turns | Lines changed |
+|---|---|---|---|---|---|
+| Plain Opus | 6/6 | $0.53 | - | 37 | 48 |
+| Sonnet + kit | 6/6 | $0.23 | -57% | 36 | 22 |
+| Plain Sonnet | 6/6 | $0.15 | -71% | 20 | 39 |
+
+Over a long session the pattern holds: Sonnet in the main seat delivers the same results for
+well under half the cost; the kit adds cost over plain Sonnet (+48%) and keeps changes smallest.
+
+## Run 7: 2026-11-17, blind quality review (plain Opus vs Sonnet + kit)
+Six tasks (large + audit samples), outputs recorded, then reviewed blind by Opus: each pair
+shown as A/B in random order. Benchmark cost: Opus $1.19, Sonnet + kit $0.46 (-61%); all 12
+runs passed. Lines changed: 60 vs 22.
+
+| Criterion (1-10) | Sonnet + kit | Plain Opus |
+|---|---|---|
+| Correctness | 8.5 | 8.8 |
+| Readability | 9.0 | 9.0 |
+| Minimal scope | **10.0** | 8.7 |
+| Fits the codebase | 8.8 | 9.0 |
+| Verdicts | 1 win | 1 win (4 ties) |
+
+- The kit won the bug fix (same one-line fix, no unrequested files). Plain Opus won the feature
+  task: it reused an existing helper so one item reads "1 item"; the kit's version said "1 items".
+- A first review was discarded: the judge showed large-sample pairs the small sample's task
+  text. Fixed and rerun; the invalid verdicts are kept in `judgements_invalid.jsonl` locally.
+- An earlier attempt at this run exposed a real defect: when `runner` was refused permission to
+  run tests, the Sonnet session stopped instead of running them itself. The template now falls
+  back to the main session; the rerun passed.
+
+
 ## Run 6: 2026-11-17, Haiku vs Sonnet vs Opus main, small sample (1 repeat)
 The 4 small-sample tasks, each main model with and without the kit. 24 runs, about $2.
 

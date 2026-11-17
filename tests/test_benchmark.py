@@ -129,6 +129,17 @@ class BenchmarkTests(unittest.TestCase):
                 digests.append(h.hexdigest())
         self.assertEqual(digests[0], digests[1])
 
+    def test_session_mode_runs_all_tasks_in_one_unit(self):
+        tasks = run_benchmark.load_tasks("session")[1]
+        self.assertEqual([t["id"] for t in tasks][:2], ["locate", "fix-bug"])
+        row = run_benchmark.run_session(tasks, "kit", "haiku", FAKE)
+        self.assertEqual((row["task"], row["tasks_total"]), ("session(6)", 6))
+        # The fake only knows the small sample's prompts, plus a correct money-audit answer
+        # and a wrong SQL-audit answer, so exactly one of the six tasks passes.
+        self.assertEqual(row["tasks_passed"], 1)
+        self.assertTrue(any(f.startswith("audit-sql: answer wrongly includes") for f in row["failures"]))
+        self.assertFalse(row["passed"])
+
     def test_dry_run_runs_nothing(self):
         self.assertEqual(run_benchmark.main(["--claude-cmd", "does-not-exist"]), 0)
 

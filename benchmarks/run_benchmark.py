@@ -50,6 +50,9 @@ SAMPLES = {
               os.path.join(HERE, "hidden_checks_large")),
     # Built on the fly (large sample + 150 legacy modules) instead of stored in git.
     "audit": (build_audit_sample.build, os.path.join(HERE, "tasks_audit.json"), HIDDEN),
+    # All six large+audit tasks in ONE session on the audit sample (see run_session).
+    "session": (build_audit_sample.build, os.path.join(HERE, "tasks_session.json"),
+                os.path.join(HERE, "hidden_checks_large")),
 }
 RESULTS = os.path.join(HERE, "results", "results.jsonl")
 
@@ -204,6 +207,94 @@ def run_one(task, mode, model, claude_cmd, keep=False, sample="small", effort=No
             shutil.rmtree(base, ignore_errors=True)
 
 
+def tokens_from_sessions(workdir, session_ids):
+    """Token totals across every log a resumed session wrote, each reply counted once."""
+    folder = os.path.join(measure_tokens.projects_dir(), measure_tokens.project_folder_name(workdir))
+    seen, main, subs = set(), {}, {}
+    found = False
+    for sid in dict.fromkeys(s for s in session_ids if s):  # unique, in order
+        log = os.path.join(folder, f"{sid}.jsonl")
+        if not os.path.exists(measure_tokens.long_path(log)):
+            continue
+        found = True
+        measure_tokens.count_file(log, main, seen)
+        for sub in measure_tokens.subagent_logs(log):
+            measure_tokens.count_file(sub, subs, seen)
+    if not found:
+        return None
+    both = {"main:" + k: v for k, v in main.items()}
+    both.update({"sub:" + k: v for k, v in subs.items()})
+    return {"by_model": both, "total": measure_tokens.add_up(both)}
+
+
+def run_session(tasks, mode, model, claude_cmd, keep=False, sample="session", effort=None):
+    """Run every task, one after another, in ONE Claude Code session (resumed between tasks).
+
+    This is how people actually work: the conversation grows with each task, so every
+    later reply re-reads more context. Checks run once at the end; answer checks apply
+    to each task's own reply. Returns one result dict for the whole session."""
+    base = tempfile.mkdtemp(prefix=f"bench-session-{mode}-")
+    workdir = os.path.realpath(os.path.join(base, "repo"))
+    try:
+        prepare(mode, workdir, sample)
+        started = time.time()
+        session_ids, answers, cost, turns, exit_codes = [], {}, 0.0, 0, []
+        sid = None
+        for task in tasks:
+            cmd = claude_command(claude_cmd, task["prompt"], model, effort)
+            if sid:
+                cmd += ["--resume", sid]  # continue the same conversation
+            code, out = sh(cmd, workdir, timeout=900, stdout_only=True)
+            exit_codes.append(code)
+            try:
+                reply = json.JSONDecoder().raw_decode(out[out.index("{"):])[0] if "{" in out else {}
+            except json.JSONDecodeError:
+                reply = {}
+            sid = reply.get("session_id") or sid
+            session_ids.append(reply.get("session_id"))
+            answers[task["id"]] = str(reply.get("result", ""))
+            # A resumed session reports a running total, so keep the latest, never a sum.
+            cost = max(cost, reply.get("total_cost_usd") or 0)
+            turns += reply.get("num_turns") or 0
+        seconds = round(time.time() - started, 1)
+
+        task_results = {}
+        hidden = {n for t in tasks for n in t.get("hidden_files", [])}
+        copied = []
+        for name in sorted(hidden):
+            dst = os.path.join(workdir, name)
+            if not os.path.lexists(dst):
+                shutil.copy2(os.path.join(SAMPLES[sample][2], name), dst)
+                copied.append(name)
+        for task in tasks:
+            failures = []
+            for check in task.get("checks", []):
+                c_code, c_out = sh(check, workdir)
+                if c_code != 0:
+                    failures.append(f"{check}: {c_out.strip().splitlines()[-1] if c_out.strip() else 'failed'}")
+            answer = answers.get(task["id"], "")
+            failures += [f"answer is missing '{n}'" for n in task.get("answer_must_contain", []) if n not in answer]
+            failures += [f"answer wrongly includes '{n}'" for n in task.get("answer_must_not_contain", []) if n in answer]
+            task_results[task["id"]] = failures
+        for name in copied:
+            os.remove(os.path.join(workdir, name))
+        added, removed = lines_changed(workdir)
+
+        failures = [f"{t}: {f}" for t, fs in task_results.items() for f in fs]
+        return {
+            "task": f"session({len(tasks)})", "mode": mode, "model": model, "sample": sample,
+            "time": time.strftime("%Y-%m-%d %H:%M"), "claude_exit": max(exit_codes or [1]),
+            "passed": not failures and not any(exit_codes), "failures": failures,
+            "tasks_passed": sum(not fs for fs in task_results.values()), "tasks_total": len(tasks),
+            "cost_usd": round(cost, 6), "turns": turns, "seconds": seconds,
+            "lines_added": added, "lines_removed": removed,
+            "tokens": tokens_from_sessions(workdir, session_ids), "diff": code_diff(workdir),
+        }
+    finally:
+        if not keep:
+            shutil.rmtree(base, ignore_errors=True)
+
+
 def total_tokens(row):
     """Fresh input + cache writes + output. Cache reads are listed separately (much cheaper)."""
     t = (row.get("tokens") or {}).get("total")
@@ -262,7 +353,9 @@ def main(argv=None):
     if args.tasks:
         tasks = [t for t in tasks if t["id"] in args.tasks]
     # Round by round (all tasks, both modes), so a budget stop keeps the comparison balanced.
-    runs = [(t, m) for _ in range(args.repeat) for t in tasks for m in args.modes]
+    # The session sample runs all its tasks as one unit per mode.
+    units = [{"id": f"session({len(tasks)})", "tasks": tasks}] if args.sample == "session" else tasks
+    runs = [(t, m) for _ in range(args.repeat) for t in units for m in args.modes]
 
     print(f"{len(runs)} runs on the {args.sample} sample: {len(tasks)} tasks x {len(args.modes)} modes "
           f"x {args.repeat} repeats, model {args.model}")
@@ -282,7 +375,10 @@ def main(argv=None):
             break
         print(f"[{i}/{len(runs)}] {task['id']} {mode} ...", flush=True)
         model = args.kit_model if (mode == "kit" and args.kit_model) else args.model
-        row = run_one(task, mode, model, claude_cmd, args.keep, args.sample, args.effort)
+        if args.sample == "session":
+            row = run_session(task["tasks"], mode, model, claude_cmd, args.keep, args.sample, args.effort)
+        else:
+            row = run_one(task, mode, model, claude_cmd, args.keep, args.sample, args.effort)
         rows.append(row)
         with open(args.out, "a", encoding="utf-8") as fh:
             fh.write(json.dumps(row) + "\n")
