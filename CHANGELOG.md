@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+- **Strict delegation:** the main session only plans, delegates and judges; all reading,
+  searching, editing and command runs go to Haiku/Sonnet helpers, however small.
+- New `runner` agent (Haiku) for tests and commands.
+- Audit benchmark sample (214 files) with planted findings and decoys.
+
 ## 1.0.0 (2026-11-17)
 First public release.
 

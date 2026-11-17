@@ -1,11 +1,12 @@
 # Tokenwise
 
 A verified collection of 200+ specialized Claude Code subagents and 16 skills for
-token-efficient development: 6 core agents installed by default and a catalog of 198
+token-efficient development: 7 core agents installed by default and a catalog of 198
 specialists you add by name.
 
-Tokenwise routes work by cognitive demand: Opus reasons and decides, Sonnet executes,
-Haiku reads and retrieves, and Fable is reserved for rare, costly-to-reverse decisions.
+Tokenwise routes work by cognitive demand: Opus only plans, delegates and judges; every
+hands-on step, however small, goes to Sonnet (edits, debugging, research) or Haiku
+(reading, searching, running tests). Fable is reserved for rare, costly-to-reverse decisions.
 A secret-aware codebase map replaces exploratory file reads. A reuse-before-create
 discipline searches the map, scout agents and installed dependencies before any new
 code is written. Every change is scoped to the request, verified by the narrowest
@@ -33,9 +34,10 @@ Catalog agents: `--list-agents`, then `--agents security-auditor backend-archite
 ## Agents
 | Agent | Model | Role |
 |---|---|---|
-| `explorer` | Haiku | All reading and scanning; returns `path:line` only |
+| `explorer` | Haiku | All reading and searching; returns `path:line` and a short answer |
+| `runner` | Haiku | Runs tests and commands; reports pass/fail and key lines |
 | `reviewer` | Haiku | Diff review, one line per finding; cannot edit |
-| `builder` | Sonnet | Edits of 1-2 files; no shell |
+| `builder` | Sonnet | Every edit, 1-2 files per call; no shell |
 | `debugger` | Sonnet | Reproduces failures and isolates the root cause |
 | `researcher` | Sonnet | Documentation and web lookups with sources |
 | `big-decision` | Fable | Rare: architecture, data model, security design, or after two failed attempts |
@@ -77,12 +79,11 @@ copies of a sample project, with and without the kit, using the same model and p
 It records tokens, cost, lines changed, and pass/fail from hidden checks. A saving
 counts only if the pass rate holds. A real run (`--run`) uses your Claude plan or API credit.
 
-**Results so far** ([details](docs/BENCHMARK.md)): on a 64-file project with Opus, every task
-passed with and without the kit (16/16). The kit changed far fewer lines (7 vs 23.5 on the
-feature task), cost about the same (+5% overall), and did not yet reduce tokens. On a
-5-file project it cost 17-34% more. On search-heavy audits (214 files, Haiku) quality held,
-but the one delegated run used more tokens than plain grep; an Opus run is next, where
-Haiku helpers cost 40x less per token.
+**Results so far** ([details](docs/BENCHMARK.md)): quality held in every valid run (44/44 graded passes
+across four runs). With strict delegation on Opus, helpers did all hands-on work and Opus
+took 65% fewer turns, but total cost rose 25% on short single tasks, because each Opus
+session has a fixed token floor and helper tokens add to it. It cost less only on the
+largest task (-14%). Long multi-task sessions, where savings should appear, are not yet measured.
 
 ## Privacy
 Scripts make no network calls. No hooks, no permission bypass, least-privilege agents.

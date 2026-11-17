@@ -1,5 +1,33 @@
 # Benchmark results
 
+## Run 4: 2026-11-17, Opus 5.5 main session, strict delegation, 1 repeat
+The template now forbids the main session from reading, searching, editing or running
+commands itself; Haiku and Sonnet helpers do all hands-on work. Large sample (4 tasks)
+and audit sample (2 tasks), 12 runs, total cost $2.45.
+
+| Task | Pass (base / kit) | Cost $ (base / kit) | Change | Opus turns (base / kit) | Kit tokens by model (Opus / Sonnet / Haiku) |
+|---|---|---|---|---|---|
+| fix-bug | pass / pass | 0.178 / 0.272 | +53% | 7 / 5 | 15.8k / 25.3k / 7.7k |
+| add-feature | pass / pass | 0.317 / 0.271 | -14% | 15 / 2 | 19.3k / 8.9k / 29.2k |
+| locate | pass / pass | 0.094 / 0.121 | +29% | 2 / 2 | 12.6k / - / 7.8k |
+| rename | pass / pass | 0.199 / 0.352 | +77% | 16 / 3 | 21.8k / 16.2k / 19.6k |
+| audit-money | pass / pass | 0.164 / 0.195 | +19% | 5 / 2 | 16.8k / - / 46.7k |
+| audit-sql | pass / pass | 0.138 / 0.145 | +5% | 4 / 3 | 13.4k / - / 35.7k |
+| **Total** | 6/6 / 6/6 | **1.09 / 1.36** | **+25%** | 49 / 17 | |
+
+### What it shows
+- **Delegation now works as designed:** every kit run used helpers, and Opus took 65% fewer
+  turns (17 vs 49). Quality held: 12/12 passes.
+- **But cost rose 25%.** Opus's own tokens barely fell: each Opus session has a fixed floor
+  of about 12-14k tokens (system prompt and tools), and on these tasks the plain Opus run
+  needs little more than that floor. The helpers' tokens are then added on top, and
+  Sonnet is not cheap ($2 / $10 per million).
+- **Where it cost less:** the feature task (-14%), the one where plain Opus did the most
+  work itself (15 turns).
+- **Hypothesis, not yet measured:** savings should grow in long sessions, where every extra
+  Opus turn re-reads a growing context. These one-task runs are too short to show that.
+
+
 ## Run 3: 2026-11-17, Haiku 5.5, 2 repeats, audit sample (214 files)
 Search-heavy tasks built to test delegation: the large sample plus 150 legacy modules
 (about 630 KB), with planted problems to find and correct decoys that must not be reported.

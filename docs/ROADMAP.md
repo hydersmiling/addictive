@@ -1,8 +1,9 @@
 # Roadmap
 
 ## Next
-1. **Cut lookup overhead.** Run 2 (64 files, Opus) showed equal quality, smaller diffs and
-   +0-6% tokens, but +21% on lookups. Make map reading cheaper, then rerun with `--repeat 3`.
+1. **Measure long sessions.** Strict delegation cut Opus turns 65% but cost +25% on short
+   single tasks. Benchmark a multi-task session where Opus context grows; trim helper prompts
+   and prefer Haiku over Sonnet where quality allows.
 2. **Doctor command.** Check `CLAUDE.md` length, map freshness, deny rules, agent headers and
    Fable access; print fixes.
 3. **Symbols for more languages.** JS/TS, Go, Java in the code map.

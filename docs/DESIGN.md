@@ -1,23 +1,25 @@
 # Design
 
 ## Principle
-Spend expensive reasoning only where judgement is needed. Opus plans and decides;
-cheaper models read, search and make routine edits; a generated map replaces
-exploratory file reads. Every saving must hold output quality constant.
+Spend expensive reasoning only where judgement is needed. The main session (Opus) plans,
+delegates, judges and answers; it never reads, searches, edits or runs commands itself,
+however small the job. Haiku and Sonnet helpers do all hands-on work. Opus tokens cost 40x
+Haiku's, so the goal is lower cost per task even if total tokens rise. Quality must hold.
 
 ## Roles
 | Role | Model | Responsibility | Returns |
 |---|---|---|---|
 | Main session | Opus | Plan, decide, final check | Decisions |
-| `explorer` | Haiku | All reading and scanning: locate code, answer "does this exist?" | `path:line` list |
+| `explorer` | Haiku | All reading and searching | `path:line` list + short answer |
+| `runner` | Haiku | All tests and commands | pass/fail + key lines |
 | `reviewer` | Haiku | Review a diff | One line per finding |
-| `builder` | Sonnet | Edits of 1-2 files | Diff receipt |
+| `builder` | Sonnet | All edits, 1-2 files per call | Diff receipt |
 | `debugger` | Sonnet | Root cause before any fix | cause / proof / fix |
 | `researcher` | Sonnet | Web and docs lookups | Answer + sources |
 | `big-decision` | Fable | Costly-to-reverse choices; two failed attempts | decision / why / risks |
 | `make_codemap.py` | none | Build `CODEMAP.md` | File map |
 
-The main session reads code only to judge it, never to find it.
+The main session reads at most ~30 cited lines, only to verify a helper's claim.
 
 ## Mechanisms
 - **Code map.** One line per file plus Python symbols; secret files and gitignored paths
@@ -34,7 +36,7 @@ The main session reads code only to judge it, never to find it.
 
 ## Decisions
 - **Few skills.** Each skill's description is loaded in every session; overlapping skills
-  cost tokens and blur routing. Core kit: 8 skills, 6 agents. Specialised packs are optional.
+  cost tokens and blur routing. Core kit: 8 skills, 7 agents. Specialised packs are optional.
 - **Least privilege.** Every agent declares `tools:` and `model:` explicitly. Instructions
   are not permissions.
 - **Nothing implicit.** No hooks, no network access in scripts, no overwriting user files.
