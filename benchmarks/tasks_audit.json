@@ -1,0 +1,22 @@
+{
+  "_about": "Search-heavy tasks for the audit sample (sample_large plus 150 legacy modules, built by build_audit_sample.py). Answers are graded: every planted file must be named, and no decoy may be.",
+  "project_line": "Depot: warehouse, orders and reporting library with a large legacy package (benchmark sample).",
+  "tasks": [
+    {
+      "id": "audit-money",
+      "prompt": "Audit the codebase: list every Python file that formats dollar amounts by hand instead of using depot.core.money.format_cents. Do not change any code. Reply with only the file paths, one per line.",
+      "hidden_files": [],
+      "checks": [],
+      "answer_must_contain": ["mod_017.py", "mod_048.py", "mod_093.py", "mod_131.py"],
+      "answer_must_not_contain": ["mod_035.py", "mod_104.py"]
+    },
+    {
+      "id": "audit-sql",
+      "prompt": "Security audit: list every Python file that builds an SQL statement by inserting values into the query string (an injection risk). Do not change any code. Reply with only the file paths, one per line.",
+      "hidden_files": [],
+      "checks": [],
+      "answer_must_contain": ["mod_029.py", "mod_076.py", "mod_118.py"],
+      "answer_must_not_contain": ["mod_061.py", "mod_142.py"]
+    }
+  ]
+}

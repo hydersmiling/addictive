@@ -102,6 +102,33 @@ class BenchmarkTests(unittest.TestCase):
                 fh.write("\n\ndef order_summary(order):\n    return f\"${total(order) / 100:.2f}\"\n")
             self.assertNotEqual(self._run_check(repo, "check_reuse.py", cmd=["check_reuse.py"]).returncode, 0)
 
+    def _audit_task(self, task_id):
+        with open(os.path.join(ROOT, "benchmarks", "tasks_audit.json"), encoding="utf-8") as fh:
+            return next(t for t in json.load(fh)["tasks"] if t["id"] == task_id)
+
+    def test_audit_correct_answer_passes(self):
+        row = run_benchmark.run_one(self._audit_task("audit-money"), "baseline", "haiku", FAKE, sample="audit")
+        self.assertTrue(row["passed"], row["failures"])
+
+    def test_audit_decoy_fails(self):
+        row = run_benchmark.run_one(self._audit_task("audit-sql"), "kit", "haiku", FAKE, sample="audit")
+        self.assertIn("answer wrongly includes 'mod_061.py'", row["failures"])
+
+    def test_audit_build_is_deterministic(self):
+        import hashlib
+        import tempfile
+        digests = []
+        for _ in range(2):
+            with tempfile.TemporaryDirectory() as tmp:
+                run_benchmark.build_audit_sample.build(os.path.join(tmp, "a"))
+                legacy = os.path.join(tmp, "a", "depot", "legacy")
+                h = hashlib.sha256()
+                for name in sorted(os.listdir(legacy)):
+                    with open(os.path.join(legacy, name), "rb") as fh:
+                        h.update(fh.read())
+                digests.append(h.hexdigest())
+        self.assertEqual(digests[0], digests[1])
+
     def test_dry_run_runs_nothing(self):
         self.assertEqual(run_benchmark.main(["--claude-cmd", "does-not-exist"]), 0)
 
