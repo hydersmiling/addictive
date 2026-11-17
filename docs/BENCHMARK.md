@@ -1,5 +1,27 @@
 # Benchmark results
 
+## Runs 9-12: 2026-11-18, the trimmed kit (1.6.0)
+**Run 9, plain Sonnet vs Sonnet + Mainseat 1.5 (6 tasks, blind Opus review):** both 6/6;
+$0.42 vs $0.48 (+15%); lines changed 50 vs 23; verdicts 2 wins each, 2 ties. Plain Sonnet's
+wins: a lessons-log entry required by the test machine's personal rules, and a test the kit
+skipped. Mainseat's wins: portable file paths.
+
+**Run 10, after trimming (1.6.0), plain Sonnet vs Sonnet + Mainseat (6 tasks):** both 6/6;
+$0.434 vs $0.445 (+2.5%, down from +15%); lines changed 34 vs 27. Always-loaded text fell
+from about 1,740 to 690 tokens.
+
+**Run 11, showcase pages, plain Opus vs Sonnet + Mainseat (2 rounds, blind screenshot judge):**
+Mainseat ranked first in both rounds; average score 7.9 vs 7.5; cost $1.49 vs $1.52. The
+one-pass Opus `designer` builds the page. The earlier three-pass workflow (brief, build,
+screenshot review) scored 8.2 but cost 48% more than plain Opus and was dropped.
+
+**Run 12, plain Opus vs Sonnet + Mainseat at medium effort (6 tasks, blind Opus review):**
+both 6/6; $1.19 vs $0.48 (-59%); lines changed 60 vs 33. Verdicts: Opus 3 wins, 3 ties.
+Opus's wins: a lessons-log entry (the personal-rules effect again), stronger test assertions
+on the feature task (a real gap), and neater path formatting. Medium effort cost no less than
+the default, so it is not recommended.
+
+
 ## Run 8: 2026-11-17, long sessions (6 tasks in one session)
 All six large and audit tasks run one after another in a single resumed session on the
 214-file audit sample, so context grows as in real work. One session per setup.

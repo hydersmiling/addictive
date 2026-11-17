@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.6.0 (2026-11-18)
+- **Leaner:** every agent and skill description is one line and the template is half as long;
+  always-loaded text fell about 61% (1,740 to 690 tokens). Mainseat now costs about the same
+  as plain Sonnet (+2.5%, down from +15%).
+- **Delegate only when it pays:** small jobs (a known file, a test run, an edit) are done
+  directly; helpers handle big searches, noisy commands, large diffs and hard bugs.
+- **New `designer` agent (Opus):** builds whole showcase pages in one pass. In blind
+  screenshot tests its pages beat plain Opus's (7.9 vs 7.5) at the same cost.
+- `scripts/screenshot.py` and `benchmarks/visual_bench.py` for blind visual comparisons.
+- Benchmark runs 9-12 published in docs/BENCHMARK.md, including where plain Opus still wins.
+
 ## 1.5.0 (2026-11-17)
 - **Design work goes to Opus first:** building a new app, page or UI now starts with the
   `planner` writing a design brief (audience, palette, type, layout, copy, no blank image

@@ -24,9 +24,10 @@ half the cost, delivered in smaller, cleaner changes.
 | Cost, 4 small tasks | $0.59 | **$0.33 (-44%)** |
 | Lines changed, feature task | 22 | **6** |
 | Long session, 6 tasks in one conversation | $0.53 | **$0.23 (-57%)** |
-| Blind code review (6 pairs, Opus as reviewer) | 1 win | **1 win, 4 ties** |
+| Blind code review (12 pairs, Opus as reviewer) | 4 wins | **1 win, 7 ties** |
+| Showcase pages, blind screenshot judge | 7.5 / 10 | **7.9 / 10, same cost** |
 
-101 graded benchmark runs so far; one failed, exposing a defect that is now fixed. Method and raw numbers: [docs/BENCHMARK.md](docs/BENCHMARK.md).
+131 graded benchmark runs so far; one failed, exposing a defect that is now fixed. Method and raw numbers: [docs/BENCHMARK.md](docs/BENCHMARK.md).
 
 ## Start in one minute
 **As a Claude Code plugin (recommended).** Inside Claude Code:
@@ -126,13 +127,13 @@ second one: an expensive model's judgement is worth paying for, but its keystrok
 
 ## Anatomy of a request
 1. **Understand.** Sonnet reads your request and the project's rules.
-2. **Locate.** For anything beyond a known file, a Haiku `explorer` consults the code map
+2. **Locate.** Sonnet opens files it already knows. For searches across many files, a Haiku `explorer` consults the code map
    and returns precise `path:line` citations, keeping bulky reading out of the main context.
 3. **Plan.** If the work spans several files or needs design, the Opus `planner` returns a
    short numbered plan, then steps back.
 4. **Build.** Sonnet makes the smallest change that fully satisfies the request, reusing
    existing helpers before writing new ones.
-5. **Verify.** A Haiku `runner` executes the narrowest test that proves the change; two
+5. **Verify.** Sonnet runs the narrowest test that proves the change (a Haiku `runner` handles long, noisy commands); two
    failed fixes escalate to a `debugger` instead of looping.
 6. **Learn.** If you correct the same thing twice, it becomes a lasting rule.
 
@@ -141,8 +142,9 @@ second one: an expensive model's judgement is worth paying for, but its keystrok
 |---|---|---|
 | Main session: understands, decides, edits known files | **Sonnet** | Every reply re-reads the whole context, so this seat sets the price |
 | `planner`: designs multi-file work | Opus | Strongest reasoning, used only when a plan is needed |
-| `explorer`, `runner`, `reviewer`: read, search, run tests, review | Haiku | 40x cheaper than Opus for mechanical work |
-| `builder`, `debugger`, `researcher`: edits, root causes, docs lookups | Sonnet | Capable at half Opus's price |
+| `explorer`, `runner`, `reviewer`: big searches, noisy commands, large diffs | Haiku | 40x cheaper than Opus; used only when the job is big enough to pay |
+| `designer`: builds a whole page people will see, in one pass | Opus | Showcase pages need Opus's eye; one pass is cheapest |
+| `debugger`, `researcher` (plus `builder` for an Opus main session): root causes, docs lookups | Sonnet | Capable at half Opus's price |
 | `big-decision`: costly-to-reverse choices | Fable | Rare; falls back to Opus if unavailable |
 
 **Why doesn't Opus build?** Building is many turns of reading and editing, each paid at the
@@ -172,7 +174,7 @@ session model's price. Opus earns its cost on the plan, not on the keystrokes.
 - **Self-debugging:** two failed fixes hand over to a debugger instead of looping.
 - **Learns your corrections:** say it twice and it becomes a rule in `.claude/LEARNED.md`.
 - **Compact replies:** the answer, then at most one short follow-up.
-- **200+ agents:** 8 core plus 198 optional specialists (`--list-agents`, `--agents NAME`).
+- **200+ agents:** 9 core plus 198 optional specialists (`--list-agents`, `--agents NAME`).
 - **Real numbers:** `scripts/measure_tokens.py` profiles any session: tokens per model,
   subagents included, and how much of it was the fixed floor.
 
@@ -209,9 +211,9 @@ difference does not appear on the bill, but it compounds over the life of a code
 
 ## Walkthroughs
 **Fixing a failing test.** You write: "the test suite fails, fix it." Sonnet asks the
-Haiku `runner` to run the suite, which returns only the decisive lines: one failing test
+test suite itself and reads only the decisive lines: one failing test
 and its assertion. Sonnet opens the file the traceback names, finds the off-by-one in a
-discount threshold, corrects one line, and asks `runner` to confirm the suite passes.
+discount threshold, corrects one line, and re-runs the suite to confirm it passes.
 If the first fix had failed and the second had too, the `debugger` would have been asked
 for a root cause instead of a third guess. You receive one sentence naming the cause and
 the fix, and a one-line follow-up if there is anything left to decide.
@@ -232,11 +234,14 @@ tasks, Mainseat found every planted problem and reported none of the correct loo
 - **`planner` (Opus).** Receives a goal, constraints and relevant locations, reads only
   what it needs, and returns at most eight concrete steps plus a check command. It never
   edits. If the goal is ambiguous it asks one question rather than guessing.
-- **`explorer` (Haiku).** The kit's eyes. It searches in parallel, cites only line ranges
+- **`designer` (Opus).** Designs and builds a whole page people will see in one pass: a
+  detailed hero visual, one memorable showpiece section and specific copy, with no blank
+  placeholders. In blind tests its pages beat plain Opus's at the same cost.
+- **`explorer` (Haiku).** The kit's eyes for big searches. It searches in parallel, cites only line ranges
   it actually read, and answers in `path:line` form so its findings can be verified quickly.
-- **`runner` (Haiku).** Runs tests, builds and read-only commands, and reports pass or
+- **`runner` (Haiku).** Runs long or noisy commands, and reports pass or
   fail with at most ten key lines. It refuses installs, pushes, deletions and deployments.
-- **`builder` (Sonnet).** Makes edits of one or two files per call, re-reads its work to
+- **`builder` (Sonnet).** For an Opus main session only: makes edits of one or two files per call, re-reads its work to
   verify it, and returns a short receipt. It has no shell, by design.
 - **`reviewer` (Haiku).** Reviews a diff and reports one finding per line with severity
   and a suggested fix. It cannot edit, so a review never silently becomes a rewrite.
@@ -248,7 +253,7 @@ tasks, Mainseat found every planted problem and reported none of the correct loo
   or a problem that cheaper agents have failed twice. It returns a decision, its reasons,
   its risks and the rejected options.
 
-Beyond these eight, an optional catalog of 198 specialists covers languages, frameworks,
+Beyond these nine, an optional catalog of 198 specialists covers languages, frameworks,
 infrastructure, security, data and documentation. Each is capped at Sonnet or Haiku and
 installed only by name, because every installed agent's description is read in every session.
 
@@ -312,7 +317,7 @@ directly then showed Sonnet with Mainseat passing everything plain Opus passed f
 rated the two setups' code as tied overall.
 
 ## FAQ
-**Does Mainseat make Claude worse?** In 101 graded runs, every setup passed the same tasks
+**Does Mainseat make Claude worse?** In 131 graded runs, every setup passed the same tasks
 apart from one run that exposed a since-fixed defect. A blind code review scored the two
 setups as tied overall: 1 win each, 4 ties.
 
@@ -419,7 +424,7 @@ are not paying Opus rates for the routine turns around them.
 | Path | Purpose |
 |---|---|
 | `CLAUDE.md.template` | The short project rules the installer copies into your project |
-| `agents/` | The eight core agents, each with an explicit model and tool list |
+| `agents/` | The nine core agents, each with an explicit model and tool list |
 | `.claude/skills/` | The eight core skills, loaded only when relevant |
 | `optional/` | The agent catalog and optional skill packs, installed only on request |
 | `scripts/` | Installer, code map, token counter and header checker, all standard-library Python |
@@ -481,8 +486,8 @@ with a benchmark run and record its method in `docs/BENCHMARK.md`.
   (-64%). Mainseat's rules cost about 20-30% on short tasks and buy smaller, reused,
   verified changes.
 - One or two runs per setup so far, so treat the percentages as indicative.
-- In the blind review the two setups tied overall; plain Opus was slightly stronger on
-  correctness details (8.8 vs 8.5), Mainseat on keeping to the task (10 vs 8.7).
+- In blind code reviews Opus won 4 pairs, Mainseat 1, with 7 ties. Most of Opus's wins were
+  presentation or logging details; one was a real difference in test quality.
 
 ## Safe by design
 No hooks, no network calls in scripts, no permission bypass, least-privilege agents.
