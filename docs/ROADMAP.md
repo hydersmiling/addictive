@@ -1,8 +1,8 @@
 # Roadmap
 
 ## Next
-1. **Benchmark at realistic size.** Run 1 (5-file sample) showed +17-34% tokens with equal pass rate;
-   add a 50+ file sample, run Opus with `--repeat 3`, and trim fixed context until the kit pays off.
+1. **Cut lookup overhead.** Run 2 (64 files, Opus) showed equal quality, smaller diffs and
+   +0-6% tokens, but +21% on lookups. Make map reading cheaper, then rerun with `--repeat 3`.
 2. **Doctor command.** Check `CLAUDE.md` length, map freshness, deny rules, agent headers and
    Fable access; print fixes.
 3. **Symbols for more languages.** JS/TS, Go, Java in the code map.
