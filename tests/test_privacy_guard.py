@@ -49,7 +49,7 @@ class PrivacyGuardTests(unittest.TestCase):
             settings = json.load(fh)
         self.assertNotIn("hooks", settings)
         self.assertNotIn("allow", settings.get("permissions", {}))
-        for folder, _dirs, files in os.walk(os.path.join(ROOT, ".claude")):
+        for folder, _dirs, files in [w for top in (".claude", "agents") for w in os.walk(os.path.join(ROOT, top))]:
             for name in files:
                 with open(os.path.join(folder, name), encoding="utf-8") as fh:
                     text = fh.read()

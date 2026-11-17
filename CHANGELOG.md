@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.1 (2026-11-17)
+- **Fix:** plugin installs now load all 8 core agents. They moved to the root `agents/` folder,
+  where Claude Code loads plugin agents; 1.4.0 installed only the skills. Verified with a
+  fresh install: 8 agents, 9 skills, about 990 tokens added to each session.
+
 ## 1.4.0 (2026-11-17)
 - **Installable as a Claude Code plugin:** `claude plugin marketplace add hydersmiling/mainseat`,
   then `claude plugin install mainseat@mainseat`.

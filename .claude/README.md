@@ -1,12 +1,13 @@
 # Inside `.claude`
 
-Everything Claude Code loads from this kit lives here. `scripts/install.py` copies
+Skills and settings live here; the core agents live in the root `agents/` folder, where
+Claude Code plugins load them. `scripts/install.py` copies
 `agents/`, `skills/`, `settings.json` and `LEARNED.md` into your project's `.claude/`.
 
 ## Layout
 | Path | What it is | Loaded when |
 |---|---|---|
-| `agents/*.md` | 8 core subagents (model, tools, instructions) | Description every session; body when called |
+| `../agents/*.md` | 8 core subagents (model, tools, instructions) | Description every session; body when called |
 | `skills/*/SKILL.md` | 8 core skills | Description every session; body when invoked |
 | `settings.json` | Deny rules for secrets, dependencies and build output | Every session |
 | `LEARNED.md` | Rules learned from your corrections, imported by `CLAUDE.md` | Every turn |
