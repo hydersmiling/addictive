@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1 (2026-11-17)
+- README: "More than a cost cutter" section describing everything Tokenwise does beyond
+  saving tokens, and a one-page visual overview at the top of the page.
+
 ## 1.2.0 (2026-11-17)
 - **Long-session benchmark:** `--sample session` runs six tasks in one resumed session.
   Result: Sonnet + Tokenwise 6/6 at $0.23 vs plain Opus 6/6 at $0.53 (-57%).
