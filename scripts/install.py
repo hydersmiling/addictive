@@ -136,7 +136,10 @@ def main(argv=None):
         else:
             print("  1. Fill in the 'Project' and 'Run tests' lines in CLAUDE.md.")
         print("  2. Run: python scripts/make_codemap.py")
-        print("  3. No Fable access? Set 'model: opus' in .claude/agents/big-decision.md.")
+        print("  3. Start Claude Code on Sonnet (recommended): claude --model sonnet")
+        print("     Sonnet runs the session; Opus is called only through the planner agent.")
+        print("     Measured: 44-56% cheaper than plain Opus with the same pass rate.")
+        print("  4. No Fable access? Set 'model: opus' in .claude/agents/big-decision.md.")
     return 0
 
 
