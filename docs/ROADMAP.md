@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Next
-1. **Trim per-turn cost.** Long sessions confirmed Sonnet + Tokenwise at -57% vs plain Opus, but
+1. **Trim per-turn cost.** Long sessions confirmed Sonnet + Mainseat at -57% vs plain Opus, but
    +48% vs plain Sonnet. Shorten the template and agent descriptions; rerun with `--repeat 3`.
 2. **Doctor command.** Check `CLAUDE.md` length, map freshness, deny rules, agent headers and
    Fable access; print fixes.

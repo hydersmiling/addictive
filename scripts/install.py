@@ -1,4 +1,4 @@
-"""Copy the Tokenwise kit into one of your projects.
+"""Copy the Mainseat kit into one of your projects.
 
 Usage:
     python scripts/install.py PATH --dry-run                  # show what would happen
@@ -90,7 +90,7 @@ def install(target, dry_run=False, extras=(), agents=()):
 def main(argv=None):
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-    parser = argparse.ArgumentParser(description="Copy the Tokenwise kit into a project.")
+    parser = argparse.ArgumentParser(description="Copy the Mainseat kit into a project.")
     parser.add_argument("target", nargs="?", help="your project folder")
     parser.add_argument("--dry-run", action="store_true", help="show what would be copied; change nothing")
     parser.add_argument("--with", dest="extras", nargs="+", default=[], choices=sorted(OPTIONAL),
