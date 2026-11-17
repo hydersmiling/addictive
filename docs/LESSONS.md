@@ -63,3 +63,14 @@ One entry per surprise: what happened, root cause, fix, rule.
 - Fix: stop when spend is unknown; parse stdout only; skip symlinks; `lexists`; `utf-8-sig`;
   Stripe, Google and JWT patterns; checker refuses to pass when it finds no files.
 - Rule: any guard that limits spend or exposure fails closed when its input is missing.
+
+## 2026-11-17: Heredoc turned "\n" into a real line break (twice)
+- What: Python edits sent through a bash heredoc broke string literals containing a newline escape.
+- Cause: this shell expands the escape before Python sees it.
+- Fix: edit such lines with the Edit tool, or build the character with chr(10).
+- Rule: never put backslash escapes in code passed through a heredoc on this machine.
+
+## 2026-11-17: Delegating a grep-able search costs more
+- What: the one delegated audit run used 2.3x the tokens of a baseline that used grep.
+- Rule: delegate reading that needs judgement across many files; let simple pattern
+  searches stay a single grep in the main session.

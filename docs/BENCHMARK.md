@@ -1,5 +1,25 @@
 # Benchmark results
 
+## Run 3: 2026-11-17, Haiku 5.5, 2 repeats, audit sample (214 files)
+Search-heavy tasks built to test delegation: the large sample plus 150 legacy modules
+(about 630 KB), with planted problems to find and correct decoys that must not be reported.
+Template updated to send audits to `explorer`. 8 runs, total cost about $0.04.
+
+| Task | Pass (base / kit) | Tokens* (base / kit) | Change | Subagent used (kit) |
+|---|---|---|---|---|
+| audit-money | 2/2 / 2/2 | 13,575 / 24,495 | +80% | 1 of 2 runs |
+| audit-sql | 2/2 / 2/2 | 15,438 / 15,702 | +2% | 0 of 2 runs |
+
+### What it shows
+- **Quality held:** every planted file found, no decoy reported, in both setups.
+- **Delegation happened once, and cost more:** main 16.8k + `explorer` 14.8k = 31.6k tokens,
+  against 13.5k for a baseline that solved the task with a few greps. When a search can be
+  done with grep, handing it to a subagent duplicates work.
+- **Why price can't show a saving here:** the main session was Haiku too, so the helper was no
+  cheaper per token. With Opus as the main model, Haiku tokens cost 40x less, so a run can
+  use more tokens and still cost less. That needs an Opus run of these tasks.
+
+
 ## Run 2: 2026-11-17, Opus 5.5, 2 repeats, large sample (64 files)
 Method: `run_benchmark.py --run --sample large --model opus --repeat 2 --max-tokens 950000`.
 Same rules as run 1. Four runs that failed with zero tokens (a usage limit was hit mid-run)
