@@ -1,7 +1,9 @@
 # Design
 
 ## Principle
-Spend expensive reasoning only where judgement is needed. The main session (Opus) plans,
+Spend expensive reasoning only where judgement is needed. Recommended: the main session runs
+on Sonnet and calls Opus only through `planner` (measured -56% cost vs plain Opus, equal
+quality). If the main session is Opus, it plans,
 delegates, judges and answers; it never reads, searches, edits or runs commands itself,
 however small the job. Haiku and Sonnet helpers do all hands-on work. Opus tokens cost 40x
 Haiku's, so the goal is lower cost per task even if total tokens rise. Quality must hold.
@@ -16,6 +18,7 @@ Haiku's, so the goal is lower cost per task even if total tokens rise. Quality m
 | `builder` | Sonnet | All edits, 1-2 files per call | Diff receipt |
 | `debugger` | Sonnet | Root cause before any fix | cause / proof / fix |
 | `researcher` | Sonnet | Web and docs lookups | Answer + sources |
+| `planner` | Opus | Plans multi-file and design work for a cheaper main session | Numbered plan |
 | `big-decision` | Fable | Costly-to-reverse choices; two failed attempts | decision / why / risks |
 | `make_codemap.py` | none | Build `CODEMAP.md` | File map |
 
@@ -36,7 +39,7 @@ The main session reads at most ~30 cited lines, only to verify a helper's claim.
 
 ## Decisions
 - **Few skills.** Each skill's description is loaded in every session; overlapping skills
-  cost tokens and blur routing. Core kit: 8 skills, 7 agents. Specialised packs are optional.
+  cost tokens and blur routing. Core kit: 8 skills, 8 agents. Specialised packs are optional.
 - **Least privilege.** Every agent declares `tools:` and `model:` explicitly. Instructions
   are not permissions.
 - **Nothing implicit.** No hooks, no network access in scripts, no overwriting user files.

@@ -70,7 +70,7 @@ def subagent_logs(session_log):
     return jsonl_in(os.path.join(session_dir, "subagents"))
 
 
-def count_file(path, totals, seen):
+def count_file(path, totals, seen, contexts=None):
     """Add the token usage in one .jsonl log to `totals` (a dict keyed by model).
 
     The same model reply can be written on several lines (one per content
@@ -100,17 +100,39 @@ def count_file(path, totals, seen):
                 if isinstance(value, int):
                     bucket[field] += value
             bucket["replies"] += 1
+            if contexts is not None:
+                # Everything the model had to read for this reply = its context size.
+                u = msg["usage"]
+                contexts.append(sum(u.get(f) or 0 for f in
+                                    ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens")))
 
 
 def measure(session_log):
     """Return {"main": {...}, "subagents": {...}} token totals for one session."""
     seen = set()
-    main, subs = {}, {}
-    count_file(session_log, main, seen)
+    main, subs, contexts = {}, {}, []
+    count_file(session_log, main, seen, contexts)
     for sub in subagent_logs(session_log):
         count_file(sub, subs, seen)
     return {"session": os.path.basename(session_log)[:-6], "main": main, "subagents": subs,
-            "subagent_logs": len(subagent_logs(session_log))}
+            "subagent_logs": len(subagent_logs(session_log)), "profile": profile(contexts)}
+
+
+def profile(contexts):
+    """Where the main session's tokens go, from the context size of each reply.
+
+    floor  = context of the first reply: system prompt, tools, CLAUDE.md, skill and
+             agent descriptions. Every later reply pays for this again.
+    growth = how much the conversation added on top of the floor by the last reply.
+    reread = total context read across all replies; the floor alone accounts for
+             floor x replies of it.
+    """
+    if not contexts:
+        return None
+    floor = contexts[0]
+    return {"replies": len(contexts), "floor": floor, "peak": max(contexts),
+            "growth": contexts[-1] - floor, "reread": sum(contexts),
+            "floor_share": round(floor * len(contexts) / sum(contexts), 2)}
 
 
 def add_up(per_model):
@@ -132,6 +154,12 @@ def print_report(result):
     t = add_up(result["main"] | {f"sub:{k}": v for k, v in result["subagents"].items()})
     print(f"  {'TOTAL':<10} {'':<22} {t['replies']:>7} {t['input_tokens']:>9,} "
           f"{t['cache_creation_input_tokens']:>12,} {t['cache_read_input_tokens']:>12,} {t['output_tokens']:>9,}")
+    p = result.get("profile")
+    if p:
+        print(f"  Main session profile: {p['replies']} replies, fixed floor {p['floor']:,} tokens per reply, "
+              f"peak context {p['peak']:,}, conversation growth {p['growth']:,}.")
+        print(f"  The fixed floor is {p['floor_share']:.0%} of everything the main model read "
+              f"({p['reread']:,} tokens). Fewer main-session replies or a cheaper main model cut this most.")
     print("  Note: cache reads are much cheaper than fresh input; compare like with like.")
     print()
 

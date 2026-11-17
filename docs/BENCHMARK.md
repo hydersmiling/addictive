@@ -1,5 +1,24 @@
 # Benchmark results
 
+## Run 5: 2026-11-17, which main model? (1 repeat, large + audit samples)
+Same 6 tasks, three setups: plain Opus, plain Sonnet, and Sonnet with the kit (Opus
+available through the `planner` agent). Total cost about $2.
+
+| Setup | Passed | Cost for 6 tasks | vs plain Opus | Lines changed, feature task |
+|---|---|---|---|---|
+| Plain Opus | 6/6 | $1.12 | - | 22 |
+| Plain Sonnet | 6/6 | $0.40 | -64% | 18 |
+| Sonnet + kit | 6/6 | $0.49 | -56% | 6 |
+
+### What it shows
+- **The main model is the biggest lever.** Sonnet matched Opus on every task at about a
+  third of the cost.
+- **The kit adds ~22% on top of plain Sonnet** on short tasks (its rules are re-read every
+  turn), and its routing rarely triggered: the planner was never called, Haiku once.
+- **It did keep changes smallest** (6 lines on the feature task vs 18 and 22).
+- Recommendation: Sonnet as main session; Opus only through `planner` for design work.
+
+
 ## Run 4: 2026-11-17, Opus 5.5 main session, strict delegation, 1 repeat
 The template now forbids the main session from reading, searching, editing or running
 commands itself; Haiku and Sonnet helpers do all hands-on work. Large sample (4 tasks)
