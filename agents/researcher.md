@@ -1,9 +1,6 @@
 ---
 name: researcher
-description: >
-  Look things up on the web or in library docs: how an API works, which package
-  to use, what an error message means, current versions. Returns a short answer
-  with sources. Use instead of loading long web pages into the main session.
+description: "Web and docs lookups; returns a short answer with sources."
 tools: WebSearch, WebFetch, Read, Grep, Glob
 model: sonnet
 maxTurns: 15

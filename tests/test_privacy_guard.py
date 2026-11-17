@@ -17,7 +17,8 @@ NETWORK_MODULES = {"socket", "urllib", "http", "requests", "httpx", "aiohttp",
                    "ftplib", "smtplib", "telnetlib", "xmlrpc", "websocket", "paramiko"}
 OUR_SCRIPTS = ["scripts/make_codemap.py", "scripts/measure_tokens.py", "scripts/install.py",
                "scripts/check_agents.py", "benchmarks/run_benchmark.py", "benchmarks/judge.py",
-               "benchmarks/build_audit_sample.py"]
+               "benchmarks/build_audit_sample.py",
+               "scripts/screenshot.py", "benchmarks/visual_bench.py"]
 
 
 def tracked_text_files():

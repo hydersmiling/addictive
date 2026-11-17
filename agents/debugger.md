@@ -1,9 +1,6 @@
 ---
 name: debugger
-description: >
-  Find the root cause of a bug, failing test, crash or wrong output. Reproduces
-  first, ranks causes by evidence, and returns the cause plus the smallest fix.
-  Does not edit files. Use before changing code when the cause is not obvious.
+description: "Root cause of a hard bug or failing test, with proof and the smallest fix. Does not edit."
 tools: Read, Grep, Glob, Bash
 model: sonnet
 maxTurns: 25

@@ -35,6 +35,7 @@ KIT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SINGLE_FILES = [
     ("scripts/make_codemap.py", "scripts/make_codemap.py"),
     ("scripts/measure_tokens.py", "scripts/measure_tokens.py"),
+    ("scripts/screenshot.py", "scripts/screenshot.py"),
     ("CLAUDE.md.template", "CLAUDE.md"),
     (".claude/settings.json", ".claude/settings.json"),
     (".claude/LEARNED.md", ".claude/LEARNED.md"),

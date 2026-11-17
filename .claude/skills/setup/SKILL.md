@@ -1,9 +1,6 @@
 ---
 name: setup
-description: >
-  One-time Mainseat setup for the current project after installing the plugin. Adds
-  CLAUDE.md (the routing rules), .claude/settings.json, .claude/LEARNED.md and the code
-  map and token scripts. Use when the user types /mainseat:setup or asks to set up Mainseat.
+description: "One-time Mainseat setup for this project (/mainseat:setup)."
 disable-model-invocation: true
 ---
 

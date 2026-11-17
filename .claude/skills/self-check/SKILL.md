@@ -1,9 +1,6 @@
 ---
 name: self-check
-description: >
-  Prove a change works before calling it done, and debug your own mistakes
-  when it doesn't. Use after every code change, and whenever a test, build or
-  command fails.
+description: "Prove a change works with the narrowest test; debug failures."
 ---
 
 # self-check

@@ -23,6 +23,11 @@ Name mapping used: caveman → terse, ultracave → terse-ultra, megacave → te
 cavecrew → delegate, cavecrew-investigator → scout, cavecrew-builder → builder,
 cavecrew-reviewer → reviewer, caveman-explore → explorer.
 
+### Changes in 1.6.0 (all Pack A files above)
+Descriptions shortened to one line to cut per-session tokens: `terse`, `safe-refactor`,
+`builder` (now described as the Opus-main-session editor), `reviewer` and `explorer`.
+Bodies unchanged.
+
 ## Pack B (optional, not installed by default)
 Upstream commit `480b61ed91cbc08177dc2c60caa9ffd6c9b95749` (2026-11-16).
 

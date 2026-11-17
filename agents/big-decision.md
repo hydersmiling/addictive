@@ -1,10 +1,6 @@
 ---
 name: big-decision
-description: >
-  Strongest model, used rarely. Only for decisions that are expensive to undo:
-  choosing an architecture, a database, a framework or data model; a security
-  design; a large refactor plan; or a problem that cheaper agents failed twice.
-  Not for coding, searching, small fixes or normal planning.
+description: "Opus/Fable, rare: costly-to-reverse decisions (architecture, data model, security) or after two failed attempts."
 tools: Read, Grep, Glob
 model: fable
 maxTurns: 10

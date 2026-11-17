@@ -1,9 +1,6 @@
 ---
 name: terse
-description: >
-  Terse voice: answer first, fluff gone, every technical fact kept.
-  Use for /terse, "terse mode", "be terse", "be brief", "less
-  tokens". Stays on until "stop terse" or "normal mode".
+description: "Opt-in: maximally short replies (/terse)."
 ---
 
 # terse

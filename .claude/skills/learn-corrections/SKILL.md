@@ -1,10 +1,6 @@
 ---
 name: learn-corrections
-description: >
-  Turn a user's repeated corrections into a lasting project rule so they never
-  have to teach the same thing twice. Use when the user corrects the same kind
-  of thing a second time, says "always" / "never" / "from now on" / "I told you",
-  or types /learn.
+description: "Save a repeated correction or 'always/never' preference as a rule (/learn)."
 ---
 
 # learn-corrections

@@ -12,17 +12,19 @@ Haiku's, so the goal is lower cost per task even if total tokens rise. Quality m
 | Role | Model | Responsibility | Returns |
 |---|---|---|---|
 | Main session | Opus | Plan, decide, final check | Decisions |
-| `explorer` | Haiku | All reading and searching | `path:line` list + short answer |
-| `runner` | Haiku | All tests and commands | pass/fail + key lines |
+| `explorer` | Haiku | Big searches (5+ files or long output) | `path:line` list + short answer |
+| `runner` | Haiku | Long or noisy commands | pass/fail + key lines |
+| `designer` | Opus | Whole pages people will see, in one pass | Finished page |
 | `reviewer` | Haiku | Review a diff | One line per finding |
-| `builder` | Sonnet | All edits, 1-2 files per call | Diff receipt |
+| `builder` | Sonnet | Edits when the main session is Opus | Diff receipt |
 | `debugger` | Sonnet | Root cause before any fix | cause / proof / fix |
 | `researcher` | Sonnet | Web and docs lookups | Answer + sources |
 | `planner` | Opus | Plans multi-file and design work for a cheaper main session | Numbered plan |
 | `big-decision` | Fable | Costly-to-reverse choices; two failed attempts | decision / why / risks |
 | `make_codemap.py` | none | Build `CODEMAP.md` | File map |
 
-The main session reads at most ~30 cited lines, only to verify a helper's claim.
+The main session does small jobs itself; helpers are used only when a job is big enough to
+repay their start-up cost (measured: delegating small jobs raised cost by 15-48%).
 
 ## Mechanisms
 - **Code map.** One line per file plus Python symbols; secret files and gitignored paths
@@ -39,7 +41,7 @@ The main session reads at most ~30 cited lines, only to verify a helper's claim.
 
 ## Decisions
 - **Few skills.** Each skill's description is loaded in every session; overlapping skills
-  cost tokens and blur routing. Core kit: 8 skills, 8 agents. Specialised packs are optional.
+  cost tokens and blur routing. Core kit: 9 skills, 9 agents, one-line descriptions. Specialised packs are optional.
 - **Least privilege.** Every agent declares `tools:` and `model:` explicitly. Instructions
   are not permissions.
 - **Nothing implicit.** No hooks, no network access in scripts, no overwriting user files.

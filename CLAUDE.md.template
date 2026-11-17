@@ -1,46 +1,28 @@
 # Project rules for Claude
 
-<!-- Copy to CLAUDE.md and fill in the two lines below. Claude reads this file on
-     every turn, so keep it short. Recommended: run the main session on Sonnet
-     (`/model sonnet`) and let it call Opus only through the `planner` agent. -->
+<!-- Fill in the two lines below. Read on every turn: keep it short. Run on Sonnet. -->
 
 Project: <one line: what this project is>
 Run tests: <command, e.g. `python -m unittest` or `npm test`>
 
 ## Who does what
-Every reply of the main session re-reads its whole context, so the main session
-should be a mid-price model that delegates reading and saves Opus for planning.
-
-| Job | Who | Model |
-|---|---|---|
-| Plan a new app, page or UI (design and copy), multi-file work, unclear fixes | `planner` | Opus |
-| Find code, read 3+ files, audits | `explorer` | Haiku |
-| Run tests and commands | `runner` | Haiku |
-| Small edits in files you already know | main session | (Sonnet) |
-| Root cause of a failure | `debugger` | Sonnet |
-| Web and docs lookups | `researcher` | Sonnet |
-| Review a diff over ~30 lines or touching security, data or money | `reviewer` | Haiku |
-| Costly-to-reverse decision, or two failed attempts | `big-decision` | Fable |
-
-If the main session is running on Opus, it does no hands-on work at all: every read,
-edit and command goes to a helper (`builder` for edits).
-
-Building something new that people will see (an app, page, UI or marketing copy)? Ask
-`planner` for the design first, then build exactly to it.
-
-Give helpers precise tasks with paths. Independent helper calls go in one message.
-If a helper is refused permission (for example, `runner` can't run a command), do that
-step yourself instead of stopping; never end a task just because a helper was blocked.
+- Do small things yourself: open a known file, run a test, make an edit. A helper costs more
+  than it saves on small jobs.
+- `explorer` (Haiku): only when you would otherwise read 5+ files or a long output.
+- `planner` (Opus): a plan before multi-file features, refactors or unclear fixes.
+- `designer` (Opus): builds a whole page people will see (site, landing page, UI) in one
+  pass. Give it the request; don't build such pages yourself.
+- `debugger`: a bug two fixes haven't solved. `researcher`: web or docs lookups.
+- `reviewer` (Haiku): diffs over ~50 lines or touching security, data or money.
+- `big-decision` (Fable, rare): costly-to-reverse choices.
+- If a helper is refused permission, do that step yourself.
 
 ## Every change
-- Do only what was asked, in the fewest lines that fully solve it.
-- Before adding a file, function or dependency, check one doesn't already exist.
-- After a change, run the narrowest test that proves it. Two failed fixes → `debugger`.
-- Unfamiliar area: read `CODEMAP.md` first. Run `/map` at the end only if files were
-  added, moved or deleted.
-- Replies: the answer, then at most one short follow-up line.
-- Same correction twice, or "always/never": add a one-line rule to `.claude/LEARNED.md`.
-- Never read or print secrets. Never commit `.env`, keys or tokens.
+- Only what was asked, in the fewest lines that fully solve it; reuse existing code first.
+- Prove it with the narrowest test. New behaviour gets a test.
+- Unfamiliar area: read `CODEMAP.md` first; `/map` at the end if files were added or moved.
+- Replies: the answer, then at most one short follow-up.
+- Same correction twice, or "always/never": add a rule to `.claude/LEARNED.md`.
+- Never read or print secrets; never commit `.env`, keys or tokens.
 
-## Learned rules
 @.claude/LEARNED.md

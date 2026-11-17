@@ -7,7 +7,7 @@ Claude Code plugins load them. `scripts/install.py` copies
 ## Layout
 | Path | What it is | Loaded when |
 |---|---|---|
-| `../agents/*.md` | 8 core subagents (model, tools, instructions) | Description every session; body when called |
+| `../agents/*.md` | 9 core subagents (model, tools, instructions) | Description every session; body when called |
 | `skills/*/SKILL.md` | 8 core skills | Description every session; body when invoked |
 | `settings.json` | Deny rules for secrets, dependencies and build output | Every session |
 | `LEARNED.md` | Rules learned from your corrections, imported by `CLAUDE.md` | Every turn |
@@ -16,10 +16,11 @@ Claude Code plugins load them. `scripts/install.py` copies
 | Agent | Model | Tools | Job |
 |---|---|---|---|
 | `planner` | Opus | Read, Grep, Glob | Numbered plans for multi-file and design work |
-| `explorer` | Haiku | Read, Glob, Grep | All reading and searching; `path:line` answers |
-| `runner` | Haiku | Bash, Read | Runs tests and commands; pass/fail + key lines |
+| `explorer` | Haiku | Read, Glob, Grep | Big searches (5+ files); `path:line` answers |
+| `runner` | Haiku | Bash, Read | Long or noisy commands; pass/fail + key lines |
 | `reviewer` | Haiku | Read, Grep, Glob, Bash | Diff review, one line per finding |
-| `builder` | Sonnet | Read, Edit, Write, Grep, Glob | Edits, 1-2 files per call; no shell |
+| `builder` | Sonnet | Read, Edit, Write, Grep, Glob | Edits for an Opus main session; no shell |
+| `designer` | Opus | Read, Edit, Write, Grep, Glob | Whole showcase pages in one pass |
 | `debugger` | Sonnet | Read, Grep, Glob, Bash | Root cause before any fix |
 | `researcher` | Sonnet | WebSearch, WebFetch, Read, Grep, Glob | Docs and web lookups |
 | `big-decision` | Fable | Read, Grep, Glob | Costly-to-reverse decisions |

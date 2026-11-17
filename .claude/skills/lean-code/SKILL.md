@@ -1,9 +1,6 @@
 ---
 name: lean-code
-description: >
-  Write the smallest correct change that does exactly what the user asked,
-  nothing more. Use for any code change: features, fixes, refactors. Covers
-  planning reads cheaply, reusing code, and trimming the result before you finish.
+description: "Smallest correct change for any code edit; only what was asked."
 ---
 
 # lean-code
