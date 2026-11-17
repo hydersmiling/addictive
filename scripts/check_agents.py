@@ -28,7 +28,7 @@ MODELS = {"haiku", "sonnet", "opus", "fable", "inherit"}
 
 def read_header(path):
     """Return the top-level keys of the YAML header as {key: value-string}."""
-    with open(path, encoding="utf-8") as fh:
+    with open(path, encoding="utf-8-sig", errors="replace") as fh:  # -sig: tolerate a Windows BOM
         lines = fh.read().splitlines()
     if not lines or lines[0].strip() != "---":
         return None
@@ -69,10 +69,14 @@ def main():
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     problems = []
-    agents = sorted(glob.glob(os.path.join(ROOT, ".claude", "agents", "*.md")))
-    agents += sorted(glob.glob(os.path.join(ROOT, "optional", "agents-catalog", "*.md")))
-    skills = sorted(glob.glob(os.path.join(ROOT, ".claude", "skills", "*", "SKILL.md")))
-    skills += sorted(glob.glob(os.path.join(ROOT, "optional", "**", "SKILL.md"), recursive=True))
+    root = glob.escape(ROOT)  # a folder name with [ ] * ? must not break the search
+    agents = sorted(glob.glob(os.path.join(root, ".claude", "agents", "*.md")))
+    agents += sorted(glob.glob(os.path.join(root, "optional", "agents-catalog", "*.md")))
+    skills = sorted(glob.glob(os.path.join(root, ".claude", "skills", "*", "SKILL.md")))
+    skills += sorted(glob.glob(os.path.join(root, "optional", "**", "SKILL.md"), recursive=True))
+    if not agents or not skills:
+        print("PROBLEM: no agent or skill files found; refusing to report a pass.")
+        return 1
     for path in agents:
         problems += check(path, AGENT_FIELDS, need_model=True)
     for path in skills:
