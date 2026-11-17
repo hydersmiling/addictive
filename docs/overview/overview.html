@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tokenwise overview</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAF9F5;
+    --ink: #141413;
+    --muted: #6F6E69;
+    --rule: #E8E6DC;
+    --grey: #B0AEA5;
+    --clay: #D97757;
+    --clay-deep: #A4503A;
+    --sage: #788C5D;
+    --sky: #6A9BCC;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--paper); }
+  body {
+    width: 794px; height: 1450px; overflow: hidden; padding: 38px 44px 30px;
+    color: var(--ink); font: 400 10.5px/1.55 "Inter", "Segoe UI", sans-serif;
+    display: flex; flex-direction: column; gap: 24px;
+  }
+  h1, h2 { font-family: "Source Serif 4", Georgia, serif; font-weight: 600; margin: 0; }
+  h2 { font-size: 15px; letter-spacing: -0.01em; margin-bottom: 8px; }
+  p { margin: 0; }
+
+  header { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .spark { color: var(--clay); font-size: 46px; line-height: 1; transform: translateY(-2px); }
+  h1 { font-size: 46px; letter-spacing: -0.02em; line-height: 1; }
+  .lede { margin-top: 6px; font-family: "Source Serif 4", Georgia, serif; font-size: 17px; color: var(--ink); }
+  .sub { margin-top: 3px; color: var(--muted); font-size: 11.5px; }
+  .prompt { background: var(--ink); color: var(--paper); border-radius: 10px; padding: 10px 14px;
+            font: 500 12px "JetBrains Mono", monospace; white-space: nowrap; }
+  .prompt b { color: var(--clay); font-weight: 700; margin-right: 6px; }
+  .prompt small { display: block; color: var(--grey); font: 400 9.5px "Inter", sans-serif; margin-bottom: 4px; }
+
+  .card { background: #fff; border: 1px solid var(--rule); border-radius: 14px; padding: 16px 18px 14px; }
+  svg { display: block; width: 100%; height: auto; }
+  .stop { font: 600 11.5px "Inter", sans-serif; fill: var(--ink); }
+  .agent { font: 700 10.5px "JetBrains Mono", monospace; }
+  .note { font: 400 9.5px "Inter", sans-serif; fill: var(--muted); }
+  .stops { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 10px;
+           border-top: 1px solid var(--rule); padding-top: 10px; }
+  .stops b { display: block; font-weight: 600; color: var(--clay-deep); margin-bottom: 2px; }
+  .stops p { color: var(--muted); font-size: 9.5px; line-height: 1.45; }
+
+  .row { display: grid; grid-template-columns: 1.1fr 1fr; gap: 26px; }
+  .row.install { grid-template-columns: 0.95fr 1.15fr; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 6px 8px 6px 0; border-bottom: 1px solid var(--rule); }
+  th { font-weight: 500; color: var(--muted); font-size: 9.5px; }
+  td.us { color: var(--clay-deep); font-weight: 600; }
+  .fine { color: var(--muted); font-size: 9.5px; margin-top: 8px; }
+  .why p + p { margin-top: 7px; }
+
+  .key { display: grid; gap: 9px; }
+  .key div { display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: start; }
+  .key i { height: 7px; border-radius: 4px; margin-top: 5px; }
+  .key b { font-weight: 600; display: block; }
+  .key span { color: var(--muted); font-size: 9.5px; }
+  .key em { font-style: normal; color: var(--muted); font: 500 9.5px "JetBrains Mono", monospace; white-space: nowrap; }
+
+  .terminal { background: var(--ink); color: #E8E6DC; border-radius: 12px; padding: 14px 16px;
+              font: 400 9.4px/1.7 "JetBrains Mono", monospace; white-space: nowrap; overflow: hidden; }
+  .terminal .bar { display: flex; gap: 6px; margin-bottom: 10px; }
+  .terminal .bar i { width: 9px; height: 9px; border-radius: 50%; background: #3A3936; }
+  .terminal .p { color: var(--clay); font-weight: 700; }
+  .terminal .c { color: var(--grey); }
+  .terminal .ok { color: #9DB27C; }
+
+  pre.tree { margin: 0; font: 400 9.6px/1.6 "JetBrains Mono", monospace; color: var(--ink); white-space: pre; }
+  pre.tree em { font-style: normal; color: var(--muted); }
+  .skills { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
+  .skills div b { font: 700 10px "JetBrains Mono", monospace; color: var(--clay-deep); display: block; }
+  .skills div span { color: var(--muted); font-size: 9.5px; }
+
+  .bullets { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+  .bullets li { display: grid; grid-template-columns: 12px 1fr; color: var(--ink); }
+  .bullets li::before { content: "✻"; color: var(--clay); font-size: 9px; line-height: 1.9; }
+  .bullets li span { color: var(--muted); }
+  footer { margin-top: auto; display: flex; justify-content: space-between; border-top: 1px solid var(--rule);
+           padding-top: 10px; color: var(--muted); font-size: 9.5px; }
+  footer strong { color: var(--ink); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="brand"><span class="spark">✻</span><h1>Tokenwise</h1></div>
+    <p class="lede">Opus-level results at Sonnet prices.</p>
+    <p class="sub">A routing kit for Claude Code: Sonnet builds, Haiku reads, Opus plans.</p>
+  </div>
+  <div class="prompt"><small>New to Claude Code? Start here</small><b>&gt;</b>claude --model sonnet</div>
+</header>
+
+<section class="card" aria-label="How a request travels">
+  <h2>How a request travels</h2>
+  <svg viewBox="0 0 706 214" role="img" aria-label="Transit map. The Sonnet main line runs through six stops; Haiku, Opus and Fable branches lead to helper agents.">
+    <path d="M138 104 V158 H176" fill="none" stroke="var(--sage)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M250 104 V48 H290" fill="none" stroke="var(--sky)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M250 48 V16 H290" fill="none" stroke="var(--clay-deep)" stroke-width="5" stroke-dasharray="2 8" stroke-linecap="round"/>
+    <path d="M384 104 V188 H340" fill="none" stroke="var(--clay)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+    <path d="M504 104 V48 H546" fill="none" stroke="var(--sage)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M504 104 V158 H546" fill="none" stroke="var(--sage)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M24 104 H682" fill="none" stroke="var(--clay)" stroke-width="12" stroke-linecap="round"/>
+    <g fill="#fff" stroke="var(--ink)" stroke-width="3">
+      <circle cx="34" cy="104" r="9"/><circle cx="138" cy="104" r="9"/><circle cx="250" cy="104" r="9"/>
+      <circle cx="384" cy="104" r="9"/><circle cx="504" cy="104" r="9"/><circle cx="662" cy="104" r="9"/>
+    </g>
+    <g class="stop">
+      <text x="34" y="132" text-anchor="middle">Understand</text>
+      <text x="152" y="132">Locate</text>
+      <text x="264" y="132">Plan</text>
+      <text x="398" y="132">Build</text>
+      <text x="518" y="132">Verify</text>
+      <text x="662" y="132" text-anchor="middle">Learn</text>
+    </g>
+    <g class="agent">
+      <text x="184" y="162" fill="var(--sage)">explorer</text>
+      <text x="298" y="52" fill="var(--sky)">planner</text>
+      <text x="298" y="20" fill="var(--clay-deep)">big-decision</text>
+      <text x="332" y="192" text-anchor="end" fill="var(--clay-deep)">builder, debugger, researcher</text>
+      <text x="332" y="205" text-anchor="end" class="note" style="font-family:Inter">Sonnet: edits, root causes, lookups</text>
+      <text x="554" y="52" fill="var(--sage)">runner</text>
+      <text x="554" y="162" fill="var(--sage)">reviewer</text>
+    </g>
+    <g class="note">
+      <text x="184" y="175">Haiku</text>
+      <text x="298" y="65">Opus, only when a plan is needed</text>
+      <text x="398" y="20">Fable, rare</text>
+      <text x="554" y="65">Haiku, narrowest test</text>
+      <text x="554" y="175">Haiku, larger diffs</text>
+    </g>
+    <path d="M512 176 C 492 210, 430 212, 344 196" fill="none" stroke="var(--grey)" stroke-width="1.4" stroke-dasharray="3 3" marker-end="url(#a)"/>
+    <defs><marker id="a" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="var(--grey)"/></marker></defs>
+    <text class="note" x="560" y="204">two failed fixes go to debugger</text>
+  </svg>
+  <div class="stops">
+    <div><b>Understand</b><p>Sonnet reads your request and the project's two-line brief.</p></div>
+    <div><b>Locate</b><p>Haiku searches the code map and returns exact file and line.</p></div>
+    <div><b>Plan</b><p>Opus writes a short plan, only for multi-file or design work.</p></div>
+    <div><b>Build</b><p>The smallest correct change, reusing helpers that already exist.</p></div>
+    <div><b>Verify</b><p>Haiku runs the narrowest test that proves the change works.</p></div>
+    <div><b>Learn</b><p>A correction you make twice becomes a lasting project rule.</p></div>
+  </div>
+</section>
+
+<div class="row">
+  <section>
+    <h2>What it saves, measured</h2>
+    <table>
+      <thead><tr><th>Same tasks, hidden graders</th><th>Plain Opus</th><th>Sonnet + Tokenwise</th></tr></thead>
+      <tbody>
+        <tr><td>Long session, 6 tasks</td><td>6/6, $0.53</td><td class="us">6/6, $0.23 (−57%)</td></tr>
+        <tr><td>Six separate tasks</td><td>6/6, $1.19</td><td class="us">6/6, $0.46 (−61%)</td></tr>
+        <tr><td>Blind code review</td><td>1 win</td><td class="us">1 win, 4 ties</td></tr>
+        <tr><td>Lines changed</td><td>60</td><td class="us">22</td></tr>
+      </tbody>
+    </table>
+    <p class="fine">101 graded runs so far. Small samples, so read percentages as indicative.</p>
+  </section>
+  <section class="why">
+    <h2>Why it works</h2>
+    <p>Every reply in a session re-reads the whole conversation, plus a fixed floor of
+       12,000 to 14,000 tokens of instructions. All of it is paid at the main model's price.</p>
+    <p>So the main seat sets the bill. Tokenwise gives that seat to Sonnet, sends reading and
+       test runs to Haiku, and calls Opus only for the moments that need its judgement.</p>
+  </section>
+</div>
+
+<div class="row install">
+  <section>
+    <h2>Who does what</h2>
+    <div class="key">
+      <div><i style="background:var(--clay)"></i><p><b>Sonnet runs the session</b><span>Understands, decides and builds. The main line.</span></p><em>$2 / $10</em></div>
+      <div><i style="background:var(--sage)"></i><p><b>Haiku does the legwork</b><span>Reads files, runs tests, reviews diffs.</span></p><em>$0.10 / $0.50</em></div>
+      <div><i style="background:var(--sky)"></i><p><b>Opus plans</b><span>Designs multi-file work, then steps back.</span></p><em>$4 / $20</em></div>
+      <div><i style="background:var(--clay-deep)"></i><p><b>Fable decides, rarely</b><span>Costly-to-reverse calls only.</span></p><em>$8 / $40</em></div>
+    </div>
+    <p class="fine">Prices per million tokens, input / output.</p>
+  </section>
+  <section>
+    <h2>Install in a minute</h2>
+    <div class="terminal">
+      <div class="bar"><i></i><i></i><i></i></div>
+      <div class="c"># inside your project folder</div>
+      <div><span class="p">$</span> git clone https://github.com/hydersmiling/tokenwise</div>
+      <div><span class="p">$</span> python tokenwise/scripts/install.py .</div>
+      <div class="ok">  Copied the kit. Never overwrites your files.</div>
+      <div><span class="p">$</span> python scripts/make_codemap.py</div>
+      <div class="ok">  Wrote CODEMAP.md</div>
+      <div><span class="p">$</span> claude --model sonnet</div>
+      <div class="c">  ✻ Sonnet leads; Opus plans when needed</div>
+    </div>
+  </section>
+</div>
+
+<div class="row">
+  <section>
+    <h2>What's in the repository</h2>
+<pre class="tree">tokenwise/
+├── .claude/agents/      <em>8 core agents</em>
+├── .claude/skills/      <em>8 core skills</em>
+├── CLAUDE.md.template   <em>short project rules</em>
+├── scripts/             <em>install, code map, token counter</em>
+├── optional/            <em>198 specialist agents, extra packs</em>
+├── benchmarks/          <em>samples, hidden graders, blind judge</em>
+├── tests/               <em>42 tests, privacy guard included</em>
+├── docs/                <em>design, results, privacy, lessons</em>
+└── third_party/skills/  <em>licences and change log</em></pre>
+  </section>
+  <section>
+    <h2>Core skills</h2>
+    <div class="skills">
+      <div><b>compact</b><span>The answer, then one follow-up.</span></div>
+      <div><b>lean-code</b><span>Smallest correct change.</span></div>
+      <div><b>reuse-first</b><span>Search before creating.</span></div>
+      <div><b>self-check</b><span>Prove it works, then stop.</span></div>
+      <div><b>learn-corrections</b><span>Teach a rule once.</span></div>
+      <div><b>map</b><span>Refresh the code map.</span></div>
+      <div><b>terse</b><span>Even shorter replies, opt-in.</span></div>
+      <div><b>safe-refactor</b><span>Restructure, same behaviour.</span></div>
+    </div>
+  </section>
+</div>
+
+<div class="row">
+  <section>
+    <h2>Habits that keep sessions cheap</h2>
+    <ul class="bullets">
+      <li><p>Name the file and function. <span>One open beats a search.</span></p></li>
+      <li><p>Paste the decisive error line. <span>Not the whole log.</span></p></li>
+      <li><p>Say when it's done. <span>"Done when the pricing tests pass."</span></p></li>
+      <li><p>One topic per session. <span>Use /clear when you switch.</span></p></li>
+    </ul>
+  </section>
+  <section>
+    <h2>Safe by design</h2>
+    <ul class="bullets">
+      <li><p>No hooks. <span>Nothing runs on its own.</span></p></li>
+      <li><p>Least-privilege agents. <span>Each gets only the tools it needs.</span></p></li>
+      <li><p>Secrets stay out. <span>Never mapped, never read.</span></p></li>
+      <li><p>Never overwrites. <span>The installer only adds files.</span></p></li>
+    </ul>
+  </section>
+</div>
+
+<footer>
+  <span><strong>github.com/hydersmiling/tokenwise</strong>, version 1.2.0, MIT licence</span>
+  <span>No hooks. No network calls in scripts. Least-privilege agents.</span>
+</footer>
+
+</body>
+</html>

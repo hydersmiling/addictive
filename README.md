@@ -1,5 +1,9 @@
 # Tokenwise
 
+<p align="center">
+  <img src="docs/overview/tokenwise-overview.png" alt="Tokenwise at a glance: a transit map of how a request travels (Sonnet main line, Haiku and Opus branches), measured results, who does what, install steps, repository tree and core skills." width="720">
+</p>
+
 **Opus-quality results at Sonnet prices.** Tokenwise reorganises Claude Code around a
 simple economic insight: the model that *runs* your session sets the price of every
 turn, so that seat should be held by a capable mid-price model, while the most
