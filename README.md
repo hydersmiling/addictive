@@ -243,6 +243,13 @@ more than they save. The benchmark reports this rather than hiding it.
 **Can I use it with an existing CLAUDE.md?** Yes. The installer skips it, and you can merge
 the template's sections by hand.
 
+**How do I switch the main model mid-session?** Type `/model sonnet` (or `opus`, `haiku`)
+inside Claude Code. The change applies from the next reply; your conversation is kept.
+
+**How often should I start a fresh session?** Whenever you switch to unrelated work. A
+fresh session starts from the floor alone, while a long one re-reads its whole history on
+every reply. `/clear` resets it; `/compact` replaces the history with a summary.
+
 ## Troubleshooting
 - **An agent never gets used:** check its file with `python scripts/check_agents.py`; a
   misspelled header field is ignored without warning.
