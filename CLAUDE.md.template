@@ -13,7 +13,7 @@ should be a mid-price model that delegates reading and saves Opus for planning.
 
 | Job | Who | Model |
 |---|---|---|
-| Plan multi-file work, design, unclear fixes | `planner` | Opus |
+| Plan a new app, page or UI (design and copy), multi-file work, unclear fixes | `planner` | Opus |
 | Find code, read 3+ files, audits | `explorer` | Haiku |
 | Run tests and commands | `runner` | Haiku |
 | Small edits in files you already know | main session | (Sonnet) |
@@ -24,6 +24,9 @@ should be a mid-price model that delegates reading and saves Opus for planning.
 
 If the main session is running on Opus, it does no hands-on work at all: every read,
 edit and command goes to a helper (`builder` for edits).
+
+Building something new that people will see (an app, page, UI or marketing copy)? Ask
+`planner` for the design first, then build exactly to it.
 
 Give helpers precise tasks with paths. Independent helper calls go in one message.
 If a helper is refused permission (for example, `runner` can't run a command), do that

@@ -1,5 +1,8 @@
 # Mainseat
 
+**Install in one line:** in Claude Code, type `/plugin install mainseat --marketplace hydersmiling/mainseat`,
+or share this repository's link with your Claude and ask it to install it ([INSTALL.md](INSTALL.md)).
+
 <p align="center">
   <img src="docs/overview/mainseat-overview.png" alt="Mainseat at a glance: a transit map of how a request travels (Sonnet main line, Haiku and Opus branches), measured results, who does what, install steps, repository tree and core skills." width="720">
 </p>
