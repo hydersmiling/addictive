@@ -57,6 +57,11 @@ class MeasureTests(unittest.TestCase):
         self.assertEqual(result["subagent_logs"], 1)
         self.assertEqual(result["subagents"]["claude-haiku-5-5"]["output_tokens"], 30)
 
+    def test_profile(self):
+        p = measure_tokens.measure(self.log)["profile"]
+        # two real replies: contexts 10+0+50=60 and 5+0+0=5
+        self.assertEqual((p["replies"], p["floor"], p["peak"], p["reread"]), (2, 60, 60, 65))
+
     def test_project_folder_name(self):
         self.assertTrue(measure_tokens.project_folder_name("C:\\Users\\me\\my app").endswith("-me-my-app"))
 

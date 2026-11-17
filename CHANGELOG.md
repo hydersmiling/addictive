@@ -1,6 +1,10 @@
 # Changelog
 
 ## Unreleased
+- **Recommended setup: Sonnet main session** with Opus only via the new `planner` agent
+  (measured -56% cost vs plain Opus, 6/6 passes).
+- `measure_tokens.py` shows a token profile: fixed floor, peak context, floor share.
+- Benchmark runner: `--kit-model`, `--effort`.
 - **Strict delegation:** the main session only plans, delegates and judges; all reading,
   searching, editing and command runs go to Haiku/Sonnet helpers, however small.
 - New `runner` agent (Haiku) for tests and commands.
