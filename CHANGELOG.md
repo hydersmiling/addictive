@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.0 (2026-11-17)
+- **Design work goes to Opus first:** building a new app, page or UI now starts with the
+  `planner` writing a design brief (audience, palette, type, layout, copy, no blank image
+  placeholders). A side-by-side test showed a Sonnet session designing a whole site alone.
+- **Install from a link:** `INSTALL.md` gives any Claude that opens the repository exact
+  install steps; the README's first line is the one-line install.
+
 ## 1.4.1 (2026-11-17)
 - **Fix:** plugin installs now load all 8 core agents. They moved to the root `agents/` folder,
   where Claude Code loads plugin agents; 1.4.0 installed only the skills. Verified with a
