@@ -1,7 +1,7 @@
 # Tokenwise
 
 A verified collection of 200+ specialized Claude Code subagents and 16 skills for
-token-efficient development: 7 core agents installed by default and a catalog of 198
+token-efficient development: 8 core agents installed by default and a catalog of 198
 specialists you add by name.
 
 Tokenwise routes work by cognitive demand: Opus only plans, delegates and judges; every
@@ -17,6 +17,18 @@ once. Replies are compact: the answer, then at most one short follow-up.
 **Verified:** every agent and skill header is validated in CI, and 30 tests run on
 Linux, Windows and macOS. Privacy guards fail the build on network access in scripts,
 hooks, permission bypasses, committed emails, personal paths or keys.
+
+## Recommended: run the main session on Sonnet
+```bash
+claude --model sonnet        # or type /model sonnet inside Claude Code
+```
+Every reply of the main session re-reads its whole context at the main model's price,
+so the main model is the biggest cost lever. Sonnet runs the session, Haiku helpers read
+and run tests, and Opus is called only through the `planner` agent for real design work.
+Measured on 6 tasks: **Sonnet + kit cost 56% less than plain Opus, and every task passed
+in both** (6/6). The kit also produced the smallest change on the feature task (6 lines,
+vs 22 for plain Opus). Plain Sonnet was cheaper still (-64%); the kit's rules add about
+22% on short tasks. Details: [docs/BENCHMARK.md](docs/BENCHMARK.md).
 
 ## Install
 Requires Python 3.9+ and git.
@@ -40,6 +52,7 @@ Catalog agents: `--list-agents`, then `--agents security-auditor backend-archite
 | `builder` | Sonnet | Every edit, 1-2 files per call; no shell |
 | `debugger` | Sonnet | Reproduces failures and isolates the root cause |
 | `researcher` | Sonnet | Documentation and web lookups with sources |
+| `planner` | Opus | Plans multi-file work, design and unclear fixes; called by a cheaper main session |
 | `big-decision` | Fable | Rare: architecture, data model, security design, or after two failed attempts |
 
 No Fable access: set `model: opus` in `.claude/agents/big-decision.md`.

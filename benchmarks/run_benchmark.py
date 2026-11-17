@@ -102,7 +102,7 @@ def prepare(mode, workdir, sample="small"):
     git_commit_all(workdir, "start")  # so the diff later shows only Claude's changes
 
 
-def claude_command(claude_cmd, prompt, model):
+def claude_command(claude_cmd, prompt, model, effort=None):
     """The headless Claude Code call. Same flags for both modes, so the test is fair.
 
     --setting-sources project,local : ignore your personal user settings and plugins
@@ -111,9 +111,12 @@ def claude_command(claude_cmd, prompt, model):
     --allowedTools "Bash(python *)" : allow running Python (tests), nothing else in the shell
     """
     exe = shutil.which(claude_cmd[0]) or claude_cmd[0]
-    return [exe, *claude_cmd[1:], "-p", prompt, "--output-format", "json", "--model", model,
-            "--setting-sources", "project,local", "--strict-mcp-config",
-            "--permission-mode", "acceptEdits", "--allowedTools", "Bash(python *)"]
+    cmd = [exe, *claude_cmd[1:], "-p", prompt, "--output-format", "json", "--model", model,
+           "--setting-sources", "project,local", "--strict-mcp-config",
+           "--permission-mode", "acceptEdits", "--allowedTools", "Bash(python *)"]
+    if effort:
+        cmd += ["--effort", effort]
+    return cmd
 
 
 def lines_changed(workdir):
@@ -141,14 +144,14 @@ def tokens_from_logs(workdir, session_id):
     return {"by_model": both, "total": measure_tokens.add_up(both)}
 
 
-def run_one(task, mode, model, claude_cmd, keep=False, sample="small"):
+def run_one(task, mode, model, claude_cmd, keep=False, sample="small", effort=None):
     """Run one task in one mode. Returns a result dict."""
     base = tempfile.mkdtemp(prefix=f"bench-{task['id']}-{mode}-")
     workdir = os.path.realpath(os.path.join(base, "repo"))
     try:
         prepare(mode, workdir, sample)
         started = time.time()
-        code, out = sh(claude_command(claude_cmd, task["prompt"], model), workdir, timeout=900, stdout_only=True)
+        code, out = sh(claude_command(claude_cmd, task["prompt"], model, effort), workdir, timeout=900, stdout_only=True)
         seconds = round(time.time() - started, 1)
         try:
             reply = json.JSONDecoder().raw_decode(out[out.index("{"):])[0] if "{" in out else {}
@@ -235,7 +238,10 @@ def main(argv=None):
     parser.add_argument("--tasks", nargs="*", help="task ids to run (default: all)")
     parser.add_argument("--modes", nargs="*", default=["baseline", "kit"], choices=["baseline", "kit"])
     parser.add_argument("--repeat", type=int, default=1, help="runs per task and mode (3+ recommended)")
-    parser.add_argument("--model", default="opus", help="main model for both modes (default: opus)")
+    parser.add_argument("--model", default="opus", help="main model (default: opus)")
+    parser.add_argument("--kit-model", help="main model for kit runs only (default: same as --model)")
+    parser.add_argument("--effort", choices=["low", "medium", "high", "xhigh", "max"],
+                        help="effort level for every run (default: Claude Code's own)")
     parser.add_argument("--claude-cmd", default="claude", help="command that starts Claude Code")
     parser.add_argument("--keep", action="store_true", help="keep the temporary project copies")
     parser.add_argument("--sample", default="small", choices=sorted(SAMPLES), help="which sample project")
@@ -267,7 +273,8 @@ def main(argv=None):
             print(f"Token budget reached ({used:,} of {args.max_tokens:,}); skipping the remaining runs.")
             break
         print(f"[{i}/{len(runs)}] {task['id']} {mode} ...", flush=True)
-        row = run_one(task, mode, args.model, claude_cmd, args.keep, args.sample)
+        model = args.kit_model if (mode == "kit" and args.kit_model) else args.model
+        row = run_one(task, mode, model, claude_cmd, args.keep, args.sample, args.effort)
         rows.append(row)
         with open(args.out, "a", encoding="utf-8") as fh:
             fh.write(json.dumps(row) + "\n")
