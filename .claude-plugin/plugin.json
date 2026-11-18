@@ -5,11 +5,11 @@
   "version": "1.6.1",
   "description": "Opus-level results at Sonnet prices: Sonnet builds, Haiku reads and tests, Opus plans only when needed. Minimal diffs, reuse before rewrite, self-verified changes, learned rules.",
   "author": {
-    "name": "hydersmiling",
-    "url": "https://github.com/hydersmiling"
+    "name": "musahyderr",
+    "url": "https://github.com/musahyderr"
   },
-  "homepage": "https://github.com/hydersmiling/mainseat",
-  "repository": "https://github.com/hydersmiling/mainseat",
+  "homepage": "https://github.com/musahyderr/mainseat",
+  "repository": "https://github.com/musahyderr/mainseat",
   "license": "MIT",
   "icon": "./.claude-plugin/icon.svg",
   "keywords": [

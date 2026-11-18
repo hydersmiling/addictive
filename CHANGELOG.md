@@ -37,7 +37,7 @@
   fresh install: 8 agents, 9 skills, about 990 tokens added to each session.
 
 ## 1.4.0 (2026-11-17)
-- **Installable as a Claude Code plugin:** `claude plugin marketplace add hydersmiling/mainseat`,
+- **Installable as a Claude Code plugin:** `claude plugin marketplace add musahyderr/mainseat`,
   then `claude plugin install mainseat@mainseat`.
 - New `/mainseat:setup` skill adds the per-project files (CLAUDE.md, settings, scripts) once.
 - Installer `--rules-only` mode for plugin installs.
