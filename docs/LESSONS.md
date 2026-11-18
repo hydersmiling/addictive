@@ -110,3 +110,10 @@ One entry per surprise: what happened, root cause, fix, rule.
 - Cause: Windows PowerShell 5.1 reads files as the ANSI code page unless told otherwise.
 - Fix: restored from git and edited with Python using encoding="utf-8".
 - Rule: edit text files with Python or the editor, never PowerShell 5.1 Get-Content/Set-Content.
+
+## 2026-11-18: A stale local main made a pull request conflict
+- What: a README PR was built on a local `main` four merges behind GitHub; it conflicted,
+  and its README and diagrams described an older version of the kit.
+- Cause: the branch was cut without fetching first.
+- Fix: rebuilt the work on the current `main` in a new PR and closed the stale one.
+- Rule: `git fetch` and compare with `origin/main` before cutting a branch or describing the project.

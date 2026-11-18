@@ -25,7 +25,7 @@ If you have just installed Claude Code, Mainseat gives you a sound configuration
 one, so you never have to learn the expensive habits first. Five steps:
 
 1. **Install the kit into your project.** Run the installer shown above. It adds a short
-   `CLAUDE.md`, the agents and skills, and two helper scripts. Nothing you already have is
+   `CLAUDE.md`, the agents and skills, and four helper scripts. Nothing you already have is
    replaced.
 2. **Describe your project in two lines.** Open `CLAUDE.md` and fill in what the project is
    and the command that runs its tests. Claude reads this on every turn, so two precise
@@ -299,8 +299,8 @@ shared configuration stays focused on the project.
 To upgrade, pull the latest Mainseat and run the installer again. It adds new files and
 skips existing ones, so local edits are never overwritten; compare any skipped file with
 the new version and merge what you want. To remove Mainseat, delete the files it added:
-the agents and skills in `.claude/`, `.claude/LEARNED.md`, `CODEMAP.md`, and the two
-scripts in `scripts/`. Remove or edit `CLAUDE.md` and `.claude/settings.json` if you have
+the agents and skills in `.claude/`, `.claude/LEARNED.md`, `CODEMAP.md`, and the four
+scripts in `scripts/` (`make_codemap.py`, `measure_tokens.py`, `screenshot.py`, `find_unused.py`). Remove or edit `CLAUDE.md` and `.claude/settings.json` if you have
 not customised them. Nothing else on your system is touched, because nothing else was ever
 installed.
 
