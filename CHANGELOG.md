@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.1 (2026-11-18)
+- README trimmed from 478 to 134 lines: quick start, how it works, results and
+  options. The long-form sections moved unchanged to `docs/GUIDE.md`.
+
 ## 1.3.0 (2026-11-17)
 - **Renamed from Tokenwise to Mainseat.** The name says the core idea: the model in the main
   seat sets the price of every turn. The old GitHub address redirects automatically.
