@@ -23,6 +23,7 @@ Run tests: <command, e.g. `python -m unittest` or `npm test`>
 - Unfamiliar area: read `CODEMAP.md` first; `/map` at the end if files were added or moved.
 - Replies: the answer, then at most one short follow-up.
 - Same correction twice, or "always/never": add a rule to `.claude/LEARNED.md`.
+  Same multi-step job twice: offer to save it as a skill (`learn-corrections`).
 - Never read or print secrets; never commit `.env`, keys or tokens.
 
 @.claude/LEARNED.md

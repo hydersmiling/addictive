@@ -34,6 +34,8 @@ repay their start-up cost (measured: delegating small jobs raised cost by 15-48%
 - **Smallest correct change.** `lean-code` scopes the work to the request and trims the diff.
 - **Self-verification.** `self-check` runs the narrowest proof, reads the first error, and
   escalates to `debugger` after two failed fixes.
+- **Growing skills.** A multi-step job taught twice is offered back as a project skill in
+  `.claude/skills/` (user approves; at most 5, since each description loads every turn).
 - **Adaptive rules.** Repeated corrections become one-line rules in `.claude/LEARNED.md`,
   imported by `CLAUDE.md` (40-rule cap, conflicts replaced, no personal data).
 - **Shared state through files.** Subagents cannot message each other; they share the map,

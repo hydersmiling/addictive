@@ -50,6 +50,19 @@ Fill in the two lines at the top of the new `CLAUDE.md`, then run `python script
 Either way, nothing you already have is overwritten.
 
 ## How it works
+<p align="center">
+  <img src="docs/overview/architecture.svg" alt="Mainseat architecture. In a session: you talk to a Sonnet main session that does small jobs itself, sends big searches, noisy commands and large diffs to Haiku helpers, hard bugs and lookups to Sonnet helpers, and plans, showcase pages and costly choices to Opus or Fable; all share the project files. Getting it into your project: the repository installs through the plugin or the installer script." width="820">
+</p>
+
+### Why it costs less without losing quality
+Every reply in a session re-reads the whole context at the main model's price. So the
+main seat goes to Sonnet, which passed every graded task Opus passed. Opus is called only
+where its judgement changes the outcome: a plan for multi-file or design work, a showcase
+page, a costly-to-reverse decision. Bulk reading and long command output go to Haiku, so
+those pages never enter the main context. Small jobs stay with Sonnet, because handing
+them off would cost more than doing them.
+
+### A request, step by step
 1. **Understand.** Sonnet reads your request and the project's rules.
 2. **Locate.** Sonnet opens files it already knows; for wide searches, a Haiku `explorer`
    checks the code map and returns `path:line` citations.
@@ -57,8 +70,10 @@ Either way, nothing you already have is overwritten.
 4. **Build.** Sonnet makes the smallest change that solves it, reusing existing helpers.
 5. **Verify.** Sonnet runs the narrowest test (Haiku `runner` takes long, noisy commands);
    two failed fixes go to `debugger`.
-6. **Learn.** Correct the same thing twice and it becomes a rule in `.claude/LEARNED.md`.
+6. **Learn.** Correct the same thing twice and it becomes a rule in `.claude/LEARNED.md`;
+   teach the same multi-step job twice and Mainseat offers to save it as a skill.
 
+### Who does what
 | Role | Model | Why |
 |---|---|---|
 | Main session: understands, decides, edits known files | **Sonnet** | Every reply re-reads the whole context, so this seat sets the price |
@@ -74,6 +89,8 @@ Either way, nothing you already have is overwritten.
 - **Smallest correct change:** only what you asked for, verified by the narrowest test.
 - **Self-debugging:** two failed fixes hand over to a debugger instead of looping.
 - **Learns your corrections:** say it twice and it becomes a project rule.
+- **Grows skills from your workflows:** a multi-step job you teach twice is offered back
+  as a project skill you approve (at most 5, each one line of always-loaded text).
 - **Compact replies:** the answer, then at most one short follow-up.
 - **200+ agents:** 9 core plus 198 optional specialists (`--list-agents`, `--agents NAME`).
 - **Real numbers:** `scripts/measure_tokens.py` shows what any session cost, subagents included.
@@ -107,7 +124,8 @@ Everything is read from Claude Code's local logs; nothing leaves your machine.
 
 ## Customise
 - **Project rules** live in `CLAUDE.md`. Keep it short: it is read on every turn.
-- **Learned rules** live in `.claude/LEARNED.md`. Edit or delete them freely.
+- **Learned rules** live in `.claude/LEARNED.md`; learned skills in `.claude/skills/`.
+  Edit or delete them freely.
 - **Models** are set in the `model:` line of each agent file (`.claude/agents/` after a
   script install; the plugin's `agents/` folder for plugin installs).
   Without Fable access, set `big-decision` to `opus`.
