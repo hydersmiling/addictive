@@ -8,7 +8,7 @@ Usage:
     python scripts/install.py PATH --agents security-auditor  # add catalog agents by name
 
 Core kit: agents, skills, CLAUDE.md (from the template), .claude/settings.json,
-.claude/LEARNED.md, and the map and token scripts.
+.claude/LEARNED.md, and the helper scripts (map, tokens, unused code, screenshots).
 
 Plugin users: the plugin provides agents and skills; /mainseat:setup runs this script with
 --rules-only to add only the per-project files.
@@ -36,6 +36,7 @@ SINGLE_FILES = [
     ("scripts/make_codemap.py", "scripts/make_codemap.py"),
     ("scripts/measure_tokens.py", "scripts/measure_tokens.py"),
     ("scripts/screenshot.py", "scripts/screenshot.py"),
+    ("scripts/find_unused.py", "scripts/find_unused.py"),
     ("CLAUDE.md.template", "CLAUDE.md"),
     (".claude/settings.json", ".claude/settings.json"),
     (".claude/LEARNED.md", ".claude/LEARNED.md"),

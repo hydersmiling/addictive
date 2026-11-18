@@ -85,6 +85,10 @@ them off would cost more than doing them.
 
 ## What you get
 - **Code map:** a one-line summary of every file; secrets and ignored files left out.
+- **Reads only what it needs, once:** the map first, then a search, then just the lines
+  required; a file is re-read only if it changed.
+- **Finds dead code:** `python scripts/find_unused.py` lists Python functions, classes and
+  imports nothing uses, one line each, so no one has to read every file to find them.
 - **Reuse before create:** searches the map and existing helpers before writing new code.
 - **Smallest correct change:** only what you asked for, verified by the narrowest test.
 - **Self-debugging:** two failed fixes hand over to a debugger instead of looping.
@@ -153,7 +157,7 @@ CI on Linux, Windows and macOS fails on leaked emails, personal paths or keys.
 | `.claude/skills/` | The core skills, loaded only when relevant |
 | `.claude-plugin/` | Plugin and marketplace manifests |
 | `optional/` | The agent catalog and optional skill packs, installed only on request |
-| `scripts/` | Installer, code map, token counter, screenshots and header checker (standard-library Python) |
+| `scripts/` | Installer, code map, token counter, unused-code finder, screenshots and header checker (standard-library Python) |
 | `benchmarks/` | Sample projects, tasks, hidden graders, the runner and the blind judges |
 | `tests/` | Unit tests, including privacy guards that run on every push |
 | `docs/` | Guide, design, benchmark results, token tips, privacy and lessons learned |
