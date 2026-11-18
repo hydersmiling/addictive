@@ -137,8 +137,8 @@ Everything is read from Claude Code's local logs; nothing leaves your machine.
 
 ## Honest limits
 - Most of the saving comes from Sonnet in the main seat; plain Sonnet was cheaper still
-  (-64%). Mainseat's rules cost about 20-30% on short tasks and buy smaller, reused,
-  verified changes.
+  (-64%). Since the 1.6.0 trim, Mainseat costs 2.5% more than plain Sonnet (run 10,
+  6 tasks; earlier versions cost 15-30% more) and buys smaller, reused, verified changes.
 - One or two runs per setup so far, so treat the percentages as indicative.
 - In blind code reviews Opus won 4 pairs, Mainseat 1, with 7 ties. Most of Opus's wins were
   presentation or logging details; one was a real difference in test quality.

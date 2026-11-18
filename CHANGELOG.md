@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.2 (2026-11-18)
+- Docs: README limits now quote the measured 1.6.0 overhead (+2.5% over plain Sonnet);
+  the guide counts four helper scripts; `lean-code` skips the unused-code step when an older
+  install lacks the script.
+
 ## 1.6.1 (2026-11-18)
 - README trimmed from 501 to about 150 lines: install, how it works, results and
   options. The long-form sections moved unchanged to `docs/GUIDE.md`.
