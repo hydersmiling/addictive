@@ -26,5 +26,7 @@ behaviour in less code, never clever or cramped code.
 ## Before you say done
 1. Look at your diff. For each added block ask: does the request need it? Delete it if not.
 2. Could an existing helper replace any new code? Use it.
-3. Run the `self-check` skill.
-4. Report in one line: files changed, lines added and removed.
+3. If you replaced or removed code, run `python scripts/find_unused.py <folder>` and delete
+   what your change left unused (Python projects; check each candidate first).
+4. Run the `self-check` skill.
+5. Report in one line: files changed, lines added and removed.

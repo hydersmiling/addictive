@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.6.1 (2026-11-18)
+- README trimmed from 501 to about 150 lines: install, how it works, results and
+  options. The long-form sections moved unchanged to `docs/GUIDE.md`.
+- One architecture image (`docs/overview/architecture.svg`): a session's routing and the
+  install routes together, plus a short "why it costs less" section.
+- **Grows skills:** `learn-corrections` now offers to save a multi-step job taught twice as
+  a project skill (user approves; at most 5 learned skills).
+- **`scripts/find_unused.py`:** lists Python functions, classes and imports nothing uses, so
+  dead code is found without reading every file. Installed with the kit; `lean-code` runs it
+  after a change that replaces or removes code.
+- **Read once:** the template and `explorer` now say to read only the lines needed, once per
+  task, and re-read a file only if it changed.
+
 ## 1.6.0 (2026-11-18)
 - **Leaner:** every agent and skill description is one line and the template is half as long;
   always-loaded text fell about 61% (1,740 to 690 tokens). Mainseat now costs about the same

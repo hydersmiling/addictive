@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="830" viewBox="0 0 1000 830" role="img" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Mainseat architecture</title>
+  <desc>Top: in a session, you talk to a Sonnet main session that does small jobs itself and delegates big searches, noisy commands and large diffs to Haiku helpers, hard bugs and lookups to Sonnet helpers, and plans, showcase pages and costly choices to Opus or Fable. All share project files. Bottom: the repository reaches your project through the plugin or the installer script.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#5F5E5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      .h { font-size: 16px; font-weight: 600; }
+      .s { font-size: 13px; }
+      .m { font-size: 13px; font-family: ui-monospace, Consolas, monospace; }
+      .sec { font-size: 15px; font-weight: 600; fill: #444441; }
+      .ln { stroke: #5F5E5A; stroke-width: 1.2; fill: none; }
+      .dash { stroke: #888780; stroke-width: 1; stroke-dasharray: 4 4; fill: none; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="830" rx="16" fill="#FFFFFF"/>
+  <text x="500" y="40" text-anchor="middle" font-size="22" font-weight="600" fill="#2C2C2A">How Mainseat works</text>
+
+  <!-- Section 1: a session -->
+  <text x="40" y="78" class="sec">1. In a session</text>
+  <rect x="420" y="88" width="160" height="44" rx="8" fill="#F1EFE8" stroke="#5F5E5A"/>
+  <text x="500" y="115" text-anchor="middle" class="h" fill="#2C2C2A">You</text>
+  <line x1="500" y1="132" x2="500" y2="160" class="ln" marker-end="url(#a)"/>
+
+  <rect x="40" y="162" width="920" height="66" rx="8" fill="#EEEDFE" stroke="#534AB7"/>
+  <text x="500" y="189" text-anchor="middle" class="h" fill="#3C3489">Main session · Sonnet</text>
+  <text x="500" y="211" text-anchor="middle" class="s" fill="#534AB7">Decides, and does small jobs itself: known files, test runs, edits</text>
+
+  <line x1="185" y1="228" x2="185" y2="266" class="ln" marker-end="url(#a)"/>
+  <line x1="500" y1="228" x2="500" y2="266" class="ln" marker-end="url(#a)"/>
+  <line x1="815" y1="228" x2="815" y2="266" class="ln" marker-end="url(#a)"/>
+
+  <rect x="40" y="268" width="290" height="92" rx="8" fill="#E1F5EE" stroke="#0F6E56"/>
+  <text x="185" y="294" text-anchor="middle" class="h" fill="#085041">Haiku · big jobs only</text>
+  <text x="185" y="317" text-anchor="middle" class="s" fill="#0F6E56">Wide searches, noisy commands, large diffs</text>
+  <text x="185" y="341" text-anchor="middle" class="m" fill="#085041">explorer · runner · reviewer</text>
+
+  <rect x="355" y="268" width="290" height="92" rx="8" fill="#EEEDFE" stroke="#534AB7"/>
+  <text x="500" y="294" text-anchor="middle" class="h" fill="#3C3489">Sonnet helpers</text>
+  <text x="500" y="317" text-anchor="middle" class="s" fill="#534AB7">Hard bugs, docs lookups</text>
+  <text x="500" y="341" text-anchor="middle" class="m" fill="#3C3489">debugger · researcher · builder</text>
+
+  <rect x="670" y="268" width="290" height="92" rx="8" fill="#FAECE7" stroke="#993C1D"/>
+  <text x="815" y="294" text-anchor="middle" class="h" fill="#712B13">Opus and Fable · rare</text>
+  <text x="815" y="317" text-anchor="middle" class="s" fill="#993C1D">Plans, showcase pages, costly choices</text>
+  <text x="815" y="341" text-anchor="middle" class="m" fill="#712B13">planner · designer · big-decision</text>
+
+  <line x1="185" y1="360" x2="185" y2="392" class="dash"/>
+  <line x1="500" y1="360" x2="500" y2="392" class="dash"/>
+  <line x1="815" y1="360" x2="815" y2="392" class="dash"/>
+
+  <rect x="40" y="394" width="920" height="66" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-dasharray="5 4"/>
+  <text x="500" y="421" text-anchor="middle" class="h" fill="#2C2C2A">Shared project files</text>
+  <text x="500" y="443" text-anchor="middle" class="m" fill="#444441">CLAUDE.md · CODEMAP.md · .claude/LEARNED.md · learned skills · settings.json deny rules</text>
+
+  <!-- Section 2: install -->
+  <line x1="40" y1="492" x2="960" y2="492" stroke="#D3D1C7" stroke-width="1"/>
+  <text x="40" y="526" class="sec">2. Getting it into your project</text>
+
+  <rect x="40" y="542" width="360" height="268" rx="14" fill="#F1EFE8" stroke="#888780"/>
+  <text x="220" y="568" text-anchor="middle" class="h" fill="#2C2C2A">Mainseat repository</text>
+  <g>
+    <rect x="60" y="584" width="320" height="46" rx="6" fill="#EEEDFE" stroke="#534AB7"/>
+    <text x="76" y="612" class="s" fill="#3C3489"><tspan font-weight="600">Core kit</tspan>  template, 9 agents, core skills</text>
+    <rect x="60" y="638" width="320" height="46" rx="6" fill="#EEEDFE" stroke="#534AB7"/>
+    <text x="76" y="666" class="s" fill="#3C3489"><tspan font-weight="600">scripts/</tspan>  install, codemap, tokens, checks</text>
+    <rect x="60" y="692" width="320" height="46" rx="6" fill="#FFFFFF" stroke="#888780" stroke-dasharray="4 3"/>
+    <text x="76" y="720" class="s" fill="#444441"><tspan font-weight="600">optional/</tspan>  198 agents, added by name</text>
+    <rect x="60" y="746" width="320" height="46" rx="6" fill="#FFFFFF" stroke="#888780" stroke-dasharray="4 3"/>
+    <text x="76" y="774" class="s" fill="#444441"><tspan font-weight="600">benchmarks/, tests/</tspan>  proof; stay in the repo</text>
+  </g>
+
+  <rect x="430" y="600" width="140" height="58" rx="8" fill="#FFFFFF" stroke="#534AB7"/>
+  <text x="500" y="624" text-anchor="middle" class="h" fill="#3C3489">Plugin</text>
+  <text x="500" y="645" text-anchor="middle" class="m" fill="#534AB7">/mainseat:setup</text>
+  <rect x="430" y="696" width="140" height="58" rx="8" fill="#FFFFFF" stroke="#534AB7"/>
+  <text x="500" y="720" text-anchor="middle" class="h" fill="#3C3489">Script</text>
+  <text x="500" y="741" text-anchor="middle" class="m" fill="#534AB7">install.py</text>
+
+  <path d="M400 676 L415 676 L415 629 L428 629" class="ln" marker-end="url(#a)"/>
+  <path d="M400 676 L415 676 L415 725 L428 725" class="ln" marker-end="url(#a)"/>
+  <path d="M570 629 L585 629 L585 676 L598 676" class="ln" marker-end="url(#a)"/>
+  <path d="M570 725 L585 725 L585 676 L598 676" class="ln" marker-end="url(#a)"/>
+
+  <rect x="600" y="542" width="360" height="268" rx="14" fill="#E1F5EE" stroke="#0F6E56"/>
+  <text x="780" y="568" text-anchor="middle" class="h" fill="#085041">Your project</text>
+  <g>
+    <rect x="620" y="584" width="320" height="46" rx="6" fill="#FFFFFF" stroke="#0F6E56"/>
+    <text x="636" y="612" class="s" fill="#085041"><tspan font-weight="600">CLAUDE.md</tspan>  short rules, two lines to fill</text>
+    <rect x="620" y="638" width="320" height="46" rx="6" fill="#FFFFFF" stroke="#0F6E56"/>
+    <text x="636" y="666" class="s" fill="#085041"><tspan font-weight="600">.claude/</tspan>  skills, deny rules, LEARNED.md</text>
+    <rect x="620" y="692" width="320" height="46" rx="6" fill="#FFFFFF" stroke="#0F6E56"/>
+    <text x="636" y="720" class="s" fill="#085041"><tspan font-weight="600">scripts/</tspan>  make_codemap, measure_tokens</text>
+    <rect x="620" y="746" width="320" height="46" rx="6" fill="#FFFFFF" stroke="#0F6E56" stroke-dasharray="4 3"/>
+    <text x="636" y="774" class="s" fill="#085041"><tspan font-weight="600">CODEMAP.md</tspan>  built on the first run</text>
+  </g>
+</svg>

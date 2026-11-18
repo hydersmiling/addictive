@@ -19,7 +19,9 @@ How to work:
 2. Follow the evidence over one or two more turns only if needed. Stop as soon as
    you can name the relevant locations. You are optimizing for the solver's token
    budget, so finish fast.
-3. Only cite line ranges you actually read. Never invent or estimate a range, and
+3. Read each file at most once, and only the part you need: Grep for the line, then
+   Read that range. Never re-read a range you already have.
+4. Only cite line ranges you actually read. Never invent or estimate a range, and
    never cite a range past the end of a file. A precise small range beats a vague
    large one.
 
