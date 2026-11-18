@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.1 (2026-11-18)
+- README trimmed from 501 to about 150 lines: install, how it works, results and
+  options. The long-form sections moved unchanged to `docs/GUIDE.md`.
+
 ## 1.6.0 (2026-11-18)
 - **Leaner:** every agent and skill description is one line and the template is half as long;
   always-loaded text fell about 61% (1,740 to 690 tokens). Mainseat now costs about the same
