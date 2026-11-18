@@ -3,7 +3,7 @@
 ## The fastest way
 Inside Claude Code, type:
 ```
-/plugin install mainseat --marketplace hydersmiling/mainseat
+/plugin install mainseat --marketplace musahyderr/mainseat
 ```
 Then open your project and type `/mainseat:setup` once.
 
@@ -13,7 +13,7 @@ order. Ask the user before running each command, as you would for any install.
 
 1. Add the marketplace and install the plugin:
    ```bash
-   claude plugin marketplace add hydersmiling/mainseat
+   claude plugin marketplace add musahyderr/mainseat
    claude plugin install mainseat@mainseat
    ```
 2. Confirm it installed: `claude plugin details mainseat` should list 9 agents and 9 skills.
@@ -28,7 +28,7 @@ beyond these commands.
 
 ## Without the plugin system
 ```bash
-git clone https://github.com/hydersmiling/mainseat
+git clone https://github.com/musahyderr/mainseat
 python mainseat/scripts/install.py path/to/project
 ```
 This copies the same agents, skills, rules and scripts into the project as plain files.

@@ -1,6 +1,6 @@
 # Mainseat
 
-**Install in one line:** in Claude Code, type `/plugin install mainseat --marketplace hydersmiling/mainseat`,
+**Install in one line:** in Claude Code, type `/plugin install mainseat --marketplace musahyderr/mainseat`,
 or share this repository's link with your Claude and ask it to install it ([INSTALL.md](INSTALL.md)).
 
 <p align="center">
@@ -29,11 +29,11 @@ Method and raw numbers: [docs/BENCHMARK.md](docs/BENCHMARK.md).
 ## Start in one minute
 **As a Claude Code plugin (recommended).** Inside Claude Code:
 ```
-/plugin install mainseat --marketplace hydersmiling/mainseat
+/plugin install mainseat --marketplace musahyderr/mainseat
 ```
 or from a terminal:
 ```bash
-claude plugin marketplace add hydersmiling/mainseat
+claude plugin marketplace add musahyderr/mainseat
 claude plugin install mainseat@mainseat
 ```
 Then open your project, start Claude Code on Sonnet (`claude --model sonnet`) and type
@@ -42,7 +42,7 @@ one-line description of your project and its test command, and builds the code m
 
 **Or with the installer script**, if you prefer plain files in your repository:
 ```bash
-git clone https://github.com/hydersmiling/mainseat
+git clone https://github.com/musahyderr/mainseat
 python mainseat/scripts/install.py path/to/project
 claude --model sonnet
 ```
