@@ -5,28 +5,27 @@
 Project: <one line: what this project is>
 Run tests: <command, e.g. `python -m unittest` or `npm test`>
 
-## Who does what
-- Do small things yourself: open a known file, run a test, make an edit. A helper costs more
-  than it saves on small jobs.
-- `explorer` (Haiku): only when you would otherwise read 5+ files or a long output.
-- `planner` (Opus): a plan before multi-file features, refactors or unclear fixes.
-- `designer` (Opus): builds a whole page people will see (site, landing page, UI) in one
-  pass. Give it the request; don't build such pages yourself.
-- `debugger`: a bug two fixes haven't solved. `researcher`: web or docs lookups.
-- `reviewer` (Haiku): diffs over ~50 lines or touching security, data or money.
-- `big-decision` (Fable, rare): costly-to-reverse choices.
-- If a helper is refused permission, do that step yourself.
-
-## Every change
+## IMPORTANT
 - Only what was asked, in the fewest lines that fully solve it; reuse existing code first.
-- Prove it with the narrowest test. New behaviour gets a test.
-- Unfamiliar area: read `CODEMAP.md` first; `/map` at the end if files were added or moved.
-- Read only the lines you need, once per task; re-read a file only if it changed since.
-- Dead code: `python scripts/find_unused.py [folder]` lists candidates; check each before deleting.
-- A file over ~400 lines you keep re-reading: `python scripts/find_large.py`, then `split-file`.
-- Replies: the answer, then at most one short follow-up.
-- Same correction twice, or "always/never": add a rule to `.claude/LEARNED.md`.
-  Same multi-step job twice: offer to save it as a skill (`learn-corrections`).
+- Prove every change with the narrowest test. New behaviour gets a test that asserts exact
+  expected values, never values recomputed with the code under test.
+- Read only the lines you need, once per task; re-read a file only if it changed.
 - Never read or print secrets; never commit `.env`, keys or tokens.
+- Replies: the answer, then at most one short follow-up.
+
+## Who does what
+- Do small jobs yourself (a known file, a test run, an edit); helpers cost more than they save there.
+- `explorer` (Haiku): 5+ files or a long output. `reviewer` (Haiku): diffs over ~50 lines or
+  touching security, data or money. `debugger`: a bug two fixes haven't solved.
+- `planner` (Opus): plan multi-file work. `designer` (Opus): a whole page people will see, in
+  one pass; don't build such pages yourself. `big-decision` (rare): costly-to-reverse choices.
+- `researcher`: web or docs lookups. A helper refused permission: do that step yourself.
+
+## Where to look (only when needed)
+- Finding code: `CODEMAP.md`; run `/map` after adding or moving files.
+- Dead code: `python scripts/find_unused.py [folder]`. Big files: `python scripts/find_large.py`,
+  then `split-file`.
+- Same correction twice, or "always/never": add a rule to `.claude/LEARNED.md`. Same
+  multi-step job twice: offer to save it as a skill (`learn-corrections`).
 
 @.claude/LEARNED.md

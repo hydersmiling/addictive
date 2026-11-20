@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7.1 (2026-11-20)
+- **IMPORTANT first:** the installed project rules now open with a short IMPORTANT block,
+  then who does what, then where to look, so Claude reads the essentials and opens other
+  files only when needed. New rule: tests assert exact expected values, never values
+  recomputed with the code under test (the one gap a blind review found against Opus).
+- The repository's own `CLAUDE.md` follows the same layout, with an index of every doc and
+  when to open it, instead of asking Claude to read the lessons file first.
+
 ## 1.7.0 (2026-11-20)
 - **Split big files safely:** `scripts/find_large.py` lists files over ~400 lines and Python
   functions over ~80; the new `split-file` skill splits them by responsibility and keeps every
