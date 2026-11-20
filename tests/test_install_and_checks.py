@@ -76,6 +76,14 @@ class CheckAgentsTests(unittest.TestCase):
         self.assertIn("unknown field 'modle'", problems)
         self.assertIn("no 'model' set", problems)
 
+    def test_skill_size_limit(self):
+        tmp = tempfile.NamedTemporaryFile("w", suffix=".md", delete=False, encoding="utf-8")
+        nl = chr(10)
+        tmp.write("---" + nl + "name: big" + nl + "description: d" + nl + "---" + nl + ("line" + nl) * 600)
+        tmp.close()
+        self.addCleanup(os.unlink, tmp.name)
+        self.assertTrue(any("600" in p or "lines" in p for p in check_agents.check_limits(tmp.name)))
+
     def test_repo_agents_are_valid(self):
         self.assertEqual(check_agents.main(), 0)
 

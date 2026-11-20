@@ -300,7 +300,7 @@ To upgrade, pull the latest Mainseat and run the installer again. It adds new fi
 skips existing ones, so local edits are never overwritten; compare any skipped file with
 the new version and merge what you want. To remove Mainseat, delete the files it added:
 the agents and skills in `.claude/`, `.claude/LEARNED.md`, `CODEMAP.md`, and the four
-scripts in `scripts/` (`make_codemap.py`, `measure_tokens.py`, `screenshot.py`, `find_unused.py`). Remove or edit `CLAUDE.md` and `.claude/settings.json` if you have
+scripts in `scripts/` (`make_codemap.py`, `measure_tokens.py`, `screenshot.py`, `find_unused.py`, `find_large.py`). Remove or edit `CLAUDE.md` and `.claude/settings.json` if you have
 not customised them. Nothing else on your system is touched, because nothing else was ever
 installed.
 

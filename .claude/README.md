@@ -8,7 +8,7 @@ Claude Code plugins load them. `scripts/install.py` copies
 | Path | What it is | Loaded when |
 |---|---|---|
 | `../agents/*.md` | 9 core subagents (model, tools, instructions) | Description every session; body when called |
-| `skills/*/SKILL.md` | 8 core skills | Description every session; body when invoked |
+| `skills/*/SKILL.md` | 9 core skills (some with `references/` loaded on demand) | Description every session; body when invoked |
 | `settings.json` | Deny rules for secrets, dependencies and build output | Every session |
 | `LEARNED.md` | Rules learned from your corrections, imported by `CLAUDE.md` | Every turn |
 
@@ -27,7 +27,8 @@ Claude Code plugins load them. `scripts/install.py` copies
 
 ## Skills
 `compact` (reply style), `lean-code`, `reuse-first`, `self-check`, `learn-corrections`,
-`map` (`/map`), `terse` (opt-in) and `safe-refactor`. Plugin installs also get `setup`
+`map` (`/map`), `split-file` (`/split-file`, with language references), `terse` (opt-in)
+and `safe-refactor`. Plugin installs also get `setup`
 (`/mainseat:setup`), which adds the per-project files once.
 
 ## Rules for changing these files

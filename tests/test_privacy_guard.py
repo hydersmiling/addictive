@@ -18,7 +18,8 @@ NETWORK_MODULES = {"socket", "urllib", "http", "requests", "httpx", "aiohttp",
 OUR_SCRIPTS = ["scripts/make_codemap.py", "scripts/measure_tokens.py", "scripts/install.py",
                "scripts/check_agents.py", "benchmarks/run_benchmark.py", "benchmarks/judge.py",
                "benchmarks/build_audit_sample.py",
-               "scripts/screenshot.py", "benchmarks/visual_bench.py", "scripts/find_unused.py"]
+               "scripts/screenshot.py", "benchmarks/visual_bench.py", "scripts/find_unused.py",
+               "scripts/find_large.py"]
 
 
 def tracked_text_files():

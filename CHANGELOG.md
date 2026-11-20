@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.7.0 (2026-11-20)
+- **Split big files safely:** `scripts/find_large.py` lists files over ~400 lines and Python
+  functions over ~80; the new `split-file` skill splits them by responsibility and keeps every
+  public name importable from its old location (re-exports), with tests before and after.
+- **Skills with references:** `split-file` keeps its Python and JavaScript/TypeScript detail in
+  `references/` files that load only when needed, following Anthropic's skills guidance.
+- **Limits enforced:** `check_agents.py` fails a core skill over 500 lines or with a name and
+  description over 1,536 characters; optional third-party skills get a warning.
+- **`docs/REFERENCES.md`:** the Anthropic course and docs Mainseat follows, and what it adopts.
+
 ## 1.6.2 (2026-11-18)
 - Docs: README limits now quote the measured 1.6.0 overhead (+2.5% over plain Sonnet);
   the guide counts four helper scripts; `lean-code` skips the unused-code step when an older
