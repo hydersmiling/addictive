@@ -89,6 +89,9 @@ them off would cost more than doing them.
   required; a file is re-read only if it changed.
 - **Finds dead code:** `python scripts/find_unused.py` lists Python functions, classes and
   imports nothing uses, one line each, so no one has to read every file to find them.
+- **Splits big files safely:** `python scripts/find_large.py` lists files and functions that have
+  grown too big; the `split-file` skill splits them by responsibility and keeps every import
+  working through re-exports.
 - **Reuse before create:** searches the map and existing helpers before writing new code.
 - **Smallest correct change:** only what you asked for, verified by the narrowest test.
 - **Self-debugging:** two failed fixes hand over to a debugger instead of looping.

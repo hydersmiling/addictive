@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "mainseat",
   "displayName": "Mainseat",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "description": "Opus-level results at Sonnet prices: Sonnet builds, Haiku reads and tests, Opus plans only when needed. Minimal diffs, reuse before rewrite, self-verified changes, learned rules.",
   "author": {
     "name": "musahyderr",

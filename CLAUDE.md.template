@@ -23,6 +23,7 @@ Run tests: <command, e.g. `python -m unittest` or `npm test`>
 - Unfamiliar area: read `CODEMAP.md` first; `/map` at the end if files were added or moved.
 - Read only the lines you need, once per task; re-read a file only if it changed since.
 - Dead code: `python scripts/find_unused.py [folder]` lists candidates; check each before deleting.
+- A file over ~400 lines you keep re-reading: `python scripts/find_large.py`, then `split-file`.
 - Replies: the answer, then at most one short follow-up.
 - Same correction twice, or "always/never": add a rule to `.claude/LEARNED.md`.
   Same multi-step job twice: offer to save it as a skill (`learn-corrections`).

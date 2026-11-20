@@ -37,6 +37,7 @@ SINGLE_FILES = [
     ("scripts/measure_tokens.py", "scripts/measure_tokens.py"),
     ("scripts/screenshot.py", "scripts/screenshot.py"),
     ("scripts/find_unused.py", "scripts/find_unused.py"),
+    ("scripts/find_large.py", "scripts/find_large.py"),
     ("CLAUDE.md.template", "CLAUDE.md"),
     (".claude/settings.json", ".claude/settings.json"),
     (".claude/LEARNED.md", ".claude/LEARNED.md"),

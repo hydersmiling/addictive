@@ -16,7 +16,7 @@ order. Ask the user before running each command, as you would for any install.
    claude plugin marketplace add musahyderr/mainseat
    claude plugin install mainseat@mainseat
    ```
-2. Confirm it installed: `claude plugin details mainseat` should list 9 agents and 9 skills.
+2. Confirm it installed: `claude plugin details mainseat` should list 9 agents and 10 skills.
 3. Tell the user, in plain words:
    - Start a new Claude Code session (or restart Claude Code) so the agents and skills load.
    - Run the session on Sonnet: `claude --model sonnet`.
